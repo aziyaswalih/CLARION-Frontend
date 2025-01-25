@@ -88,6 +88,8 @@ const UserSignup: React.FC = () => {
       );
     //   redirect logic to login page after succesful registration write below
       alert(response.data.message);
+      console.log(response.data);
+      
       window.location.href = "/login";
 
     } catch (error: any) {
