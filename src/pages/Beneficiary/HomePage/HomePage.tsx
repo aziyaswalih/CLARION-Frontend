@@ -3,9 +3,6 @@ import { Button } from '../../../components/ui/button'
 // import { Card } from '../../../components/ui/card'
 import { Progress } from '../../../components/ui/progress';
 import { Target, Eye } from 'lucide-react';
-
-// You'll need to create these components separately
-
 import Footer from '../../../components/beneficiary/Footer/Footer'
 import Header from '../../../components/beneficiary/Header/Header'
 import LatestCauses from '../../../components/beneficiary/LatestCauses';

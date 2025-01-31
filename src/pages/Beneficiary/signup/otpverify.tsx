@@ -1,94 +1,116 @@
-import { useState, useEffect } from "react"
-import { Input } from "../../../components/ui/input"
-import { Button } from "../../../components/ui/button"
-import { EmailIcon } from "../../../components/ui/email-icon"
-import Header from "../../../components/beneficiary/Header/Header"
-import Footer from "../../../components/beneficiary/Footer/Footer"
-import { Label } from "@radix-ui/react-label"
+import { useState, useEffect } from "react";
+import axios from "axios"; // Import Axios for API requests
+import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button";
+import { EmailIcon } from "../../../components/ui/email-icon";
+// import Header from "../../../components/beneficiary/Header/Header";
+// import Footer from "../../../components/beneficiary/Footer/Footer";
+import { Label } from "@radix-ui/react-label";
 
 export default function OTPVerification() {
-//   const [email, setEmail] = useState("")
-  const [otp, setOtp] = useState("")
-  const [timeLeft, setTimeLeft] = useState(10) // 2 minutes in seconds
-  const [show, setShow] = useState(false)
+  const [otp, setOtp] = useState<string>(""); // OTP input
+  const [timeLeft, setTimeLeft] = useState<number>(10); // Timer for resend
+  const [showResend, setShowResend] = useState<boolean>(false); // Show resend button
+  const [loading, setLoading] = useState<boolean>(false); // Loading state for buttons
 
+  const API_BASE_URL = "http://localhost:5000/api/user";
+
+  // Timer countdown
   useEffect(() => {
-    if(timeLeft==0) {
-        setShow(true)
+    if (timeLeft === 0) {
+      setShowResend(true);
     }
-    if (timeLeft >= 0 ) {
+    if (timeLeft > 0) {
       const timer = setInterval(() => {
-        setTimeLeft((prev) => prev - 1)
-      }, 1000)
-      return () => clearInterval(timer)
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+      return () => clearInterval(timer); // Cleanup timer on component unmount
     }
-  }, [timeLeft])
+  }, [timeLeft]);
 
-//   const formatTime = (seconds: number) => {
-//     const mins = Math.floor(seconds / 60)
-//     const secs = seconds % 60
-//     return `${mins}:${secs.toString().padStart(2, "0")}`
-//   }
-
-//   const handleSendOTP = () => {
-//     if (email) {
-//       setShow(2)
-//       setTimeLeft(120)
-//     }
-//   }
-
-  const handleVerifyOTP = () => {
-    if (Number(otp)>999 && Number(otp) <10000) {
-
-    }else if(otp){
-        alert("OTP should be 4 digit")
-    }else{
-        alert("error while entering otp")
+  // Handle OTP verification
+  const handleVerifyOTP = async () => {
+    if (!otp || otp.length !== 4 || !/^\d{4}$/.test(otp)) {
+      alert("Please enter a valid 4-digit OTP.");
+      return;
     }
-  }
 
-  const handleResendOTP = () => {
-    setTimeLeft(10)
-    setShow(false)
-    setOtp("")
-  }
+    try {
+      setLoading(true);
+      const response = await axios.post(`${API_BASE_URL}/auth/verify-otp`, {
+        otp,
+      });
+      alert(response.data.message || "OTP verified successfully!");
+    } catch (error: any) {
+      console.error("Error verifying OTP:", error);
+      alert(error.response?.data?.message || "Failed to verify OTP.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle OTP resend
+  const handleResendOTP = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post(`${API_BASE_URL}/auth/send-otp`);
+      alert(response.data.message || "OTP resent successfully!");
+      setTimeLeft(10); // Reset timer
+      setShowResend(false); // Hide resend button
+      setOtp(""); // Clear OTP input
+    } catch (error: any) {
+      console.error("Error resending OTP:", error);
+      alert(error.response?.data?.message || "Failed to resend OTP.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#877356]">
-        <Header />
+      {/* <Header /> */}
       <div className="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">
-        {/* <div>
-        <h1 className="text-center text-3xl font-semibold mb-12">VERIFICATION</h1>
-        </div> */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {/* Step 1 */}
+        <div className="gap-8 max-w-5xl mx-auto">
+          {/* Centered OTP Verification */}
           <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-lg shadow-sm">
             <EmailIcon />
-            <h2 className="text-lg font-medium">VERIFY YOUR EMAIL</h2>
+            <h2 className="text-lg font-medium text-center">VERIFY YOUR EMAIL</h2>
             <Input
-              type="otp"
-              placeholder="OTP"
+              type="text"
+              placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              className="w-full"
+              className="w-full text-center"
             />
             <div>
-            {show  &&(<Button onClick={handleResendOTP} className="w-full  text-[#956d09]">
-              Resend OTP
-            </Button>)}
-            {!show &&(<Label className="w-full  text-[#956d09]">
-              You can resend OTP after {timeLeft}
-            </Label>)}
+              {showResend ? (
+                <Button
+                  onClick={handleResendOTP}
+                  className="w-full text-[#956d09]"
+                  disabled={loading}
+                >
+                  {loading ? "Resending..." : "Resend OTP"}
+                </Button>
+              ) : (
+                <Label className="w-full text-[#956d09] text-center">
+                  You can resend OTP after {timeLeft} seconds
+                </Label>
+              )}
             </div>
-            <Button onClick={handleVerifyOTP} className="w-full bg-[#b8860b] hover:bg-[#956d09] text-white">
-              Submit OTP
+            <Button
+              onClick={handleVerifyOTP}
+              className="w-full bg-[#b8860b] hover:bg-[#956d09] text-white"
+              disabled={loading}
+            >
+              {loading ? "Verifying..." : "Submit OTP"}
             </Button>
-            <p className="text-sm text-gray-500">ENTER THE OTP SENT TO YOUR EMAIL</p>
+            <p className="text-sm text-gray-500 text-center">
+              ENTER THE OTP SENT TO YOUR EMAIL
+            </p>
           </div>
         </div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
-  )
+  );
 }
-

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { userSignup } from "./beneficiaryApicalls";
 
-const BeneficiaryInitialstate={
+const BeneficiaryInitialstate = {
    beneficiary: "",
    isLoading:false,
    isError:false,
@@ -9,7 +9,7 @@ const BeneficiaryInitialstate={
    isSuccess:false
 }
 
-const BeneficiaryState=createSlice({
+const BeneficiaryState = createSlice({
     name:'beneficiary',
     initialState:BeneficiaryInitialstate,
     reducers:{
@@ -22,10 +22,60 @@ const BeneficiaryState=createSlice({
             state.isLoading=false
             state.isSuccess=true
              state.beneficiary=action.payload
-        }).addCase(userSignup.pending,(state,action)=>{
+        }).addCase(userSignup.pending,(state)=>{
             state.isSuccess=false
             state.isError=true
             state.message='pending'
         })
     },
 })
+
+
+// import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+// interface Beneficiary {
+//   id: string;
+//   name: string;
+//   email: string;
+//   phone: string;
+//   address: string;
+//   role: string;
+// }
+
+// interface BeneficiaryState {
+//   beneficiaries: Beneficiary[];
+//   loading: boolean;
+//   error: string | null;
+// }
+
+// Initial state
+// const initialState: BeneficiaryState = {
+//   beneficiaries: [],
+//   loading: false,
+//   error: null,
+// };
+
+
+// Slice
+// const beneficiarySlice = createSlice({
+//   name: 'beneficiaries',
+//   initialState,
+//   reducers: {},
+//   extraReducers: (builder) => {
+//     builder
+//       .addCase(fetchBeneficiaries.pending, (state) => {
+//         state.loading = true;
+//         state.error = null;
+//       })
+//       .addCase(fetchBeneficiaries.fulfilled, (state, action: PayloadAction<Beneficiary[]>) => {
+//         state.loading = false;
+//         state.beneficiaries = action.payload;
+//       })
+//       .addCase(fetchBeneficiaries.rejected, (state, action: PayloadAction<any>) => {
+//         state.loading = false;
+//         state.error = action.payload;
+//       });
+//   },
+// });
+
+export default BeneficiaryState.reducer;

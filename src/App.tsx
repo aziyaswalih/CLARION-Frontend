@@ -4,6 +4,7 @@ import AdminRoutes from "./routes/AdminRoutes";
 import BeneficiaryRoutes from "./routes/BeneficiaryRoutes";
 import VolunteerRoutes from "./routes/VolunteerRoutes";
 import DonorRoutes from "./routes/DonorRoutes";
+import HomePage from "./pages/Beneficiary/HomePage/HomePage";
 // import NotFound from "./components/NotFound";
 // import HomePage from "./pages/Beneficiary/HomePage/HomePage";
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/donor/*" element = {<DonorRoutes />} />
           <Route path="/volunteer/*" element = {<VolunteerRoutes />} />
           <Route path="/admin/*" element = {<AdminRoutes />} />
+          <Route path="/main" element={<HomePage/>}/>
           
         </Routes>
      

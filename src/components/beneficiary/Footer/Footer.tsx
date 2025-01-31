@@ -3,7 +3,7 @@ import { Button } from '../../ui/button'
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#2c2520] text-white py-8">
+    <footer className="bg-[#493f39] text-white py-8">
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
           <h3 className="text-2xl font-bold mb-4">CLARION</h3>
