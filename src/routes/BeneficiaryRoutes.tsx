@@ -1,25 +1,22 @@
 import { Route, Routes } from "react-router-dom"
-import UserSignup from "../pages/Beneficiary/signup/UserSignup"
+// import UserSignup from "../pages/Beneficiary/signup/UserSignup"
 import OTPVerification from "../pages/Beneficiary/signup/otpverify"
-import UserLogin from "../pages/Beneficiary/Login/UserLogin"
+// import UserLogin from "../pages/Beneficiary/Login/UserLogin"
 // import HomePage from "../pages/Beneficiary/HomePage/HomePage"
-import NotFound from "../components/NotFound";
 import BeneficiaryHome from "../pages/Beneficiary/HomePage/Home"
 
-import HomePage from "../pages/Beneficiary/HomePage/HomePage"
-import ResetPassword from "../pages/Beneficiary/Login/ResetPassword";
+import HomePage from "../pages/HomePage"
+// import ResetPassword from "../pages/Beneficiary/Login/ResetPassword";
 // import { Navigate } from "react-router-dom";
 
 const BeneficiaryRoutes = () => {
   return (
     <Routes>
-      <Route path="signup" element={<UserSignup/>}/>
+      {/* <Route path="signup" element={<UserSignup/>}/>
       <Route path="login" element={<UserLogin/>}/>
-      <Route path="reset" element={<ResetPassword/>}/>
+      <Route path="reset" element={<ResetPassword/>}/> */}
       <Route path="home" element={<BeneficiaryHome/>}/>
       <Route path="landingpage" element={<HomePage/>}/>
-      <Route path="" element={<HomePage/>}/>
-      <Route path="*" element = {<NotFound />} />
       <Route path="test" element = {<OTPVerification />} />
       
 

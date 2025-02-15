@@ -6,6 +6,7 @@ import Header from '../../../components/beneficiary/Header/Header';
 // import FeaturedProjects from '../../../components/beneficiary/FeaturedProjects';
 import { useNavigate } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
+import LatestCauses from '../../../components/beneficiary/LatestCauses';
 
 const DonorHome: React.FC = () => {
   const navigate = useNavigate();
@@ -99,6 +100,7 @@ const DonorHome: React.FC = () => {
 
       <section className="container mx-auto py-20 px-4">
         {/* <FeaturedProjects /> */}
+        <LatestCauses/>
       </section>
       <Footer />
     </div>

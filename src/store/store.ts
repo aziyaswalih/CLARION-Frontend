@@ -1,14 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 // import donorReducer from "../reducers/donor/donorReducer";
 // import volunteerReducer from "../reducers/volunteer/volunteerReducer";
+import userReducer from "../reducers/users/userReducer";
 import beneficiaryReducer from "../reducers/beneficiary/beneficiaryReducer";
-// import adminReducer from "../reducers/admin/adminReducer";
 
 export const store = configureStore({
   reducer: {
     // donor: donorReducer,
     // volunteer: volunteerReducer,
-    beneficiaries: beneficiaryReducer,
+    users: userReducer,
+    beneficiary: beneficiaryReducer,
     // admin: adminReducer,
   },
 });

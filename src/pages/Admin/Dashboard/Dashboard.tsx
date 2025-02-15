@@ -15,7 +15,7 @@ export default function DashboardPage() {
       <div className="ml-64 p-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-semibold">Overview</h1>
-          <Button variant="outline" onClick={() => navigate('/admin/login')}>LOGOUT</Button>
+          <Button variant="outline" onClick={() => navigate('/admin/logout')}>LOGOUT</Button>
         </div>
 
         {/* Stats Grid */}

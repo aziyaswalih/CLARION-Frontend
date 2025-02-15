@@ -1,11 +1,11 @@
 import React from 'react'
-import { Button } from '../../../components/ui/button'
+import { Button } from '../components/ui/button'
 // import { Card } from '../../../components/ui/card'
-import { Progress } from '../../../components/ui/progress';
+import { Progress } from '../components/ui/progress';
 import { Target, Eye } from 'lucide-react';
-import Footer from '../../../components/beneficiary/Footer/Footer'
-import Header from '../../../components/beneficiary/Header/Header'
-import LatestCauses from '../../../components/beneficiary/LatestCauses';
+import Footer from '../components/beneficiary/Footer/Footer'
+import Header from '../components/beneficiary/Header/Header'
+import LatestCauses from '../components/beneficiary/LatestCauses';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage: React.FC = () => {

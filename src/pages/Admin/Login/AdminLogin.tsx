@@ -6,6 +6,8 @@ import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
 import { useState } from "react";
 import axios from "axios";
+import Auth from "../../../components/googleAuth/Auth";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -51,11 +53,11 @@ const LoginPage = () => {
       );
       console.log(response.data.user);
 
-      alert(response.data.message);
       
       // Store the token in localStorage or a cookie
       localStorage.setItem("authToken", response.data.token);
       // Redirect to the dashboard or another page
+      toast.success('Login successful')
       
       window.location.href = "/admin/dashboard";
     } catch (error: any) {
@@ -128,12 +130,7 @@ const LoginPage = () => {
                 {loading ? "Logging in..." : "Login"}
               </Button>
             </form>
-            <p className="mt-6 text-center text-sm text-gray-600">
-              Don't have an account?{" "}
-              <a href="/signup" className="text-[#b8860b] hover:text-[#956d09] font-semibold">
-                Sign Up Here
-              </a>
-            </p>
+            <Auth/>
           </CardContent>
         </Card>
       </main>
