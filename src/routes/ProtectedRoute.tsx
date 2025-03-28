@@ -19,6 +19,7 @@ const ProtectedRoute = ({ allowedRoles }: { allowedRoles: string[] }) => {
     }
   } catch (error) {
     console.error("Invalid Token", error);
+    localStorage.removeItem('authToken');
     return <Navigate to="/login" replace />;
   }
 };

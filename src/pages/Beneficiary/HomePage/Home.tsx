@@ -1,13 +1,13 @@
-
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../../components/ui/button";
 import Footer from "../../../components/beneficiary/Footer/Footer";
 import Header from "../../../components/beneficiary/Header/Header";
-import { Upload } from "lucide-react";
+import {  Eye } from "lucide-react";
 import { toast } from "react-toastify";
-import { submitBeneficiaryDetails } from "../../../reducers/beneficiary/beneficiaryReducer";
-import {  AppDispatch } from "../../../store/store";
+import { getBeneficiary, submitBeneficiaryDetails } from "../../../reducers/beneficiary/beneficiaryReducer";
+import {  AppDispatch, RootState } from "../../../store/store";
+import { useNavigate } from "react-router-dom";
 
 //  types for address and family details
 interface Address {
@@ -25,27 +25,28 @@ interface FamilyDetails {
 
 // type for form data
 interface BeneficiaryFormData {
-    details: string;
-    condition: string;
+    // details: string;
+    // condition: string;
     dateOfBirth: string;
     gender: string;
     identificationType: string; 
     identificationNumber: string; 
     address: Address;
     familyDetails: FamilyDetails; // 
-    uploadedFiles: File[];
+    // uploadedFiles: File[];
     submissionStatus:'idle' | 'loading' | 'succeeded' | 'failed';
     submissionError:(string | null);
 }
 
 const BeneficiaryHome: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
-    // const beneficiaryData = useSelector((state: RootState) => state.beneficiary);
-
-    
-    const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-    const [details, setDetails] = useState<string>("");
-    const [condition, setCondition] = useState<string>("");
+    const user = useSelector((state:RootState) => state.users.user)
+    const beneficiaryData = useSelector((state: RootState) => state.beneficiary);
+    console.log(beneficiaryData,'beneficiary data');
+    const navigate = useNavigate()
+    // const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+    // const [details, setDetails] = useState<string>("");
+    // const [condition, setCondition] = useState<string>("");
     const [dateOfBirth, setDateOfBirth] = useState<string>("");
     const [gender, setGender] = useState<string>("");
     const [identificationType, setIdentificationType] = useState<string>(""); // ✅ State for identificationType
@@ -62,25 +63,33 @@ const BeneficiaryHome: React.FC = () => {
         incomeLevel: "",
     });
 
-   
-    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        if (event.target.files) {
-            setUploadedFiles((prevFiles) => [...prevFiles, ...Array.from(event.target.files??[])]);
-        }
-    };
+   useEffect(()=>{
+    dispatch(getBeneficiary())
+   },[dispatch,user])
+    // const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    //     // commented because file upload logic not implemented in the backend
+    //     if (event.target.files) {
+    //         // comment below function after completing implementation
+    //         setUploadedFiles((prevFiles) => [...prevFiles, ...Array.from([])]);
+    //         // setUploadedFiles((prevFiles) => [...prevFiles, ...Array.from(event.target.files??[])]);
+    //     }
+    // };
 
+    const goToProfile = () => {
+        navigate('/profile');
+      };
     
     const handleSubmit = (): void => {
         const formData: BeneficiaryFormData = {
-            details,
-            condition,
+            // details,
+            // condition,
             dateOfBirth,
             gender,
             identificationType, 
             identificationNumber,
             address,
             familyDetails, 
-            uploadedFiles, 
+            // uploadedFiles, 
             submissionStatus:'idle',
             submissionError:null
         };
@@ -102,7 +111,18 @@ const BeneficiaryHome: React.FC = () => {
                 <p className="text-lg md:text-xl text-[#555555] mb-8">
                     Please upload your reports and provide details about your situation to help us understand your needs better.
                 </p>
+                <div className="flex items-center space-x-4 cursor-pointer text-[#3c3630]" onClick={goToProfile}>
+                <Eye className="w-6 h-6" />
+                <span className="text-lg font-medium underline">Go to profile</span>
+                
+          </div><br></br>
+            <div className="flex justify-center">
+            <button onClick={()=>navigate('/story')} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
+                Add Story +
+            </button>
             </div>
+            </div>
+            
             <div className="w-1/2 h-full flex items-center justify-center">
                 <img
                     src="/images/featured-2.jpeg"
@@ -111,8 +131,11 @@ const BeneficiaryHome: React.FC = () => {
                 />
             </div>
         </section>
-
-        <section className="bg-[#f4f9ff] py-16 px-4">
+        {/* {beneficiaryData.details && <div className="container mx-auto max-w-3xl bg-white p-8 rounded-lg shadow-lg"><h3 className="text-2xl md:text-3xl font-semibold text-[#00509e] mb-6">Your submitted details</h3>
+        <p>{beneficiaryData.details}</p>
+        </div>
+        } */}
+        {beneficiaryData.submissionStatus!=='succeeded' && <section className="bg-[#f4f9ff] py-16 px-4">
             <div className="container mx-auto max-w-3xl bg-white p-8 rounded-lg shadow-lg">
                 <h3 className="text-2xl md:text-3xl font-semibold text-[#00509e] mb-6">
                     Submit Your Details
@@ -120,9 +143,9 @@ const BeneficiaryHome: React.FC = () => {
                 <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
 
                     {/* Details */}
-                    <div>
+                    {/* <div>
                         <label className="block text-lg text-[#3b3b3b] mb-2">
-                            Your Details
+                            Your Story
                         </label>
                         <textarea
                             rows={4}
@@ -131,10 +154,10 @@ const BeneficiaryHome: React.FC = () => {
                             placeholder="Provide details about your background and needs..."
                             className="w-full border border-gray-300 rounded-lg p-3 text-lg focus:ring focus:ring-[#00509e] outline-none"
                         ></textarea>
-                    </div>
+                    </div> */}
 
                     {/* Condition */}
-                    <div>
+                    {/* <div>
                         <label className="block text-lg text-[#3b3b3b] mb-2">
                             Your Condition
                         </label>
@@ -145,7 +168,7 @@ const BeneficiaryHome: React.FC = () => {
                             placeholder="Describe your current condition or situation..."
                             className="w-full border border-gray-300 rounded-lg p-3 text-lg focus:ring focus:ring-[#00509e] outline-none"
                         ></textarea>
-                    </div>
+                    </div> */}
 
                     {/* Date of Birth & Gender */}
                     <div className="grid grid-cols-2 gap-4">
@@ -258,13 +281,13 @@ const BeneficiaryHome: React.FC = () => {
 
 
                     {/* Upload Files */}
-                    <div className="border border-dashed border-gray-400 rounded-lg p-4 flex flex-col items-center justify-center">
+                    {/* <div className="border border-dashed border-gray-400 rounded-lg p-4 flex flex-col items-center justify-center">
                         <Upload className="w-10 h-10 text-gray-500 mb-2" />
-                        <input type="file" multiple onChange={handleFileUpload} className="hidden" />
-                        <label className="text-[#00509e] cursor-pointer hover:underline">
+                        <input type="file" id="fileInput" multiple onChange={handleFileUpload} className="hidden" />
+                        <label htmlFor="fileInput" className="text-[#00509e] cursor-pointer hover:underline">
                             Click to upload files
                         </label>
-                    </div>
+                    </div> */}
 
                     {/* Submit Button */}
                     <Button onClick={handleSubmit} className="bg-[#00509e] text-white w-full py-3 rounded-md">
@@ -272,7 +295,7 @@ const BeneficiaryHome: React.FC = () => {
                     </Button>
                 </form>
             </div>
-        </section>
+        </section>}
 
         <Footer />
     </div>

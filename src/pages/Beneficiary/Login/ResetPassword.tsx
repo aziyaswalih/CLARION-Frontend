@@ -1,13 +1,13 @@
-
+import { useState, ChangeEvent, FormEvent } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../store/store";
+import { sendOTP, verifyOtp, resetPasswordAsync } from "../../../reducers/users/userActions";
+import { toast } from "react-toastify";
 import Footer from "../../../components/beneficiary/Footer/Footer";
-import Header from "../../../components/beneficiary/Header/Header";
 import { Button } from "../../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
-import { useState, ChangeEvent, FormEvent } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
 
 interface FormData {
   email: string;
@@ -16,156 +16,123 @@ interface FormData {
   confirmPassword: string;
 }
 
-interface Errors {
-  email: string;
-  otp: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
 const ResetPasswordPage: React.FC = () => {
-  const { email: paramEmail } = useParams<{ email: string }>();
+  const dispatch = useDispatch<AppDispatch>();
   const [formData, setFormData] = useState<FormData>({
-    email: paramEmail || "",
-    otp: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
-
-  const [errors, setErrors] = useState<Errors>({
     email: "",
     otp: "",
     newPassword: "",
     confirmPassword: "",
   });
-
-  const [loading, setLoading] = useState<boolean>(false);
+  const [otpSent, setOtpSent] = useState<boolean>(false);
   const [otpVerified, setOtpVerified] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
-    setErrors({ ...errors, [id]: "" });
+  };
+
+  const handleSendOtp = async () => {
+    try {
+      const result = await dispatch(sendOTP(formData.email ));
+      if (sendOTP.fulfilled.match(result)) {
+        localStorage.setItem("token", result.payload.otpToken[1]);
+        console.log("token", result.payload.otpToken[1]);
+        
+        setOtpSent(true);
+        toast.success("OTP sent successfully!");
+      } else {
+        toast.error("Failed to send OTP. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Error sending OTP.");
+    }
   };
 
   const handleVerifyOtp = async () => {
-    try {
-        const token = localStorage.getItem('token')
-        console.log(token);
-        
-      const response = await axios.post<{ success: boolean }>(
-        "http://localhost:5000/api/user/verifyOtp",
-        { token:token, otp: formData.otp }
-      );
-      if (response.data.success) {
-        setOtpVerified(true);
-      } else {
-        setErrors({ ...errors, otp: "Invalid OTP. Please try again." });
-      }
-    } catch (error) {
-      setErrors({ ...errors, otp: "OTP verification failed." });
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("No token found. Please request OTP again.");
+      return;
+    }
+
+    const result = await dispatch(verifyOtp({ token, otp: formData.otp }));
+    if (verifyOtp.fulfilled.match(result)) {
+      localStorage.removeItem("token");
+      setOtpVerified(true);
+      toast.success("OTP successfully verified!");
+    } else {
+      toast.error("Invalid OTP. Please try again.");
     }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!otpVerified) return;
-
     if (formData.newPassword !== formData.confirmPassword) {
-      setErrors({ ...errors, confirmPassword: "Passwords do not match." });
+      toast.error("Passwords do not match.");
       return;
     }
 
     setLoading(true);
-    try {
-      await axios.post("http://localhost:5000/api/user/reset-password", {
-        email: formData.email,
-        password: formData.newPassword,
-      });
-      alert("Password reset successfully");
+    const result = await dispatch(
+      resetPasswordAsync({ email: formData.email, password: formData.newPassword })
+    );
+    setLoading(false);
+
+    if (resetPasswordAsync.fulfilled.match(result)) {
+      toast.success("Password reset successfully!");
       window.location.href = "/login";
-    } catch (error) {
-      console.error("Error resetting password:", error);
-    } finally {
-      setLoading(false);
+    } else {
+      toast.error("Password reset failed.");
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#877356]">
-      <Header />
       <main className="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">
-        <Card className="w-full max-w-md bg-white/90 backdrop-blur-sm shadow-xl">
+        <Card className="w-full max-w-md bg-white/80 backdrop-blur-sm shadow-xl">
           <CardHeader>
             <CardTitle className="text-2xl md:text-3xl font-bold">RESET PASSWORD</CardTitle>
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={handleSubmit}>
-              {/* Email Field */}
               <div>
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  readOnly={!!paramEmail} // Readonly if email is from params
-                  placeholder="Enter your email"
-                  className={paramEmail ? "bg-gray-200 cursor-not-allowed" : ""}
-                />
-                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                <Input id="email" type="email" onChange={handleChange} placeholder="Enter your email" />
+                {!otpSent && (
+                  <Button type="button" onClick={handleSendOtp} className="mt-2 bg-blue-500 text-white">
+                    Send OTP
+                  </Button>
+                )}
               </div>
 
-              {/* OTP Field */}
-              <div>
-                <Label htmlFor="otp">Enter OTP</Label>
-                <Input
-                  id="otp"
-                  type="text"
-                  value={formData.otp}
-                  onChange={handleChange}
-                  placeholder="Enter OTP"
-                />
-                <Button type="button" onClick={handleVerifyOtp} className="mt-2 bg-blue-500 text-white">
-                  Verify OTP
-                </Button>
-                {errors.otp && <p className="text-red-500 text-sm">{errors.otp}</p>}
-              </div>
+              {otpSent && (
+                <div>
+                  <Label htmlFor="otp">Enter OTP</Label>
+                  <Input id="otp" type="text" value={formData.otp} onChange={handleChange} placeholder="Enter OTP" />
+                  <Button type="button" onClick={handleVerifyOtp} className="mt-2 bg-green-500 text-white">
+                    Verify OTP
+                  </Button>
+                </div>
+              )}
 
-              {/* New Password Field */}
-              <div>
-                <Label htmlFor="newPassword">New Password</Label>
-                <Input
-                  id="newPassword"
-                  type="password"
-                  value={formData.newPassword}
-                  onChange={handleChange}
-                  placeholder="Enter new password"
-                />
-              </div>
-
-              {/* Confirm Password Field */}
-              <div>
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Confirm password"
-                />
-                {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
-              </div>
-
-              {/* Reset Password Button */}
-              <Button
-                type="submit"
-                disabled={!otpVerified}
-                className="w-full bg-gradient-to-r from-[#b8860b] to-[#956d09] text-white"
-                title={!otpVerified ? "Verify OTP first" : ""}
-              >
-                {loading ? "Resetting..." : "Reset Password"}
-              </Button>
+              {otpVerified && (
+                <>
+                  <div>
+                    <Label htmlFor="newPassword">New Password</Label>
+                    <Input id="newPassword" type="password" value={formData.newPassword} onChange={handleChange} placeholder="Enter new password" />
+                  </div>
+                  <div>
+                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <Input id="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleChange} placeholder="Confirm password" />
+                  </div>
+                  <Button type="submit" className="w-full bg-gradient-to-r from-[#b8860b] to-[#956d09] text-white">
+                    {loading ? "Resetting..." : "Reset Password"}
+                  </Button>
+                </>
+              )}
             </form>
           </CardContent>
         </Card>

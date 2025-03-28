@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom"
-import AdminLogin from "../pages/Admin/Login/AdminLogin"
 import DashboardPage from "../pages/Admin/Dashboard/Dashboard"
 import { VolunteerTable } from "../pages/Admin/VolunteerList/Volunteerlist"
 import { DonorsList } from "../pages/Admin/DonorList/Donorlist"
@@ -14,7 +13,6 @@ import NotFound from "../components/NotFound"
 const AdminRoutes = () => {
   return (
     <Routes>
-      <Route path="login" element={<AdminLogin/>}/>
       <Route path="dashboard" element={<DashboardPage/>}/>
       <Route path="volunteers" element={<VolunteerTable/>}/>
       <Route path="volunteers/edit/:id" element={<Editvolunteers />} />

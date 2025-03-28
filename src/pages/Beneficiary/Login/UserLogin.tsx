@@ -1,35 +1,42 @@
 import Footer from "../../../components/beneficiary/Footer/Footer";
-import Header from "../../../components/beneficiary/Header/Header";
 import { Button } from "../../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
-import axios from "axios";
 import { toast } from "react-toastify";
 import OTPForm from "../signup/OTPForm"; 
 import {jwtDecode} from 'jwt-decode';
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Auth from "../../../components/googleAuth/Auth";
+import { useDispatch, useSelector } from "react-redux";
+import { loginAsync, resendOtp, sendOTP, verifyOtp } from "../../../reducers/users/userActions";
+import { AppDispatch, RootState } from "../../../store/store";
+import { resetState } from "../../../reducers/users/userReducer";
 const LoginPage = () => {
-  // ... (state variables and handleChange function - same as before)
+  
     const [formData, setFormData] = useState({
       email: "",
       password: "",
     });
+    const { isSuccess, isError, isLoading } = useSelector(
+      (state: RootState) => state.users
+    );
+    const [isOtpSent,setOtpSent] = useState<boolean>(false) 
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const [loading, setLoading] = useState(false);
     const [showOTPForm, setShowOTPForm] = useState(false);
-    const [otp, setOtp] = useState(""); // State to store OTP input
+    // const [otp, setOtp] = useState(""); // State to store OTP input
     const [otpError, setOtpError] = useState(""); // State to store OTP error message
     const [userEmail, setUserEmail] = useState("");
     const [isResending, setIsResending] = useState(false);
-    const [resendTimer, setResendTimer] = useState(0);  
+    const [resendTimer, setResendTimer] = useState<number>(30);  
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
     setErrors({ ...errors, [id]: undefined });
   };
+    const dispatch = useDispatch<AppDispatch>()
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
 
 
@@ -47,18 +54,12 @@ const LoginPage = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-  // const handleHome = (formData.email,response.data){
-  //   if (response.data?.user?.role === "volunteer") {
-  //     window.location.href = "/volunteer/home";
-  //   } else if (response.data?.user?.role === "user") {
-  //     window.location.href = "/home";
-  //   } else if (response.data?.user?.role === "donor") {
-  //     window.location.href = "/donor/home";
-  //   } else {
-  //     throw new Error("Invalid role");
-  //   }
-  // }
+  useEffect(() => {
+    if (isSuccess || isError) {
+      setTimeout(() => dispatch(resetState()), 3000);
+      Navigate 
+    }
+  }, [isSuccess, isError, dispatch]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,65 +67,66 @@ const LoginPage = () => {
 
     setLoading(true);
 
-    try {
-      const response = await axios.post<{ token: string; message: string; user: any }>(
-        "http://localhost:5000/api/user/login",
-        formData
-      );
-
-      if (response.data.user.is_verified) {
-        localStorage.setItem("authToken", response.data.token);
+      dispatch(loginAsync(formData)).unwrap()
+      .then((user)=>{
+        if (user.user?.is_verified) {
+        localStorage.setItem("authToken", user.token);
         setUserEmail(formData.email);
-        if (response.data?.user?.role === "volunteer") {
+        if (user?.user?.role === "volunteer") {
           window.location.href = "/volunteer/home";
-        } else if (response.data?.user?.role === "user") {
+        } else if (user?.user?.role === "user") {
           window.location.href = "/home";
-        } else if (response.data?.user?.role === "donor") {
+        } else if (user?.user?.role === "donor") {
           window.location.href = "/donor/home";
+        } else if (user?.user?.role === "admin") {
+          window.location.href = "/admin/dashboard";
         } else {
           throw new Error("Invalid role");
         }
         
       } else {
-        localStorage.setItem("authToken", response.data.token);
+        localStorage.setItem("authToken", user.token);
         setShowOTPForm(true);
         setUserEmail(formData.email);
 
         // Send OTP only if not already sent (or implement logic to resend if needed)
         try {
-          const otpResponse = await axios.post<{ otpToken: string; message: string; user: any }>(
-            "http://localhost:5000/api/user/auth/send-otp",
-            { email: formData.email }
-          );
-          localStorage.setItem('otpToken', otpResponse.data.otpToken[1]); // Store the OTP token
-          console.log( otpResponse.data.otpToken[1],'token from otp response');
+          // cutted from
+          dispatch(sendOTP(formData.email??userEmail)).unwrap()
+          .then((otpResponse)=>{
+            setOtpSent(true)
+          localStorage.setItem('otpToken', otpResponse.otpToken[1]); // Store the OTP token
+          console.log( otpResponse.otpToken[1],'token from otp response');
           
           toast.info("Your account is not verified. Please enter the OTP sent to your email.");
-        } catch (otpError:any) {
+        })
+        }catch (error:any) {
           console.error("Error sending OTP:", otpError);
-          toast.error(otpError.response?.data?.message || "Failed to send OTP.");
+          toast.error(error.response?.data?.message || "Failed to send OTP.");
         }
       }
-    } catch (error: any) {
+      setLoading(false);
+
+      })
+      
+      
+      
+    .catch ((error)=> {
       console.error("Error during login:", error);
       setErrors({ email: error.response?.data?.message || "Login failed." });
       toast.error(error.response?.data?.message || "Login failed.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+    }) 
+  
+  }
   const handleOTPVerify = async (otp: string) => {  // Accept otp as argument
     setLoading(true);
     try {
       const token = localStorage.getItem("otpToken");
       console.log(token,otp);
       
-      const response = await axios.post(
-        "http://localhost:5000/api/user/verifyOtp",
-        { token, otp }
-      );
-      if (response.data.success) {
+      dispatch(verifyOtp({ token:token as string, otp })).unwrap()
+      
+      .then(()=> {
         localStorage.removeItem('otpToken');
         toast.success("OTP verified successfully!");
         const token = localStorage.getItem("authToken") || '';
@@ -143,10 +145,11 @@ const LoginPage = () => {
         } else {
           throw new Error("Invalid role");
         }}
-      } else {
-        setOtpError(response.data.message || "Invalid OTP. Please try again.");
-        toast.error(response.data.message || "Invalid OTP. Please try again.");
-      }
+      }) 
+      .catch((error)=> {
+        setOtpError(error.message || "Invalid OTP. Please try again.");
+        toast.error(error.message || "Invalid OTP. Please try again.");
+      })
     } catch (error: any) {
       console.error("Error during OTP verification:", error);
       setOtpError(error.response?.data?.message || "OTP verification failed.");
@@ -161,11 +164,11 @@ const LoginPage = () => {
     setResendTimer(30); // Set initial timer value
 
     try {
-      const otpToken = localStorage.getItem('otpToken'); // Retrieve OTP token
-      const response = await axios.post("http://localhost:5000/api/user/resendOtp", {
-        token: otpToken,  // Use OTP token for resend
-      });
-      toast.success("OTP resent successfully!");
+      const token = localStorage.getItem('otpToken'); // Retrieve OTP token
+     
+      dispatch(resendOtp({ token:token as string })).unwrap();
+            toast.success("OTP resent successfully");
+            setResendTimer(30);
     } catch (error:any) {
       console.error("Error resending OTP:", error);
       toast.error(error.response?.data?.message || "Failed to resend OTP.");
@@ -184,19 +187,19 @@ const LoginPage = () => {
     }
 
     try {
-      setLoading(true);
-      const response = await axios.post("http://localhost:5000/api/user/auth/send-otp", {
-        email: formData.email,
-      });
+      // setLoading(true);
+      // dispatch(sendOTP(
+      //   formData.email??userEmail
+      // )).unwrap()
 
-      if (response.data.success) {
-        window.location.href = `/reset?email=${encodeURIComponent(formData.email)}`;
-        localStorage.setItem('token', response.data.otpToken[1]);
-        alert("OTP sent to your email. Proceed to reset your password.");
+      // .then((response) =>{
+        window.location.href = `/reset}`;
+      //   localStorage.setItem('token', response.otpToken[1]);
+      //   toast.info("OTP sent to your email. Proceed to reset your password.");
 
-      } else {
-        throw new Error(response.data.message || "Failed to send OTP.");
-      }
+      // }).catch((error)=> {
+      //   throw new Error(error?.data?.message || "Failed to send OTP.");
+      // })
     } catch (error: any) {
       setErrors({ email: error.response?.data?.message || "Error sending OTP." });
     } finally {
@@ -206,7 +209,8 @@ const LoginPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-    if (token) {
+    const otpToken = localStorage.getItem("otpToken")??null
+    if (token && !otpToken) {
       try {
         const decoded: any = jwtDecode(token);
         console.log(decoded.role);
@@ -233,8 +237,12 @@ const LoginPage = () => {
         setRedirectPath("/login");
       }
     }
-  }, []);
-
+    let timer: NodeJS.Timeout;
+    if (isOtpSent && resendTimer > 0) {
+      timer = setTimeout(() => setResendTimer((prev) => prev - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [resendTimer, isOtpSent]);
   if (redirectPath) {
     return <Navigate to={redirectPath} replace />;
   }
@@ -242,9 +250,9 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#877356]">
-      <Header />
+      {/* <Header /> */}
       <main className="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">
-        <Card className="w-full max-w-md bg-white/90 backdrop-blur-sm shadow-xl">
+        <Card className="w-full max-w-md bg-white/80 backdrop-blur-sm shadow-xl">
           <CardHeader>
             {/* ... (Card Header content - same as before) */}
             <div className="text-center mb-4">
@@ -302,6 +310,8 @@ const LoginPage = () => {
                 >
                   {loading ? "Logging in..." : "Login"}
                 </Button>
+                <p className="text-lg text-center flex justify-center items-center">OR</p>
+
                 <Auth/>
                 {/* ... (Forgot password and signup links - same as before) */}
                 <p className="mt-6 text-center text-sm text-gray-600">
@@ -325,7 +335,7 @@ const LoginPage = () => {
               <OTPForm
                 onSubmit={handleOTPVerify}
                 onResend={handleResendOtp}
-                isLoading={loading}
+                isLoading={isLoading}
                 isResending={isResending}
                 resendTimer={resendTimer}
               />

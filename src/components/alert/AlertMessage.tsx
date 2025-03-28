@@ -1,10 +1,9 @@
 import { FC } from "react"
 
-
-
 interface Props{
     message:string
 }
+
 const AlertMessage:FC<Props> = ({message}) => {
   return (
     <div>
@@ -13,5 +12,4 @@ const AlertMessage:FC<Props> = ({message}) => {
     </div>
   )
 }
-
 export default AlertMessage

@@ -2,12 +2,10 @@ import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
 import { UserGoogle_post } from "../../reducers/users/userApicalls";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const GoogleLoginUser = () => {
     const dispatch:AppDispatch =useDispatch()
-    const navigate=useNavigate()
     const handleSuccess = async (response:  CredentialResponse) => {
         try {
           const { credential } = response;
@@ -15,7 +13,7 @@ const GoogleLoginUser = () => {
         const res=await dispatch(UserGoogle_post(credential)).unwrap()
     .then(()=>{
         toast.success("success login")
-        navigate('/login')
+        window.location.href = '/login'
         
         
     })

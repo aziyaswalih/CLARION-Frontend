@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { useraxiosInstance } from "../../api/useraxios";
-// import axios from "axios";
+import  useraxiosInstance  from "../../api/useraxios";
+
 
 export const userSignup = createAsyncThunk('/user/signup',async(signupdata,{rejectWithValue})=>{
     try {

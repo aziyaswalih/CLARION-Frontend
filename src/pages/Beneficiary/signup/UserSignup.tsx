@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../../store/store';
 import { userSignup, verifyOtp, resendOtp } from '../../../reducers/users/userActions';
 import { resetState } from '../../../reducers/users/userReducer';
-import Header from '../../../components/beneficiary/Header/Header';
 import Footer from '../../../components/beneficiary/Footer/Footer';
 import SignupForm from './SignupForm'; // Import the SignupForm component
 import OTPForm from './OTPForm'; // Import the OTPForm component
@@ -13,7 +12,7 @@ import {jwtDecode} from 'jwt-decode';
 
 const UserSignup: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { isSuccess, isError, message, isLoading, isOtpSent, token } = useSelector(
+  const { isSuccess, isError, isLoading, isOtpSent, token } = useSelector(
     (state: RootState) => state.users
   );
 
@@ -90,7 +89,7 @@ const UserSignup: React.FC = () => {
   const handleResendOtp = async () => {
     setIsResendingOtp(true);
     try {
-      await dispatch(resendOtp({ token })).unwrap();
+      dispatch(resendOtp({ token })).unwrap();
       toast.success("OTP resent successfully");
       setResendTimer(30);
     } catch (error:any) {
@@ -106,9 +105,11 @@ const UserSignup: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full flex flex-col bg-gradient-to-br from-[#9f8b75] to-[#2c2520]">
-      <Header />
+     
       <main className="flex-grow container mx-auto px-4 py-8 flex flex-col lg:flex-row items-center justify-center gap-8">
         <div className="lg:w-1/2 text-black">
+        <h1 className="text-2xl md:text-4xl font-bold font-serif text-[#774513]">CLARION</h1>
+        <br></br>
           {/* ... (Community info - same as before) */}
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Join Our Community</h2>
           <p className="text-lg md:text-xl mb-6">Be part of something bigger. Sign up today and start making a difference!</p>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '../../../components/ui/button';
-import { Heart } from 'lucide-react';
+import { Eye, Heart } from 'lucide-react';
 import Footer from '../../../components/beneficiary/Footer/Footer';
 import Header from '../../../components/beneficiary/Header/Header';
 // import FeaturedProjects from '../../../components/beneficiary/FeaturedProjects';
@@ -23,30 +23,13 @@ const DonorHome: React.FC = () => {
     }
   }
 
+  const goToProfile = () => {
+    navigate('/donor/profile');
+  };
+
   const goToDonations = () => {
     navigate('/donor/donations');
   };
-
-  const stats = [
-    {
-      icon: (
-        <svg viewBox="0 0 24 24" className="w-8 h-8" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
-        </svg>
-      ),
-      number: '25,000+',
-      label: 'Lives Impacted',
-    },
-    {
-      icon: (
-        <svg viewBox="0 0 24 24" className="w-8 h-8" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
-        </svg>
-      ),
-      number: '10,000+',
-      label: 'Donors',
-    },
-  ];
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f9f7f4]">
@@ -72,6 +55,10 @@ const DonorHome: React.FC = () => {
           <p className="text-lg md:text-xl text-[#4c4130] mb-8">
             Thank you for being a part of this mission. Together, we can achieve more!
           </p>
+          <div className="flex items-center space-x-4 cursor-pointer text-[#3c3630]" onClick={goToProfile}>
+            <Eye className="w-6 h-6" />
+            <span className="text-lg font-medium underline">Go to profile</span>
+          </div>
           <div
             className="flex items-center space-x-4 cursor-pointer text-[#4c4130]"
             onClick={goToDonations}
@@ -92,13 +79,19 @@ const DonorHome: React.FC = () => {
           <p className="text-[#5b544d] max-w-2xl mx-auto mb-8 text-lg">
             Every donation helps transform lives. Join hands with us to bring hope and change to those in need.
           </p>
-          <Button className="bg-[#c8960b] hover:bg-[#a97509] text-white px-8 py-3 rounded-md text-lg transition-colors duration-200">
+          {/* <Button className="bg-[#c8960b] hover:bg-[#a97509] text-white px-8 py-3 rounded-md text-lg transition-colors duration-200" onClick={<LatestCauses/>}>
             Donate Now
-          </Button>
+          </Button> */}
+          <button
+      className="bg-[#c8960b] hover:bg-[#a97509] text-white px-8 py-3 rounded-md text-lg transition-colors duration-200"
+      onClick={() => navigate("/latest_causes")}  // Correct navigation
+    >
+      Donate Now
+    </button>
         </div>
       </section>
 
-      <section className="container mx-auto py-20 px-4">
+      <section id='latest_cause' className="container mx-auto py-20 px-4">
         {/* <FeaturedProjects /> */}
         <LatestCauses/>
       </section>

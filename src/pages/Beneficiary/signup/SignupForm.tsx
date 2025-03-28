@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
-import { Button } from '../../../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
-import { Input } from '../../../components/ui/input';
-import { Label } from '../../../components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select';
+import React, { useState } from "react";
+import { Button } from "../../../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../components/ui/card";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../components/ui/select";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 interface SignupFormData {
   name: string;
@@ -22,12 +34,12 @@ interface SignupFormProps {
 
 const SignupForm: React.FC<SignupFormProps> = ({ onSubmit, isLoading }) => {
   const [formData, setFormData] = useState<SignupFormData>({
-    name: '',
-    email: '',
-    phone: '',
-    role: '',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    email: "",
+    phone: "",
+    role: "",
+    password: "",
+    confirmPassword: "",
   });
   const [errors, setErrors] = useState<Partial<SignupFormData>>({});
 
@@ -61,7 +73,9 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit, isLoading }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
     setErrors({ ...errors, [e.target.id]: undefined });
   };
@@ -78,13 +92,13 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit, isLoading }) => {
     }
     try {
       await onSubmit(formData);
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error);
     }
   };
 
   return (
-    <Card className="lg:w-1/2 w-full max-w-md bg-white/90 backdrop-blur-sm shadow-xl">
+    <Card className="lg:w-1/2 w-full max-w-md bg-white/80 backdrop-blur-sm shadow-xl">
       <CardHeader>
         <div className="text-center mb-4">
           <CardTitle className="text-2xl md:text-3xl font-bold mt-4">
@@ -104,7 +118,9 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit, isLoading }) => {
               placeholder="Enter your username"
               className="mt-1"
             />
-            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="email">Email</Label>
@@ -116,7 +132,9 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit, isLoading }) => {
               placeholder="Enter your email"
               className="mt-1"
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="phone">Phone</Label>
@@ -128,7 +146,9 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit, isLoading }) => {
               placeholder="Enter your phone number"
               className="mt-1"
             />
-            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+            {errors.phone && (
+              <p className="text-red-500 text-sm">{errors.phone}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="role">Role</Label>
@@ -142,7 +162,9 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit, isLoading }) => {
                 <SelectItem value="user">Beneficiary</SelectItem>
               </SelectContent>
             </Select>
-            {errors.role && <p className="text-red-500 text-sm">{errors.role}</p>}
+            {errors.role && (
+              <p className="text-red-500 text-sm">{errors.role}</p>
+            )}
           </div>
 
           <div>
@@ -155,7 +177,9 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit, isLoading }) => {
               placeholder="Enter your password"
               className="mt-1"
             />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="confirmPassword">Confirm Password</Label>
@@ -171,9 +195,22 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSubmit, isLoading }) => {
               <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
             )}
           </div>
-          <Button className="w-full bg-gradient-to-br from-[#956d09] to-[#b8860b]" disabled={isLoading}>
+          <Button
+            className="w-full bg-gradient-to-br from-[#956d09] to-[#b8860b]"
+            disabled={isLoading}
+          >
             Sign Up
           </Button>
+          {/* <p>If You Already Have An Account? <span className='text-red-900'>Please Login</span> </p> */}
+          <p>
+            If You Already Have An Account?{" "}
+            <Link
+              to="/login"
+              className="text-[#b8860b] hover:text-[#956d09] font-semibold underline"
+            >
+               Login Here
+            </Link>
+          </p>
         </form>
       </CardContent>
     </Card>

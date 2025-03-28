@@ -2,6 +2,8 @@ import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Progress } from '../../components/ui/progress';
+import { useNavigate } from "react-router-dom";
+
 
 interface CauseProps {
   category: string;
@@ -63,23 +65,24 @@ const causes: CauseProps[] = [
   }
 ];
 
+
 const CauseCard: React.FC<CauseProps> = ({ category, title, image, raised, goal, progress }) => {
+  const navigate = useNavigate();
+
+  const handleDonateClick = () => {
+    navigate("/donate", { state: { category, title, image, raised, goal, progress } });
+  };
+
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
       <div className="relative h-48">
-        <img
-          src={image || "/placeholder.svg"}
-          alt={title}
-          className="w-full h-full object-cover"
-        />
+        <img src={image || "/placeholder.svg"} alt={title} className="w-full h-full object-cover" />
         <span className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-sm font-medium text-[#2c2520]">
           {category}
         </span>
       </div>
       <div className="p-6">
-        <h3 className="text-lg font-semibold text-[#2c2520] mb-4 line-clamp-2">
-          {title}
-        </h3>
+        <h3 className="text-lg font-semibold text-[#2c2520] mb-4 line-clamp-2">{title}</h3>
         <div className="space-y-4">
           <div className="space-y-2">
             <Progress value={progress} className="h-2 bg-gray-100" indicatorClassName="bg-[#289581]" />
@@ -88,7 +91,10 @@ const CauseCard: React.FC<CauseProps> = ({ category, title, image, raised, goal,
               <span>Goal: ${goal.toLocaleString()}</span>
             </div>
           </div>
-          <Button className="w-30 bg-[#b8860b] hover:bg-[#956d09] text-white">
+          <Button
+            onClick={handleDonateClick}
+            className="w-30 bg-[#b8860b] hover:bg-[#956d09] text-white"
+          >
             Donate Now
           </Button>
         </div>
@@ -97,13 +103,15 @@ const CauseCard: React.FC<CauseProps> = ({ category, title, image, raised, goal,
   );
 };
 
+
+
 const LatestCauses: React.FC = () => {
   return (
     <section className="py-20 bg-[#fcfcfc]">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-12">
           <div>
-            <span className="text-[#b8860b] text-sm uppercase tracking-wider">Latest Causes</span>
+            <span className="text-[#b8860b] text-2xl uppercase tracking-wider underline">Latest Causes</span><br></br>
             <h2 className="text-3xl md:text-4xl font-serif text-[#2c2520] mt-2">
               Find The Popular Cause<br />
               And Donate Them
