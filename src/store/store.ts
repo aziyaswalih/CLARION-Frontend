@@ -5,6 +5,8 @@ import userReducer from "../reducers/users/userReducer";
 import beneficiaryReducer from "../reducers/beneficiary/beneficiaryReducer";
 import adminReducer from "../reducers/admin/adminReducer";
 import storyReducer from "../reducers/beneficiary/storyReducer";
+import walletReducer from "../reducers/users/walletReducer";
+import transactionReducer from "../reducers/users/transactionReducer";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +16,8 @@ export const store = configureStore({
     beneficiary: beneficiaryReducer,
     admin: adminReducer,
     stories: storyReducer,
+    wallet: walletReducer,
+    transaction: transactionReducer,
   },
 });
 

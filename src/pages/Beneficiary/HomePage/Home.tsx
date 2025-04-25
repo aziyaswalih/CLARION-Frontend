@@ -78,6 +78,10 @@ const BeneficiaryHome: React.FC = () => {
     const goToProfile = () => {
         navigate('/profile');
       };
+
+        const goToStories = () => {
+            navigate('/stories');
+        };
     
     const handleSubmit = (): void => {
         const formData: BeneficiaryFormData = {
@@ -111,17 +115,24 @@ const BeneficiaryHome: React.FC = () => {
                 <p className="text-lg md:text-xl text-[#555555] mb-8">
                     Please upload your reports and provide details about your situation to help us understand your needs better.
                 </p>
-                <div className="flex items-center space-x-4 cursor-pointer text-[#3c3630]" onClick={goToProfile}>
+                {beneficiaryData.submissionStatus ==='succeeded' && <div className="flex items-center space-x-4 cursor-pointer text-[#3c3630]" onClick={goToProfile}>
                 <Eye className="w-6 h-6" />
                 <span className="text-lg font-medium underline">Go to profile</span>
                 
-          </div><br></br>
+          </div>}
+          <br></br>
+          <div className="flex items-center space-x-4 cursor-pointer text-[#3c3630]" onClick={goToStories}>
+                        <Eye className="w-6 h-6" />
+                        <span className="text-lg font-medium underline">View Your Stories</span>
+                      </div><br></br>
             <div className="flex justify-center">
             <button onClick={()=>navigate('/story')} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
                 Add Story +
             </button>
             </div>
             </div>
+           
+            
             
             <div className="w-1/2 h-full flex items-center justify-center">
                 <img

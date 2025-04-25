@@ -1,11 +1,13 @@
 import React from 'react';
 import { Button } from '../../ui/button';
-
+import axios from 'axios';
 const Header: React.FC = () => {
   const authToken = localStorage.getItem('authToken'); // Check for token
 
   const handleLogout = () => {
     localStorage.removeItem('authToken'); // Remove token
+    axios.post('http://localhost:5000/api/user/logout', {}, { withCredentials: true })
+    alert("Logout successful")
     window.location.href = '/'; // Redirect to home or login page
   };
 

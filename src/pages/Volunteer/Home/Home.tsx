@@ -101,10 +101,10 @@ const HomePage: React.FC = () => {
           <p className="text-lg md:text-xl text-[#3c3630] mb-8">
             We're glad to have you with us. Your efforts make a real difference!
           </p>
-          <div className="flex items-center space-x-4 cursor-pointer text-[#3c3630]" onClick={goToProfile}>
+          {(status !== 'failed') && <div className="flex items-center space-x-4 cursor-pointer text-[#3c3630]" onClick={goToProfile}>
             <Eye className="w-6 h-6" />
             <span className="text-lg font-medium underline">Go to profile</span>
-          </div>
+          </div>}
 
           {/* Logout Button */}
           <Button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white mt-4 px-4 py-2">
@@ -223,7 +223,7 @@ const HomePage: React.FC = () => {
                         className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
                       >
                         <img
-                          src={story.images && story.images.length > 0 ? story.images[0] : defaultImage}
+                          src={story.images && story.images.length > 0 ? story.images[0]?`http://localhost:5000/uploads/${story.images[0]}`:defaultImage : defaultImage}
                           alt={story.title}
                           className="w-full h-56 object-cover"
                         />
@@ -268,7 +268,8 @@ const HomePage: React.FC = () => {
                         className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
                       >
                         <img
-                          src={story.images && story.images.length > 0 ? story.images[0] : defaultImage}
+                          src={story.images && story.images.length > 0 ? 
+                            `http://localhost:5000/uploads/${story.images[0]}` : defaultImage}
                           alt={story.title}
                           className="w-full h-56 object-cover"
                         />

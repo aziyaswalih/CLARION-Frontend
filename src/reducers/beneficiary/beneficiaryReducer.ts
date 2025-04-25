@@ -239,14 +239,26 @@ export const updateBeneficiaryProfile = createAsyncThunk(
                 payload = new FormData();
                 for (const key in updatedProfile) {
                     console.log(updatedProfile,'updatedprofile');
+                    const value = (updatedProfile as any)[key];
+
+                    if (key === 'profilePic' && value instanceof File) {
+                        payload.append('profilePic', value);
+                      } else if (typeof value === 'object' && value !== null) {
+                        // Serialize nested objects like address and familyDetails
+                        payload.append(key, JSON.stringify(value));
+                      } else if (value !== undefined && value !== null) {
+                        payload.append(key, value);
+                      }
+                // payload = updatedProfile;
                     
-                    if (key === 'profilePic') {
-                        (updatedProfile.uploadedFiles as File[]).forEach((file) => {
-                            payload.append("uploadedFiles", file);
-                        });
-                    } else {
-                        payload.append(key, (updatedProfile as any)[key]);
-                    }
+                //     if (key === 'profilePic') {
+                //         // (updatedProfile.profilePic as File).forEach((file) => {
+                //             payload.append("profilePic", updatedProfile.profilePic);
+                //         // });
+                //     }
+                //     //  else {
+                //     //     payload.append(key, (updatedProfile as any)[key]);
+                //     // }
                 }
                 headers["Content-Type"] = "multipart/form-data";
             } else {

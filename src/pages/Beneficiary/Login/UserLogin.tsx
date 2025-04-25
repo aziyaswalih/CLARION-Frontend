@@ -248,104 +248,222 @@ const LoginPage = () => {
   }
 
 
+  // return (
+  //   <div className="min-h-screen flex flex-col bg-[#877356]">
+  //     {/* <Header /> */}
+  //     <main className="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">
+  //       <Card className="w-full max-w-md bg-white/80 backdrop-blur-sm shadow-xl">
+  //         <CardHeader>
+  //           {/* ... (Card Header content - same as before) */}
+  //           <div className="text-center mb-4">
+  //             <div className="w-20 h-20 bg-gradient-to-br from-[#b8860b] to-[#956d09] rounded-full mx-auto flex items-center justify-center">
+  //               <svg
+  //                 className="w-12 h-12 text-white"
+  //                 fill="none"
+  //                 stroke="currentColor"
+  //                 viewBox="0 0 24 24"
+  //               >
+  //                 <path
+  //                   strokeLinecap="round"
+  //                   strokeLinejoin="round"
+  //                   strokeWidth="2"
+  //                   d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+  //                 />
+  //               </svg>
+  //             </div>
+  //             <CardTitle className="text-2xl md:text-3xl font-bold mt-4">LOGIN TO YOUR ACCOUNT</CardTitle>
+  //           </div>
+  //         </CardHeader>
+  //         <CardContent>
+  //           {!showOTPForm ? (
+  //             <form className="space-y-4" onSubmit={handleSubmit}>
+  //               {/* ... (Login form fields - same as before) */}
+  //               <div>
+  //                 <Label htmlFor="email">Email</Label>
+  //                 <Input
+  //                   id="email"
+  //                   type="email"
+  //                   value={formData.email}
+  //                   onChange={handleChange}
+  //                   placeholder="Enter your email"
+  //                   className="mt-1"
+  //                 />
+  //                 {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+  //               </div>
+  //               <div>
+  //                 <Label htmlFor="password">Password</Label>
+  //                 <Input
+  //                   id="password"
+  //                   type="password"
+  //                   value={formData.password}
+  //                   onChange={handleChange}
+  //                   placeholder="Enter your password"
+  //                   className="mt-1"
+  //                 />
+  //                 {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+  //               </div>
+
+  //               <Button
+  //                 type="submit"
+  //                 className="w-full bg-gradient-to-r from-[#b8860b] to-[#956d09] text-white"
+  //                 disabled={loading}
+  //               >
+  //                 {loading ? "Logging in..." : "Login"}
+  //               </Button>
+  //               <p className="text-lg text-center flex justify-center items-center">OR</p>
+
+  //               <Auth/>
+  //               {/* ... (Forgot password and signup links - same as before) */}
+  //               <p className="mt-6 text-center text-sm text-gray-600">
+  //                 Forgot your password?{" "}
+  //                 <button
+  //                   type="button"
+  //                   onClick={handleReset}
+  //                   className="text-[#b8860b] hover:text-[#956d09] font-semibold"
+  //                 >
+  //                   Reset password
+  //                 </button>
+  //               </p>
+  //               <p className="mt-6 text-center text-sm text-gray-600">
+  //                 Don't have an account?{" "}
+  //                 <a href="/signup" className="text-[#b8860b] hover:text-[#956d09] font-semibold">
+  //                   Sign Up Here
+  //                 </a>
+  //               </p>
+  //             </form>
+  //           ) : (
+  //             <OTPForm
+  //               onSubmit={handleOTPVerify}
+  //               onResend={handleResendOtp}
+  //               isLoading={isLoading}
+  //               isResending={isResending}
+  //               resendTimer={resendTimer}
+  //             />
+  //           )}
+  //         </CardContent>
+  //       </Card>
+  //     </main>
+  //     <Footer />
+  //   </div>
+  // );
+
+
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#877356]">
+    <div className="min-h-screen flex flex-col bg-[#c5b6a0]">
       {/* <Header /> */}
       <main className="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">
-        <Card className="w-full max-w-md bg-white/80 backdrop-blur-sm shadow-xl">
-          <CardHeader>
-            {/* ... (Card Header content - same as before) */}
-            <div className="text-center mb-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-[#b8860b] to-[#956d09] rounded-full mx-auto flex items-center justify-center">
-                <svg
-                  className="w-12 h-12 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-              </div>
-              <CardTitle className="text-2xl md:text-3xl font-bold mt-4">LOGIN TO YOUR ACCOUNT</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {!showOTPForm ? (
-              <form className="space-y-4" onSubmit={handleSubmit}>
-                {/* ... (Login form fields - same as before) */}
-                <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="Enter your email"
-                    className="mt-1"
-                  />
-                  {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-                </div>
-                <div>
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Enter your password"
-                    className="mt-1"
-                  />
-                  {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-[#b8860b] to-[#956d09] text-white"
-                  disabled={loading}
-                >
-                  {loading ? "Logging in..." : "Login"}
-                </Button>
-                <p className="text-lg text-center flex justify-center items-center">OR</p>
-
-                <Auth/>
-                {/* ... (Forgot password and signup links - same as before) */}
-                <p className="mt-6 text-center text-sm text-gray-600">
-                  Forgot your password?{" "}
-                  <button
-                    type="button"
-                    onClick={handleReset}
-                    className="text-[#b8860b] hover:text-[#956d09] font-semibold"
+        <div className="grid grid-cols-1 md:grid-cols-2 bg-white/80 backdrop-blur-sm shadow-2xl rounded-xl overflow-hidden w-full max-w-5xl">
+          {/* 👈 Charity Image (left side only on md+) */}
+          <div className="hidden md:flex items-center justify-center bg-[#b8860b]">
+            <img
+              src="images/featured-4.jpeg"
+              alt="Charity illustration"
+              className="object-cover h-full w-full"
+            />
+          </div>
+  
+          {/* 👉 Login Form (right side) */}
+          <div className="p-8">
+            <Card className="bg-transparent shadow-none">
+              <CardHeader className="text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-[#b8860b] to-[#956d09] rounded-full mx-auto flex items-center justify-center shadow-lg">
+                  <svg
+                    className="w-12 h-12 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    Reset password
-                  </button>
-                </p>
-                <p className="mt-6 text-center text-sm text-gray-600">
-                  Don't have an account?{" "}
-                  <a href="/signup" className="text-[#b8860b] hover:text-[#956d09] font-semibold">
-                    Sign Up Here
-                  </a>
-                </p>
-              </form>
-            ) : (
-              <OTPForm
-                onSubmit={handleOTPVerify}
-                onResend={handleResendOtp}
-                isLoading={isLoading}
-                isResending={isResending}
-                resendTimer={resendTimer}
-              />
-            )}
-          </CardContent>
-        </Card>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                </div>
+                <CardTitle className="text-2xl md:text-3xl font-bold mt-4 text-[#4B3621]">
+                  LOGIN TO YOUR ACCOUNT
+                </CardTitle>
+              </CardHeader>
+  
+              <CardContent>
+                {!showOTPForm ? (
+                  <form className="space-y-5" onSubmit={handleSubmit}>
+                    <div>
+                      <Label htmlFor="email" className="text-[#4B3621] font-medium">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Enter your email"
+                        className="mt-1"
+                      />
+                      {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                    </div>
+                    <div>
+                      <Label htmlFor="password" className="text-[#4B3621] font-medium">Password</Label>
+                      <Input
+                        id="password"
+                        type="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="Enter your password"
+                        className="mt-1"
+                      />
+                      {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                    </div>
+  
+                    <Button
+                      type="submit"
+                      className="w-full bg-gradient-to-r from-[#b8860b] to-[#956d09] text-white font-semibold tracking-wide"
+                      disabled={loading}
+                    >
+                      {loading ? "Logging in..." : "Login"}
+                    </Button>
+  
+                    <div className="text-center my-3 text-[#4B3621] font-semibold">OR</div>
+                    <Auth />
+  
+                    <div className="text-center text-sm text-gray-700 mt-6">
+                      Forgot your password?{" "}
+                      <button
+                        type="button"
+                        onClick={handleReset}
+                        className="text-[#b8860b] hover:text-[#956d09] font-semibold"
+                      >
+                        Reset password
+                      </button>
+                    </div>
+                    <div className="text-center text-sm text-gray-700">
+                      Don’t have an account?{" "}
+                      <a
+                        href="/signup"
+                        className="text-[#b8860b] hover:text-[#956d09] font-semibold"
+                      >
+                        Sign Up Here
+                      </a>
+                    </div>
+                  </form>
+                ) : (
+                  <OTPForm
+                    onSubmit={handleOTPVerify}
+                    onResend={handleResendOtp}
+                    isLoading={isLoading}
+                    isResending={isResending}
+                    resendTimer={resendTimer}
+                  />
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </main>
       <Footer />
     </div>
   );
+  
 };
 
 export default LoginPage;

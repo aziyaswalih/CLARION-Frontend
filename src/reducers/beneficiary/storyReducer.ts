@@ -1,192 +1,3 @@
-// import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-// import { AxiosError } from 'axios';
-// import userAxiosInstance from '../../api/useraxios';
-
-// // Define the Story interface based on your model
-// export interface Story {
-//   _id: string;
-//   beneficiary: string; // You might change this to mongoose.Types.ObjectId if needed
-//   title: string;
-//   description: string;
-//   documents?: string[];
-//   images?: string[];
-//   status: 'pending' | 'processing' | 'approved' | 'rejected';
-//   submittedAt: string;
-//   reviewedAt?: string;
-//   reviewedBy?: string; // volunteer id or name
-// }
-
-// // Define the slice state type
-// interface StoryState {
-//   stories: Story[];
-//   loading: boolean;
-//   error: string | null;
-// }
-
-// // Initial state
-// const initialState: StoryState = {
-//   stories: [],
-//   loading: false,
-//   error: null,
-// };
-
-// // Async thunk to fetch stories from the backend
-// export const fetchStories = createAsyncThunk<
-//   Story[], // Return type
-//   void,    // Parameter type (none)
-//   { rejectValue: string } // reject value type
-// >(
-//   'stories/fetchStories',
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await userAxiosInstance.get<Story[]>('/beneficiary/stories'); // Adjust API URL if needed
-//       return response.data;
-//     } catch (error: any) {
-//       const err: AxiosError = error;
-//       return rejectWithValue(err.response?.data as string|| 'An error occurred while fetching stories');
-//     }
-//   }
-// );
-
-// const storySlice = createSlice({
-//   name: 'stories',
-//   initialState,
-//   reducers: {},
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(fetchStories.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//       })
-//       .addCase(fetchStories.fulfilled, (state, action: PayloadAction<Story[]>) => {
-//         state.loading = false;
-//         state.stories = action.payload;
-//       })
-//       .addCase(fetchStories.rejected, (state, action: PayloadAction<string | undefined>) => {
-//         state.loading = false;
-//         state.error = action.payload || 'Failed to fetch stories';
-//       });
-//   },
-// });
-
-// export default storySlice.reducer;
-
-
-// In your storySlice.ts (or a similar file)
-// import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-// import userAxiosInstance from "../../api/useraxios";
-// import { AxiosError } from "axios";
-
-
-// enum RequestType {
-//     FINANCIAL = "financial",
-//     BLOOD = "blood",
-//     ORGAN = "organ",
-//     OTHER = "other",
-//   }
-
-// export interface Story {
-//   _id: string;
-//   beneficiary: string;
-//   requestType: RequestType;
-//   title: string;
-//   description: string;
-//   amount?: number; // Required if requestType is "financial"
-//   bloodGroup?: string; // Required if requestType is "blood" (or optionally for organ)
-//   organType?: string;  // Required if requestType is "organ"
-//   documents?: string[];
-//   images?: string[];
-//   status: "pending" | "processing" | "approved" | "rejected";
-//   submittedAt: string;
-//   reviewedAt?: string;
-//   reviewedBy?: string;
-// }
-
-// interface StoryState {
-//   stories: Story[];
-//   loading: boolean;
-//   error: string | null;
-// }
-
-// const initialState: StoryState = {
-//   stories: [],
-//   loading: false,
-//   error: null,
-// };
-
-// export const createStory = createAsyncThunk<
-//   Story,
-//   FormData,
-//   { rejectValue: string }
-// >("stories/createStory", async (formData, { rejectWithValue }) => {
-//   try {
-//     const response = await userAxiosInstance.post("/beneficiary/story", formData, {
-//       headers: { "Content-Type": "multipart/form-data" },
-//     });
-//     return response.data.story; // assuming the response contains { story: ... }
-//   } catch (error: any) {
-//     return rejectWithValue(error.response?.data?.message || "Failed to submit story");
-//   }
-// });
-
-// // Async thunk to fetch stories from the backend
-// export const fetchStories = createAsyncThunk<
-//   Story[], // Return type
-//   void,    // Parameter type (none)
-//   { rejectValue: string } // reject value type
-// >(
-//   'stories/fetchStories',
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await userAxiosInstance.get<Story[]>('/beneficiary/stories');
-//       console.log(response,'response from fetch stories');
-      
-//       return response.data;
-//     } catch (error: any) {
-//       const err: AxiosError = error;
-//       return rejectWithValue(err.response?.data as string|| 'An error occurred while fetching stories');
-//     }
-//   }
-// );
-
-// const storySlice = createSlice({
-//   name: "stories",
-//   initialState,
-//   reducers: {
-//     // ...other reducers if needed
-//   },
-//   extraReducers: (builder) => {
-//     builder
-//             .addCase(createStory.pending, (state) => {
-//                 state.loading = true;
-//                 state.error = null;
-//             })
-//             .addCase(createStory.fulfilled, (state, action: PayloadAction<Story>) => {
-//                 state.loading = false;
-//                 state.stories.push(action.payload);
-//             })
-//             .addCase(createStory.rejected, (state, action: PayloadAction<string | undefined>) => {
-//                 state.loading = false;
-//                 state.error = action.payload || "Story creation failed";
-//             })
-//             .addCase(fetchStories.pending, (state) => {
-//                 state.loading = true;
-//                 state.error = null;
-//               })
-//               .addCase(fetchStories.fulfilled, (state, action: PayloadAction<Story[]>) => {
-//                 state.loading = false;
-//                 state.stories = action.payload;
-//               })
-//               .addCase(fetchStories.rejected, (state, action: PayloadAction<string | undefined>) => {
-//                 state.loading = false;
-//                 state.error = action.payload || 'Failed to fetch stories';
-//               });
-//   },
-// });
-
-// export default storySlice.reducer;
-
-
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import  { AxiosError } from "axios";
 import userAxiosInstance from "../../api/useraxios";
@@ -222,6 +33,7 @@ export interface Story {
   documents?: string[];
   images?: string[];
   status: "pending" | "processing" | "approved" | "rejected";
+  reason?: string;
   submittedAt: string;
   reviewedAt?: string;
   reviewedBy?: null | User;
@@ -264,7 +76,7 @@ export const fetchStories = createAsyncThunk<
   "stories/fetchStories",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await userAxiosInstance.get<Story[]>("/beneficiary/stories");
+      const response = await userAxiosInstance.get<Story[]>("/story/stories");
       console.log(response, "response from fetch stories");
       return response.data;
     } catch (error: any) {
@@ -277,13 +89,13 @@ export const fetchStories = createAsyncThunk<
 // Async thunk to update a story
 export const updateStory = createAsyncThunk<
   Story,
-  { id: string; updatedData: Partial<Story> },
+  { id: string; updatedData: FormData },
   { rejectValue: string }
 >(
   "stories/updateStory",
   async ({ id, updatedData }, { rejectWithValue }) => {
     try {
-      // console.log(updatedData, "updated data from story reducer");
+      console.log(updatedData, "updated data from story reducer");
       
       const response = await userAxiosInstance.put(`/beneficiary/story/${id}`, updatedData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -310,6 +122,22 @@ export const updateReviewer = createAsyncThunk<
       }
     }
   )
+
+
+  export const fetchMyStories = createAsyncThunk(
+    'story/fetchMyStories',
+    async (_, { rejectWithValue }) => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await userAxiosInstance.get('/api/story/mystories', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        return response.data;
+      } catch (error: any) {
+        return rejectWithValue(error.response?.data?.message || 'Failed to fetch stories');
+      }
+    }
+  );
 
 
 const storySlice = createSlice({
@@ -361,6 +189,18 @@ const storySlice = createSlice({
       .addCase(updateStory.rejected, (state, action: PayloadAction<string | undefined>) => {
         state.loading = false;
         state.error = action.payload || "Failed to update story";
+      })
+      .addCase(fetchMyStories.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMyStories.fulfilled, (state, action) => {
+        state.loading = false;
+        state.stories = action.payload;
+      })
+      .addCase(fetchMyStories.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });

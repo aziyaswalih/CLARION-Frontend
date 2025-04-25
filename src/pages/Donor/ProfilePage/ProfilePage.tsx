@@ -4,6 +4,7 @@ import { getDonor, updateDonorProfile } from "../../../reducers/donors/donorRedu
 import { RootState, AppDispatch } from "../../../store/store";
 import Header from "../../../components/beneficiary/Header/Header";
 import { Upload } from "lucide-react";
+import { fetchWallet } from "../../../reducers/users/walletReducer";
 
 const DonorProfilePage = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -19,7 +20,11 @@ const DonorProfilePage = () => {
     });
     const [preview, setPreview] = useState<string>('');
     const profilepicurl = preview === '' ? `http://localhost:5000${profilePic}` : preview;
-
+    const { walletBalance, walletLoading } = useSelector((state:RootState) => state.wallet);
+    
+      useEffect(() => {
+        dispatch(fetchWallet());
+      }, [dispatch]);
     useEffect(() => {
         dispatch(getDonor());
     }, [dispatch]);
@@ -154,6 +159,15 @@ const DonorProfilePage = () => {
                 <div className="flex items-center justify-between">
                     <label className="font-semibold text-gray-700 capitalize w-1/4">Role:</label>
                     <p className="w-3/4">{role}</p>
+                </div>
+
+                <div className="flex items-center justify-between">
+                    <label className="font-semibold text-gray-700 capitalize w-1/4">Wallet Balance:</label>
+                    {walletLoading ? (
+                        <p className="w-3/4">Loading...</p>
+                    ) : (
+                        <p className="w-3/4">{walletBalance}</p>
+                    )}
                 </div>
 
                 {/* Address Fields */}

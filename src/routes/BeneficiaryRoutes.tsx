@@ -5,6 +5,7 @@ import HomePage from "../pages/HomePage";
 import NotFound from "../components/NotFound";
 import ProfilePage from "../pages/Beneficiary/ProfilePage/ProfilePage";
 import Story from "../pages/Beneficiary/Story/Story";
+import StoryHistory from "../pages/Beneficiary/StoryHistory/StoryHistory";
 
 const BeneficiaryRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const BeneficiaryRoutes = () => {
       <Route path="test" element={<OTPVerification />} />
       <Route path="*" element = {<NotFound />} />
       <Route path="story" element={<Story/>} />
+      <Route path="stories" element={<StoryHistory/>} />
 
     </Routes>
   );

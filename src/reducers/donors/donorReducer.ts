@@ -113,6 +113,8 @@ interface DonationState {
   donorId: DonorProfile['donorId'];
   address: Address;
   submissionStatus: "idle" | "loading" | "succeeded" | "failed";
+  userDonations: any[]; // <--- New
+  donationsLoading: boolean; // <--- New
 }
 
 // Initial State
@@ -137,7 +139,23 @@ const initialState: DonationState = {
     country: '',
   },
   submissionStatus: "idle",
+  userDonations: [], // <--- New
+  donationsLoading: false, // <--- New
 };
+
+export const fetchUserDonations = createAsyncThunk(
+  "donor/fetchUserDonations",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await userAxiosInstance.get("/donor/donations");
+      console.log(response.data.data, 'response from donations');
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch donations");
+    }
+  }
+);
+
 
 // Create Donation Async Action
 export const createDonation = createAsyncThunk<
@@ -148,7 +166,7 @@ export const createDonation = createAsyncThunk<
   try {
     const response = await userAxiosInstance.post(
       "/payments/create-Donation",
-      { amount, currency }
+      {amount, currency }
     );
     return response.data;
   } catch (error: any) {
@@ -177,6 +195,13 @@ export const verifyPayment = createAsyncThunk<
   }
 });
 
+export const newDonation = createAsyncThunk(
+  "donor/newDonation",
+  async (donationData: {causeId:string; amount :number}) => {
+    const response = await userAxiosInstance.post("/payments/donation", donationData);
+    return response.data;
+  }
+);
 // Donor Profile APIs
 export const getDonor = createAsyncThunk("donor/getDonor", async () => {
   const response = await userAxiosInstance.get("/donor/profile");
@@ -184,6 +209,42 @@ export const getDonor = createAsyncThunk("donor/getDonor", async () => {
   
   return response.data.data;
 });
+
+
+// export const updateDonorProfile = createAsyncThunk(
+//   "volunteer/updateProfile",
+//   async (updatedProfile: Partial<DonorProfile>, { rejectWithValue }) => {
+//       try {
+//           let headers: Record<string, string> = {
+//               Authorization: `Bearer ${localStorage.getItem("token")}`,
+//           };
+
+//           let payload: any;
+
+//           if (updatedProfile.donorId?.profilePic instanceof File) {
+//               payload = new FormData();
+//               for (const key in updatedProfile) {
+//                   payload.append(key, (updatedProfile as any)[key]);
+//               }
+//               headers["Content-Type"] = "multipart/form-data";
+//           } else {
+//               payload = updatedProfile;
+//               headers["Content-Type"] = "application/json";
+//           }
+
+//           const response = await userAxiosInstance.put("/donor/profile", payload, {
+//               headers,
+//           });
+//           console.log(response.data, response.data.donor, 'response from update profile');
+
+//           return response.data;
+//       } catch (error: any) {
+//           return rejectWithValue(error.response?.data?.message || "Error updating profile");
+//       }
+//   }
+// );
+
+
 
 export const updateDonorProfile = createAsyncThunk(
   "donor/updateDonorProfile",
@@ -194,15 +255,15 @@ export const updateDonorProfile = createAsyncThunk(
     if (updatedData) {
       Object.entries(updatedData).forEach(([key, value]) => {
         if (key === 'name' || key === 'phone') {
-          formData.append(`donorId.${key}`, value as unknown as string);
+          formData.append(`${key}`, value as unknown as string);
         }
       });
     }
 
     if (updatedData.address) {
-      Object.entries(updatedData.address).forEach(([key, value]) => {
-        formData.append(`address.${key}`, value as string);
-      });
+      // Object.entries(updatedData.address).forEach(([key, value]) => {
+        formData.append(`address`, JSON.stringify(updatedData.address));
+      // });
     }
 
     if (updatedData.profilePic instanceof File) {
@@ -301,6 +362,18 @@ const donorSlice = createSlice({
       .addCase(getDonor.rejected, (state, action) => {
         state.submissionStatus = "failed";
         state.error = action.error.message || "Failed to fetch donor";
+      })
+      .addCase(fetchUserDonations.pending, (state) => {
+        state.donationsLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserDonations.fulfilled, (state, action) => {
+        state.donationsLoading = false;
+        state.userDonations = action.payload.data;
+      })
+      .addCase(fetchUserDonations.rejected, (state, action) => {
+        state.donationsLoading = false;
+        state.error = action.payload as string || "Failed to load donations";
       })
       .addCase(updateDonorProfile.pending, (state) => {
         state.submissionStatus = "loading";

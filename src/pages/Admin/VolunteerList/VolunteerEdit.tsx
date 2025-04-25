@@ -4,8 +4,8 @@ import { Input } from '../../../components/ui/input';
 import { Label } from '../../../components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select';
 import Header from '../../../components/beneficiary/Header/Header';
-import axios from 'axios';
 import { useParams } from 'react-router-dom'; // Import useParams hook
+import userAxiosInstance from '../../../api/useraxios';
 
 interface FormData {
   name: string;
@@ -28,7 +28,7 @@ const Editvolunteers: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/admin/volunteers/edit/${id}`);
+        const response = await userAxiosInstance.get(`/admin/volunteers/edit/${id}`);
         const user = response.data.volunteer;
         setFormData({
           name: user.name || '',
@@ -85,8 +85,8 @@ const Editvolunteers: React.FC = () => {
     }
 
     try {
-      const response = await axios.put<{success:boolean, message: string }>(
-        `http://localhost:5000/api/admin/volunteers/update/${id}`,
+      const response = await userAxiosInstance.put<{success:boolean, message: string }>(
+        `/admin/volunteers/update/${id}`,
         formData
       );
       if(response.data.success){

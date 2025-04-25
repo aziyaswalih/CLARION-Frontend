@@ -1,4 +1,4 @@
-import { useraxiosInstance } from "../api/useraxios"; // Adjust the path as needed
+import  useraxiosInstance  from "../api/useraxios"; // Adjust the path as needed
 
 // Register user
 export const registerUser = async (formData: any) => {

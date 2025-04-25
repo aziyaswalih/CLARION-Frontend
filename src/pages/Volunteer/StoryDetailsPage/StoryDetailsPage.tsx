@@ -396,7 +396,7 @@ const StoryDetailsPage: React.FC = () => {
       });
       console.log("formData", formData,updatedStory);
       
-      await dispatch(updateStory({ id: story._id, updatedData: updatedStory }));
+      await dispatch(updateStory({ id: story._id, updatedData: formData }));
       setIsEditing(false);
       setStory({ ...story, ...updatedStory } as Story);
     } catch (error) {
@@ -404,17 +404,22 @@ const StoryDetailsPage: React.FC = () => {
     }
   };
 
-  const handleStatusUpdate = async (status: "approved" | "rejected") => {
-    if (!story) return;
-    try {
-      const formData = new FormData();
-      formData.append("status", status);
-      await dispatch(updateStory({ id: story._id, updatedData: updatedStory }));
-      setStory((prev) => (prev ? { ...prev, status } : null));
-    } catch (error) {
-      console.error(`Error updating status to ${status}:`, error);
-    }
-  };
+  // const handleStatusUpdate = async (status: "approved" | "rejected") => {
+  //   if (!story) return;
+  //   try {
+  //     const formData = new FormData();
+  //     Object.entries(updatedStory).forEach(([key, value]) => {
+  //       if (key !== 'status' && value !== undefined && value !== null) {
+  //         formData.append(key, value.toString());
+  //       }
+  //     });
+  //     formData.append("status", status);
+  //     await dispatch(updateStory({ id: story._id, updatedData: formData }));
+  //     setStory((prev) => (prev ? { ...prev, status } : null));
+  //   } catch (error) {
+  //     console.error(`Error updating status to ${status}:`, error);
+  //   }
+  // };
 
   if (!story) return <p className="text-center mt-10">Story not found</p>;
 
@@ -446,6 +451,16 @@ const StoryDetailsPage: React.FC = () => {
                 <textarea
                   name="description"
                   value={updatedStory.description as string || ""}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded-lg focus:ring focus:ring-blue-200"
+                  rows={4}
+                ></textarea>
+              </div>{/* Reason */}
+              <div>
+                <label className="font-semibold text-gray-700">Reason for Rejection:</label>
+                <textarea
+                  name="reason"
+                  value={updatedStory.reason as string || ""}
                   onChange={handleChange}
                   className="w-full border p-2 rounded-lg focus:ring focus:ring-blue-200"
                   rows={4}
@@ -550,7 +565,7 @@ const StoryDetailsPage: React.FC = () => {
                   <ul className="list-disc pl-6">
                     {story.documents.map((doc, idx) => (
                       <li key={idx}>
-                        <a href={doc} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                        <a href={`http://localhost:5000/uploads/${doc}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
                           Document {idx + 1}
                         </a>
                       </li>
@@ -563,7 +578,7 @@ const StoryDetailsPage: React.FC = () => {
                   <h4 className="font-semibold text-gray-700 mb-2">Images:</h4>
                   <div className="flex gap-4">
                     {story.images.map((img, idx) => (
-                      <img key={idx} src={img} alt={`Story Image ${idx + 1}`} className="w-24 h-24 object-cover rounded-md shadow-md" />
+                      <img key={idx} src={`http://localhost:5000/uploads/${img}`} alt={`Story Image ${idx + 1}`} className="w-24 h-24 object-cover rounded-md shadow-md" />
                     ))}
                   </div>
                 </div>
@@ -652,7 +667,7 @@ const StoryDetailsPage: React.FC = () => {
           )}
 
           {/* Approve & Reject Buttons */}
-          <div className="flex justify-normal pl-4 mt-6">
+          {/* <div className="flex justify-normal pl-4 mt-6">
             <Button
               onClick={() => handleStatusUpdate("approved")}
               className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg"
@@ -665,7 +680,7 @@ const StoryDetailsPage: React.FC = () => {
             >
               Reject
             </Button>
-          </div>
+          </div> */}
         {/* </div> */}
       {/* )} */}
 

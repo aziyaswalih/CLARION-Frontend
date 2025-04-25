@@ -28,7 +28,7 @@ export const userLogin = createAsyncThunk('/user/login', async (loginData : { em
 
 export const UserGoogle_post = createAsyncThunk("/user/google/login", async (credential: string, { rejectWithValue }) => {
   try {
-    const response = await useraxiosInstance.post("/google", { credential });
+    const response = await useraxiosInstance.post("/user/google", { credential });
     if (response.data && response.data.token) {
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
