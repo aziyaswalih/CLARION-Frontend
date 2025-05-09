@@ -1,14 +1,24 @@
 import React from 'react';
 import { Button } from '../../ui/button';
-import axios from 'axios';
+import userAxiosInstance from '../../../api/useraxios';
+import Swal from 'sweetalert2';
 const Header: React.FC = () => {
   const authToken = localStorage.getItem('authToken'); // Check for token
 
   const handleLogout = () => {
     localStorage.removeItem('authToken'); // Remove token
-    axios.post('http://localhost:5000/api/user/logout', {}, { withCredentials: true })
-    alert("Logout successful")
-    window.location.href = '/'; // Redirect to home or login page
+    userAxiosInstance.post('/user/logout', {}, { withCredentials: true })
+    // alert("Logout successful")
+    Swal.fire({
+      title: "Logout Successful",
+      text: "You have been logged out successfully.",
+      icon: "success",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "OK",
+    }).then(() => {
+      window.location.href = '/'; 
+    });
+
   };
 
   return (
@@ -16,8 +26,8 @@ const Header: React.FC = () => {
       <div className="container mx-auto flex items-center justify-between">
         <h1 className="text-2xl md:text-4xl font-bold font-serif text-[#774513]">CLARION</h1>
         <nav className="hidden md:flex space-x-6">
-          <a href="#" className="text-[#3c3630] hover:text-[#b8860b] transition-colors">Home</a>
-          <a href="#" className="text-[#3c3630] hover:text-[#b8860b] transition-colors">About Us</a>
+          <a href="/" className="text-[#3c3630] hover:text-[#b8860b] transition-colors">Home</a>
+          <a href="/about_us" className="text-[#3c3630] hover:text-[#b8860b] transition-colors">About Us</a>
           <a href="/latest_causes" className="text-[#3c3630] hover:text-[#b8860b] transition-colors">Recent Causes</a>
           </nav>
         {authToken ? ( // Conditionally render button

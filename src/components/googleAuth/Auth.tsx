@@ -31,10 +31,10 @@ const GoogleLoginUser = () => {
       <GoogleLogin
         onSuccess={handleSuccess}
         onError={() => console.log("Google login error")}
-        theme="outline" // You can use "filled_blue", "filled_black", or "outline"
-        size="large"    // Options: "small", "medium", "large"
-        logo_alignment="center" // Align logo to the center or left
-        shape="pill"    // Options: "pill" or "rectangular"
+        theme="outline" 
+        size="large"   
+        logo_alignment="center" 
+        shape="pill"    
       />
     </div>
   );

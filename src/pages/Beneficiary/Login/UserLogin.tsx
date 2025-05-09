@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginAsync, resendOtp, sendOTP, verifyOtp } from "../../../reducers/users/userActions";
 import { AppDispatch, RootState } from "../../../store/store";
 import { resetState } from "../../../reducers/users/userReducer";
+import Header from "../../../components/beneficiary/Header/Header";
 const LoginPage = () => {
   
     const [formData, setFormData] = useState({
@@ -68,7 +69,7 @@ const LoginPage = () => {
     setLoading(true);
 
       dispatch(loginAsync(formData)).unwrap()
-      .then((user)=>{
+      .then((user:any)=>{
         if (user.user?.is_verified) {
         localStorage.setItem("authToken", user.token);
         setUserEmail(formData.email);
@@ -93,7 +94,7 @@ const LoginPage = () => {
         try {
           // cutted from
           dispatch(sendOTP(formData.email??userEmail)).unwrap()
-          .then((otpResponse)=>{
+          .then((otpResponse:any)=>{
             setOtpSent(true)
           localStorage.setItem('otpToken', otpResponse.otpToken[1]); // Store the OTP token
           console.log( otpResponse.otpToken[1],'token from otp response');
@@ -350,9 +351,9 @@ const LoginPage = () => {
 
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#c5b6a0]">
-      {/* <Header /> */}
-      <main className="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">
+    <div className="min-h-screen flex flex-col bg-[#9e9c98]">
+      <Header />
+      <main className="flex-grow container mx-auto px-4 py-24 flex items-center justify-center">
         <div className="grid grid-cols-1 md:grid-cols-2 bg-white/80 backdrop-blur-sm shadow-2xl rounded-xl overflow-hidden w-full max-w-5xl">
           {/* 👈 Charity Image (left side only on md+) */}
           <div className="hidden md:flex items-center justify-center bg-[#b8860b]">

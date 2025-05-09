@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../../components/ui/button";
 import Footer from "../../../components/beneficiary/Footer/Footer";
 import Header from "../../../components/beneficiary/Header/Header";
-import {  Eye } from "lucide-react";
+import {  Book, MessageSquare, User } from "lucide-react";
 import { toast } from "react-toastify";
 import { getBeneficiary, submitBeneficiaryDetails } from "../../../reducers/beneficiary/beneficiaryReducer";
 import {  AppDispatch, RootState } from "../../../store/store";
 import { useNavigate } from "react-router-dom";
+import { Response_ChatsTypes, UserStateTypes } from "../../../reducers/volunteers/volunteerApicalls";
+import { User_get_MessagesUserId, user_get_volunteerDetails } from "../../../reducers/beneficiary/beneficiaryApicalls";
+// import ChatList from "../Chat/ChatListUserSide";
 
 //  types for address and family details
 interface Address {
@@ -44,6 +47,7 @@ const BeneficiaryHome: React.FC = () => {
     const beneficiaryData = useSelector((state: RootState) => state.beneficiary);
     console.log(beneficiaryData,'beneficiary data');
     const navigate = useNavigate()
+    const [totalUnreadCount, setTotalUnreadCount] = useState<number>(0);
     // const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
     // const [details, setDetails] = useState<string>("");
     // const [condition, setCondition] = useState<string>("");
@@ -63,6 +67,31 @@ const BeneficiaryHome: React.FC = () => {
         incomeLevel: "",
     });
 
+    useEffect(() => {
+        if (user?.id) {
+          console.log(user.id, "user id");
+          
+          dispatch(User_get_MessagesUserId(user.id))
+            .unwrap()
+            .then(async (messages: Response_ChatsTypes[]) => {
+              console.log(messages);
+    
+              // Extract unique connections based on sender and receiver
+            //   const uniqueConnections = new Map<string, Response_ChatsTypes>();
+    
+              // Map over messages to build unique connections
+              messages.forEach((message) => {
+                if(message.isRead===false){
+                    setTotalUnreadCount((prevCount) => prevCount + 1); // Increment unread count
+                }
+           
+            })
+            
+        })
+        }
+      }, [dispatch, user?.id]);
+
+
    useEffect(()=>{
     dispatch(getBeneficiary())
    },[dispatch,user])
@@ -75,13 +104,17 @@ const BeneficiaryHome: React.FC = () => {
     //     }
     // };
 
-    const goToProfile = () => {
-        navigate('/profile');
-      };
-
-        const goToStories = () => {
-            navigate('/stories');
+        const goToProfile = () => {
+            navigate('/account/profile');
         };
+
+        // const goToStories = () => {
+        //     navigate('/stories');
+        // };
+
+        // const goToChats = () => {
+        //     navigate('/chats');
+        // };
     
     const handleSubmit = (): void => {
         const formData: BeneficiaryFormData = {
@@ -115,16 +148,50 @@ const BeneficiaryHome: React.FC = () => {
                 <p className="text-lg md:text-xl text-[#555555] mb-8">
                     Please upload your reports and provide details about your situation to help us understand your needs better.
                 </p>
-                {beneficiaryData.submissionStatus ==='succeeded' && <div className="flex items-center space-x-4 cursor-pointer text-[#3c3630]" onClick={goToProfile}>
-                <Eye className="w-6 h-6" />
-                <span className="text-lg font-medium underline">Go to profile</span>
+                <div className="container mx-auto flex "> {/* Centered content, spaced icons */}
+
+                {/* Profile Icon */}
+                {beneficiaryData.submissionStatus ==='succeeded' &&<div
+                    className="flex flex-col items-center cursor-pointer text-[#00509e] hover:text-blue-700 transition-colors"
+                    onClick={goToProfile}
+                >
+                    {/* <div className="p-3 bg-[#e9f5ff] rounded-full mb-2 shadow-sm"> {/* Icon background and styling 
+                        <User size={28} /> 
+                    </div> */}
+                    <span className="text-md font-bold underline">Goto Profile</span>
+                </div>}
+
+                {/* Stories Icon */}
+                 {/* <div
+                    className="flex flex-col items-center cursor-pointer text-[#00509e] hover:text-blue-700 transition-colors"
+                    onClick={goToStories}
+                >
+                    <div className="p-3 bg-[#e9f5ff] rounded-full mb-2 shadow-sm"> {/* Icon background and styling 
+                        <Book size={28} /> {/* Lucide icon 
+                    </div>
+                    <span className="text-sm font-medium">Stories</span>
+                </div>
+
+                {/* Chats Icon with Unread Count 
+                 <div
+                    className="flex flex-col items-center cursor-pointer text-[#00509e] hover:text-blue-700 transition-colors relative" // Added relative for badge positioning
+                    onClick={goToChats}
+                >
+                    <div className="p-3 bg-[#e9f5ff] rounded-full mb-2 shadow-sm"> {/* Icon background and styling 
+                        <MessageSquare size={28} /> {/* Lucide icon 
+                    </div>
+                    <span className="text-sm font-medium">Chats</span>
+                     {/* --- Unread Count Badge --- 
+                     {totalUnreadCount > 0 && (
+                        <span className="absolute top-0 right-0 transform -translate-y-1/2 translate-x-1/2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                            {totalUnreadCount}
+                        </span>
+                     )}
+                     {/* --- END Unread Count Badge --- 
+                </div> */}
+
+            </div>
                 
-          </div>}
-          <br></br>
-          <div className="flex items-center space-x-4 cursor-pointer text-[#3c3630]" onClick={goToStories}>
-                        <Eye className="w-6 h-6" />
-                        <span className="text-lg font-medium underline">View Your Stories</span>
-                      </div><br></br>
             <div className="flex justify-center">
             <button onClick={()=>navigate('/story')} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
                 Add Story +
@@ -146,6 +213,8 @@ const BeneficiaryHome: React.FC = () => {
         <p>{beneficiaryData.details}</p>
         </div>
         } */}
+        {/* trying to add something */}
+        {/* <ChatList/> */}
         {beneficiaryData.submissionStatus!=='succeeded' && <section className="bg-[#f4f9ff] py-16 px-4">
             <div className="container mx-auto max-w-3xl bg-white p-8 rounded-lg shadow-lg">
                 <h3 className="text-2xl md:text-3xl font-semibold text-[#00509e] mb-6">
@@ -153,35 +222,7 @@ const BeneficiaryHome: React.FC = () => {
                 </h3>
                 <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
 
-                    {/* Details */}
-                    {/* <div>
-                        <label className="block text-lg text-[#3b3b3b] mb-2">
-                            Your Story
-                        </label>
-                        <textarea
-                            rows={4}
-                            value={details}
-                            onChange={(e) => setDetails(e.target.value)}
-                            placeholder="Provide details about your background and needs..."
-                            className="w-full border border-gray-300 rounded-lg p-3 text-lg focus:ring focus:ring-[#00509e] outline-none"
-                        ></textarea>
-                    </div> */}
-
-                    {/* Condition */}
-                    {/* <div>
-                        <label className="block text-lg text-[#3b3b3b] mb-2">
-                            Your Condition
-                        </label>
-                        <textarea
-                            rows={3}
-                            value={condition}
-                            onChange={(e) => setCondition(e.target.value)}
-                            placeholder="Describe your current condition or situation..."
-                            className="w-full border border-gray-300 rounded-lg p-3 text-lg focus:ring focus:ring-[#00509e] outline-none"
-                        ></textarea>
-                    </div> */}
-
-                    {/* Date of Birth & Gender */}
+                    
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-lg text-[#3b3b3b] mb-2">Date of Birth</label>

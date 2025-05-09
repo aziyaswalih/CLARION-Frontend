@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getDonor, updateDonorProfile } from "../../../reducers/donors/donorReducer";
 import { RootState, AppDispatch } from "../../../store/store";
-import Header from "../../../components/beneficiary/Header/Header";
+// import Header from "../../../components/beneficiary/Header/Header";
 import { Upload } from "lucide-react";
 import { fetchWallet } from "../../../reducers/users/walletReducer";
 
@@ -104,8 +104,7 @@ const DonorProfilePage = () => {
 
     return (
         <>
-            <Header />
-            <div className="max-w-2xl mx-auto p-8 bg-gray-200 shadow-xl rounded-2xl border border-gray-200 mt-32 space-y-4">
+            <div className="max-w-2xl mx-auto p-8 bg-gray-200 shadow-xl rounded-2xl border border-gray-200 space-y-4">
                 <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Donor Profile</h2>
 
                 <div className="flex flex-col items-center space-y-4">

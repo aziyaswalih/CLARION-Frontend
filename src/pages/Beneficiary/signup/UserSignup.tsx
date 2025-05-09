@@ -9,6 +9,7 @@ import OTPForm from './OTPForm'; // Import the OTPForm component
 import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
 import {jwtDecode} from 'jwt-decode';
+import Header from '../../../components/beneficiary/Header/Header';
 
 const UserSignup: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -105,10 +106,10 @@ const UserSignup: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full flex flex-col bg-gradient-to-br from-[#9f8b75] to-[#2c2520]">
-     
-      <main className="flex-grow container mx-auto px-4 py-8 flex flex-col lg:flex-row items-center justify-center gap-8">
+     <Header />
+      <main className="flex-grow container mx-auto px-4 py-24 flex flex-col lg:flex-row items-center justify-center gap-8">
         <div className="lg:w-1/2 text-black">
-        <h1 className="text-2xl md:text-4xl font-bold font-serif text-[#774513]">CLARION</h1>
+        <h1 className="text-2xl md:text-2xl font-bold font-serif text-[#774513]">CLARION (Charity With Clarity)</h1>
         <br></br>
           {/* ... (Community info - same as before) */}
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Join Our Community</h2>

@@ -1,4 +1,8 @@
 import axios from 'axios';
+import userAxiosInstance from '../../api/useraxios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { ErrorPayload, Response_ChatsTypes } from '../volunteers/volunteerApicalls';
+import { VolunteerState } from '../volunteers/volunteerReducer';
 
 const API_ENDPOINT = 'http://localhost:5000/api'; 
 
@@ -23,3 +27,48 @@ export const submitBeneficiaryForm = async (formData: any) => {
         throw error;
     }
 };
+
+
+export const User_get_MessagesUserId= createAsyncThunk<
+
+Response_ChatsTypes[],
+string,
+  { rejectValue: ErrorPayload }
+>("/user/chats-get", async (userId, { rejectWithValue }) => {
+  try {
+    const response = await userAxiosInstance.get(
+      `/beneficiary/chats-userId/${userId}`
+    
+    );
+    if (response.data) {
+      return response.data.chats;
+    }
+  } catch (error) {
+ 
+    return rejectWithValue({
+      message: "something wrong in geting chats ",
+    });
+  }
+});
+
+export const user_get_volunteerDetails= createAsyncThunk<
+
+VolunteerState,
+string,
+  { rejectValue: ErrorPayload }
+>("/user/get/volunteerDetails", async (volunteerId, { rejectWithValue }) => {
+  try {
+    const response = await userAxiosInstance.get(
+      `/beneficiary/volunteers/${volunteerId}`
+    
+    );
+    if (response.data) {
+      return response.data.user;
+    }
+  } catch (error) {
+  
+    return rejectWithValue({
+      message: "something wrong in geting chats ",
+    });
+  }
+});

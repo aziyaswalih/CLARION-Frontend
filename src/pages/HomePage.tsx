@@ -74,7 +74,7 @@ const HomePage: React.FC = () => {
           </Button>
           <p className="text-sm text-[#3c3630]">
             If You Want To Contribute Without Joining,{' '}
-            <a href="#" className="text-[#64501c] hover:text-[#956d09] underline">
+            <a href="/latest_causes" className="text-[#64501c] hover:text-[#956d09] underline">
               Click Here
             </a>
           </p>
@@ -280,9 +280,11 @@ const HomePage: React.FC = () => {
       </div>
     </section>
   
-
+    <div className="container mx-auto pl-4 pr-4">
     <LatestCauses />
+    </div>
 
+      {/* Call to Action Section */}
 
       {/* Team Section */}
       <section className="py-16">
@@ -293,7 +295,7 @@ const HomePage: React.FC = () => {
               <div key={index} className="text-center">
                 <div className="relative w-40 h-40 mx-auto mb-4">
                   <img
-                    src={`/images/team-${index}.jpg`} // Add these images to your public folder
+                    src={`/images/featured-${index}.jpg`} // Add these images to your public folder
                     alt={`Team Member ${index}`}
                     className="rounded-full object-cover w-full h-full"
                   />

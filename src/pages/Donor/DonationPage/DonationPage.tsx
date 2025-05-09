@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store/store";
 import { createDonation, verifyPayment, newDonation } from "../../../reducers/donors/donorReducer";
 import { fetchWallet } from "../../../reducers/users/walletReducer";
+import Header from "../../../components/beneficiary/Header/Header";
 
 interface Cause {
   id: string;
@@ -103,6 +104,7 @@ const DonationPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-20">
+      <Header/>
       <div className="max-w-3xl mx-auto bg-white p-8 shadow-lg rounded-lg">
         <img src={cause.image || "/placeholder.svg"} alt={cause.title} className="w-full h-64 object-cover rounded-lg mb-6" />
         <h2 className="text-2xl font-bold text-gray-800 mb-2">{cause.title}</h2>

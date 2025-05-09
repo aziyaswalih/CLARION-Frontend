@@ -28,6 +28,8 @@ export interface Story {
   title: string;
   description: string;
   amount?: number;
+  location?: string;
+  raisedAmount?: number;
   bloodGroup?: string;
   organType?: string;
   documents?: string[];

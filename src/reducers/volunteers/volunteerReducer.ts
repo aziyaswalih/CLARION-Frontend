@@ -6,7 +6,9 @@ import userAxiosInstance from "../../api/useraxios";
 
 
 
-interface VolunteerState {
+export interface VolunteerState {
+    id: string;
+    _id?: string;
     name: string;
     email: string;
     phone: string;
@@ -26,6 +28,8 @@ export interface volunteerDetails {
 }
 
 const initialState: VolunteerState = {
+    id: "",
+    _id: "",
     name: "",
     email: "",
     phone: "",

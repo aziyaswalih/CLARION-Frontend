@@ -1,14 +1,3 @@
-
-// const NotFound = () => {
-//   return (
-//     <div>
-//       <h1>Not Found</h1>
-//     </div>
-//   )
-// }
-
-// export default NotFound
-
 const NotFound = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">

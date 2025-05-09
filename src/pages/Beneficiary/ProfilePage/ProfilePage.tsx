@@ -78,7 +78,7 @@ const BeneficiaryProfilePage = () => {
     return (
         <>
             <Header />
-            <div className="max-w-2xl mx-auto p-8 bg-gray-200 shadow-xl rounded-2xl border border-gray-200 mt-32 space-y-4">
+            <div className="max-w-2xl mx-auto p-8 bg-gray-200 shadow-xl rounded-2xl border border-gray-200 space-y-4">
                 <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Beneficiary Profile</h2>
                 {/* Profile Picture */}
                 <div className="flex flex-col items-center space-y-4">

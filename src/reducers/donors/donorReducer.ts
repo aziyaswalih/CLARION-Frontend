@@ -1,84 +1,3 @@
-// // donorReducer.ts
-// import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-// import userAxiosInstance from "../../api/useraxios";
-
-// interface DonationState {
-//   donation: any;
-//   isLoading: boolean;
-//   error: string | null;
-// }
-
-// const initialState: DonationState = {
-//   donation: null,
-//   isLoading: false,
-//   error: null,
-// };
-
-// // Create Donation Async Action
-// export const createDonation = createAsyncThunk<
-//   any,
-//   { amount: number; currency: string },
-//   { rejectValue: string }
-// >("donor/createDonation", async ({ amount, currency }, { rejectWithValue }) => {
-//   try {
-//     const response = await userAxiosInstance.post("http://localhost:5000/api/payments/create-Donation", {
-//       amount,
-//       currency,
-//     });
-//     return response.data;
-//   } catch (error: any) {
-//     return rejectWithValue(error.response?.data?.message || "Failed to create Donation");
-//   }
-// });
-
-// // Verify Payment Async Action
-// export const verifyPayment = createAsyncThunk<
-//   any,
-//   { paymentResponse: any },
-//   { rejectValue: string }
-// >("donor/verifyPayment", async ( paymentResponse , { rejectWithValue }) => {
-//   try {
-//     console.log(paymentResponse,'payment response');
-    
-//     const response = await userAxiosInstance.post("http://localhost:5000/api/payments/verify-payment", paymentResponse);
-//     return response.data;
-//   } catch (error: any) {
-//     return rejectWithValue(error.response?.data?.message || "Payment verification failed");
-//   }
-// });
-
-// const donorSlice = createSlice({
-//   name: "donor",
-//   initialState,
-//   reducers: {},
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(createDonation.pending, (state) => {
-//         state.isLoading = true;
-//         state.error = null;
-//       })
-//       .addCase(createDonation.fulfilled, (state, action) => {
-//         state.isLoading = false;
-//         state.donation = action.payload;
-//       })
-//       .addCase(createDonation.rejected, (state, action) => {
-//         state.isLoading = false;
-//         state.error = action.payload || "Something went wrong";
-//       })
-//       .addCase(verifyPayment.pending, (state) => {
-//         state.isLoading = true;
-//       })
-//       .addCase(verifyPayment.fulfilled, (state) => {
-//         state.isLoading = false;
-//       })
-//       .addCase(verifyPayment.rejected, (state, action) => {
-//         state.isLoading = false;
-//         state.error = action.payload || "Payment verification failed";
-//       });
-//   },
-// });
-
-// export default donorSlice.reducer;
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import userAxiosInstance from "../../api/useraxios";
 
@@ -244,7 +163,13 @@ export const getDonor = createAsyncThunk("donor/getDonor", async () => {
 //   }
 // );
 
-
+export const newBloodDonationAction = createAsyncThunk(
+  "donor/newBloodDonationAction", 
+  async (donationData: { causeId: string; }) => {
+    const response = await userAxiosInstance.post("/donor/blood", donationData);
+    return response.data;
+  }
+);
 
 export const updateDonorProfile = createAsyncThunk(
   "donor/updateDonorProfile",

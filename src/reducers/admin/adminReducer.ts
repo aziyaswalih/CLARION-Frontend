@@ -1,107 +1,4 @@
-// import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-// import userAxiosInstance from "../../api/useraxios";
-
-// interface Beneficiary {
-//   _id: string;
-//   name: string;
-//   isActive: boolean;
-//   [key: string]: any; // For additional properties
-// }
-
-// interface AdminState {
-//   beneficiaries: Beneficiary[];
-//   loading: boolean;
-//   error: string | null;
-// }
-
-// const initialState: AdminState = {
-//   beneficiaries: [],
-//   loading: false,
-//   error: null,
-// };
-
-// // Async thunk actions
-// export const fetchBeneficiaries = createAsyncThunk<Beneficiary[], void, { rejectValue: string }>(
-//   "admin/fetchBeneficiaries",
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await userAxiosInstance.get<{ beneficiaries: Beneficiary[] }>(
-//         "http://localhost:5000/api/admin/beneficiaries"
-//       );
-//       return response.data.beneficiaries;
-//     } catch (error: any) {
-//       return rejectWithValue(error.response?.data || "An error occurred");
-//     }
-//   }
-// );
-
-// export const blockBeneficiary = createAsyncThunk<{ id: string; success: boolean }, string, { rejectValue: string }>(
-//   "admin/blockBeneficiary",
-//   async (id, { rejectWithValue }) => {
-//     try {
-//       const response = await userAxiosInstance.put<{ success: boolean }>(
-//         `http://localhost:5000/api/admin/beneficiaries/block/${id}`
-//       );
-//       return { id, success: response.data.success };
-//     } catch (error: any) {
-//       return rejectWithValue(error.response?.data || "An error occurred");
-//     }
-//   }
-// );
-
-// export const unblockBeneficiary = createAsyncThunk<{ id: string; success: boolean }, string, { rejectValue: string }>(
-//   "admin/unblockBeneficiary",
-//   async (id, { rejectWithValue }) => {
-//     try {
-//       const response = await userAxiosInstance.put<{ success: boolean }>(
-//         `http://localhost:5000/api/admin/beneficiaries/unblock/${id}`
-//       );
-//       return { id, success: response.data.success };
-//     } catch (error: any) {
-//       return rejectWithValue(error.response?.data || "An error occurred");
-//     }
-//   }
-// );
-
-// const adminSlice = createSlice({
-//   name: "admin",
-//   initialState,
-//   reducers: {},
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(fetchBeneficiaries.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//       })
-//       .addCase(fetchBeneficiaries.fulfilled, (state, action: PayloadAction<Beneficiary[]>) => {
-//         state.loading = false;
-//         state.beneficiaries = action.payload;
-//       })
-//       .addCase(fetchBeneficiaries.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.payload || "Failed to fetch beneficiaries";
-//       })
-//       .addCase(blockBeneficiary.fulfilled, (state, action: PayloadAction<{ id: string }>) => {
-//         state.beneficiaries = state.beneficiaries.map((beneficiary) =>
-//           beneficiary._id === action.payload.id
-//             ? { ...beneficiary, isActive: false }
-//             : beneficiary
-//         );
-//       })
-//       .addCase(unblockBeneficiary.fulfilled, (state, action: PayloadAction<{ id: string }>) => {
-//         state.beneficiaries = state.beneficiaries.map((beneficiary) =>
-//           beneficiary._id === action.payload.id
-//             ? { ...beneficiary, isActive: true }
-//             : beneficiary
-//         );
-//       });
-//   },
-// });
-
-// export default adminSlice.reducer;
-
-
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import userAxiosInstance from "../../api/useraxios";
 
 // Types
@@ -115,7 +12,15 @@ interface UserCommon {
   [key: string]: any;
 }
 
+interface DonationReport {
+  totalAmount: number;
+  totalRaised: number;
+  totalRemaining: number;
+  totalCompleted: number;
+}
+
 interface AdminState {
+  report: DonationReport;
   volunteers: UserCommon[];
   beneficiaries: UserCommon[];
   donors: UserCommon[];
@@ -125,11 +30,19 @@ interface AdminState {
 
 // Initial State
 const initialState: AdminState = {
+  report: {
+    totalAmount: 0,
+    totalRaised: 0,
+    totalRemaining: 0,
+    totalCompleted: 0,
+  },
+  loading: false,
+  error: null,
   volunteers: [],
   beneficiaries: [],
   donors: [],
-  loading: false,
-  error: null,
+  // loading: false,
+  // error: null,
 };
 
 // ===== Volunteers =====
@@ -143,6 +56,18 @@ export const fetchVolunteers = createAsyncThunk<UserCommon[], void, { rejectValu
       return response.data.volunteers;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || "An error occurred while fetching volunteers");
+    }
+  }
+);
+
+export const fetchDonationReport = createAsyncThunk(
+  "admin/fetchDonationReport",
+  async (_, thunkAPI) => {
+    try {
+      const res = await userAxiosInstance.get("/admin/reports");
+      return res.data.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response?.data || err.message);
     }
   }
 );
@@ -287,6 +212,18 @@ const adminSlice = createSlice({
       })
       .addCase(unblockDonor.fulfilled, (state, action) => {
         state.donors = state.donors.map((donor) => donor._id === action.payload.id ? { ...donor, isActive: true } : donor);
+      })
+      .addCase(fetchDonationReport.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchDonationReport.fulfilled, (state, action) => {
+        state.loading = false;
+        state.report = action.payload;
+      })
+      .addCase(fetchDonationReport.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
