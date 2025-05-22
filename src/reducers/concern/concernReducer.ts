@@ -77,10 +77,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import userAxiosInstance from '../../api/useraxios';
 
 interface Concern {
-  reportedMemberId: Member;
+  reportedMemberId: Member | string;
   subject: string;
   description: string;
-  reporterId: Member;
+  reporterId: Member | string;
 }
 
 interface ConcernFull extends Concern {

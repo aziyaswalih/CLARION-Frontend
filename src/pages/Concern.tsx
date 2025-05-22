@@ -88,7 +88,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/store';
-import { clearStatus, submitConcern } from '../reducers/concern/ConcernReducer';
+import { clearStatus, submitConcern } from '../reducers/concern/concernReducer';
 import { useParams } from 'react-router-dom';
 import Header from '../components/beneficiary/Header/Header';
 
