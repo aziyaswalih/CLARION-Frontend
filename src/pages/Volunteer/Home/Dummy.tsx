@@ -258,7 +258,7 @@ const HomePage: React.FC = () => {
                       className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
                     >
                       <img
-                        src={story.images && story.images.length > 0 ? `http://localhost:5000/uploads/${story.images[0]}` : defaultImage}
+                        src={story.images && story.images.length > 0 ? `${import.meta.env.VITE_SOCKET_URL}/uploads/${story.images[0]}` : defaultImage}
                         alt={story.title}
                         className="w-full h-56 object-cover"
                       />
@@ -305,7 +305,7 @@ const HomePage: React.FC = () => {
                     >
                       <img
                         src={story.images && story.images.length > 0 ?
-                          `http://localhost:5000/uploads/${story.images[0]}` : defaultImage}
+                          `${import.meta.env.VITE_SOCKET_URL}/uploads/${story.images[0]}` : defaultImage}
                         alt={story.title}
                         className="w-full h-56 object-cover"
                       />

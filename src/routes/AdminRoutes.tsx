@@ -6,7 +6,6 @@ import { BeneficiariesList } from "../pages/Admin/BeneficiaryList/Beneficiarylis
 import EditBeneficiary  from "../pages/Admin/BeneficiaryList/Beneficiaryedit"
 import Editvolunteers from "../pages/Admin/VolunteerList/VolunteerEdit"
 import EditDonor from "../pages/Admin/DonorList/DonorEdit"
-import AddBeneficiary from "../pages/Admin/BeneficiaryList/AddBeneficiary"
 import Logout from "../components/admin/Dashboard/logout"
 import NotFound from "../components/NotFound"
 import RecentStories from "../pages/Admin/RecentStories/RecentStories"
@@ -23,7 +22,6 @@ const AdminRoutes = () => {
       <Route path="donors/edit/:id" element={<EditDonor />} />
       <Route path="beneficiaries" element={<BeneficiariesList/>}/>
       <Route path="beneficiaries/edit/:id" element={<EditBeneficiary />} />
-      <Route path="beneficiaries/add" element={<AddBeneficiary />} />
       <Route path="recentstories" element={<RecentStories/>}/>
       <Route path="concerns/:id" element={<ConcernDetailPage />} />
       <Route path="concerns" element={<ConcernListPage />} />

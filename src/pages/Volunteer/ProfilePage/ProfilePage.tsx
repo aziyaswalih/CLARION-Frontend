@@ -13,7 +13,7 @@ const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [updatedProfile, setUpdatedProfile] = useState({ name, phone, skills, profilePic, motivation, availability });
     const [preview, setPreview] = useState<string>('');
-    const profilepicurl = preview===''?`http://localhost:5000${profilePic}` : preview
+    const profilepicurl = preview===''?`${import.meta.env.VITE_SOCKET_URL}${profilePic}` : preview
     // console.log(profilepicurl,'url');
     useEffect(() => {
         dispatch(getVolunteer());

@@ -4,7 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ErrorPayload, Response_ChatsTypes } from '../volunteers/volunteerApicalls';
 import { VolunteerState } from '../volunteers/volunteerReducer';
 
-// const API_ENDPOINT = 'http://localhost:5000/api'; 
+
 
 export const submitBeneficiaryForm = async (formData: any) => { 
     try {
