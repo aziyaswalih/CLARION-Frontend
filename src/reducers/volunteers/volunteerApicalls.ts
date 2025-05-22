@@ -1,8 +1,6 @@
-
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import userAxiosInstance from "../../api/useraxios";
 import { volunteerDetails } from "./volunteerReducer";
-
 
 export interface Response_ChatsTypes{
     messageId?:string,
@@ -19,7 +17,6 @@ export interface Response_ChatsTypes{
        size: number;
    }
    
-
 }
 
 export interface CallData {

@@ -1,10 +1,10 @@
-import axios from 'axios';
+// import axios from 'axios';
 import userAxiosInstance from '../../api/useraxios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ErrorPayload, Response_ChatsTypes } from '../volunteers/volunteerApicalls';
 import { VolunteerState } from '../volunteers/volunteerReducer';
 
-const API_ENDPOINT = 'http://localhost:5000/api'; 
+// const API_ENDPOINT = 'http://localhost:5000/api'; 
 
 export const submitBeneficiaryForm = async (formData: any) => { 
     try {
@@ -12,8 +12,8 @@ export const submitBeneficiaryForm = async (formData: any) => {
         const authToken = localStorage.getItem('authToken');
 
         // 2. Include Authorization header in axios request
-        const response = await axios.post(
-            `${API_ENDPOINT}/beneficiary`, // ✅  Adjust endpoint if needed
+        const response = await userAxiosInstance.post(
+            `/beneficiary`, // ✅  Adjust endpoint if needed
             formData,
             {
                 headers: {

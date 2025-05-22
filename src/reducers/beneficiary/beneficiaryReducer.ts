@@ -102,20 +102,23 @@ export const updateBeneficiaryProfile = createAsyncThunk(
             };
 
             let payload: any;
+            payload = new FormData();
 
             // Handling file uploads
             if (updatedProfile.profilePic instanceof File) {
-                payload = new FormData();
+                // payload = new FormData();
                 for (const key in updatedProfile) {
                     console.log(updatedProfile,'updatedprofile');
                     const value = (updatedProfile as any)[key];
 
                     if (key === 'profilePic' && value instanceof File) {
                         payload.append('profilePic', value);
-                      } else if (typeof value === 'object' && value !== null) {
+                      } 
+                      else if (typeof value === 'object' && value !== null) {
                         // Serialize nested objects like address and familyDetails
                         payload.append(key, JSON.stringify(value));
-                      } else if (value !== undefined && value !== null) {
+                      }
+                       else if (value !== undefined && value !== null) {
                         payload.append(key, value);
                       }
                 // payload = updatedProfile;
@@ -131,7 +134,18 @@ export const updateBeneficiaryProfile = createAsyncThunk(
                 }
                 headers["Content-Type"] = "multipart/form-data";
             } else {
-                payload = updatedProfile;
+                for (const key in updatedProfile) {
+                    console.log(updatedProfile,'updatedprofile');
+                    const value = (updatedProfile as any)[key];
+                if (typeof value === 'object' && value !== null) {
+                    // Serialize nested objects like address and familyDetails
+                    payload.append(key, JSON.stringify(value));
+                  }
+                  else if (value !== undefined && value !== null) {
+                    payload.append(key, value);
+                  }
+            }
+                // payload = updatedProfile;
                 headers["Content-Type"] = "application/json";
             }
 

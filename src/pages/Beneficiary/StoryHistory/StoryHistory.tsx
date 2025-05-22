@@ -61,8 +61,8 @@ const StoryHistory: React.FC = () => {
       case 'rejected': return 'text-red-600 font-medium';
       case 'completed': return 'text-green-600 font-medium';
       case 'approved': return 'text-blue-600 font-medium';
-      case 'pending':
-      case 'submitted': return 'text-yellow-600 font-medium';
+      case 'pending': return 'text-yellow-600 font-medium';
+      case 'processing': return 'text-orange-600 font-medium';
       default: return 'text-gray-700 font-medium';
     }
   };
@@ -115,6 +115,7 @@ const StoryHistory: React.FC = () => {
               <option value="approved">Approved</option>
               <option value="rejected">Rejected</option>
               <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
               <option value="completed">Completed</option>
             </select>
             <select

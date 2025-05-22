@@ -12,6 +12,8 @@ import { FaTrash } from "react-icons/fa"; // Import trash icon
 import MessageAttachment from "../../Volunteer/UserChat/MessageAttachment";
 import FileUploader from "../../Volunteer/UserChat/FileUpload";
 import AudioRecorder from "../../Volunteer/UserChat/AudioRecord";
+import { Button } from "../../../components/ui/button";
+import { useNavigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 
 // Assuming Response_ChatsTypes has an _id field from MongoDB
@@ -289,31 +291,31 @@ const ChatDetails = ({ volunteerId, userId }: { volunteerId: string; userId: str
     // --- END NEW ---
 
     // --- NEW: Incoming Call UI and Handlers ---
-    const acceptCall = (callData: CallData) => {
-      console.log("Volunteer accepting call:", callData); // Added console log
-      if(socket) {
-        socket.emit('acceptCall', { roomId: callData.roomId, employeeId: volunteerId }); // 'employeeId' might need to be 'volunteerId' or generic 'userId'
-        // Navigate to the call page (same as sender)
-        // You'll need to determine receiver's name/pic here if needed for call page URL
-        // const receiverName = userDetails?.name || "User"; // Assuming userDetails is the person they are calling
-        // const receiverProfilePic = userDetails?.profilePic; // Assuming userDetails has profilePic
-        // You also need the volunteer's own name and profile pic
-        // const volunteerName = ???;
-        // const volunteerProfilePic = ???;
-        // navigate(`/volunteer/call?type=${callData.callType}&action=receiver&sender=${callData.senderId}&receiver=${callData.receiverId}&senderName=${encodeURIComponent(callData.senderName)}&receiverName=${encodeURIComponent(receiverName)}&roomId=${callData.roomId}`); // Open in new tab? or navigate
-      }
-      setIncomingCall(null); // Hide the notification
-    };
+    // const acceptCall = (callData: CallData) => {
+    //   console.log("Volunteer accepting call:", callData); // Added console log
+    //   if(socket) {
+    //     socket.emit('acceptCall', { roomId: callData.roomId, employeeId: volunteerId }); // 'employeeId' might need to be 'volunteerId' or generic 'userId'
+    //     // Navigate to the call page (same as sender)
+    //     // You'll need to determine receiver's name/pic here if needed for call page URL
+    //     // const receiverName = userDetails?.name || "User"; // Assuming userDetails is the person they are calling
+    //     // const receiverProfilePic = userDetails?.profilePic; // Assuming userDetails has profilePic
+    //     // You also need the volunteer's own name and profile pic
+    //     // const volunteerName = ???;
+    //     // const volunteerProfilePic = ???;
+    //     // navigate(`/volunteer/call?type=${callData.callType}&action=receiver&sender=${callData.senderId}&receiver=${callData.receiverId}&senderName=${encodeURIComponent(callData.senderName)}&receiverName=${encodeURIComponent(receiverName)}&roomId=${callData.roomId}`); // Open in new tab? or navigate
+    //   }
+    //   setIncomingCall(null); // Hide the notification
+    // };
 
-     const rejectCall = (callData: CallData) => {
-      console.log("Volunteer rejecting call:", callData); // Added console log
-       if(socket) {
-         socket.emit('rejectCall', { roomId: callData.roomId, senderId: callData.senderId }); // Notify the sender
-       }
-      setIncomingCall(null); // Hide the notification
-    };
+    //  const rejectCall = (callData: CallData) => {
+    //   console.log("Volunteer rejecting call:", callData); // Added console log
+    //    if(socket) {
+    //      socket.emit('rejectCall', { roomId: callData.roomId, senderId: callData.senderId }); // Notify the sender
+    //    }
+    //   setIncomingCall(null); // Hide the notification
+    // };
     // --- END NEW ---
-
+      const navigate = useNavigate();
 
   return (
     <div className="w-full h-full flex flex-col bg-gradient-to-b from-gray-100 to-white shadow-xl rounded-xl">
@@ -331,6 +333,9 @@ const ChatDetails = ({ volunteerId, userId }: { volunteerId: string; userId: str
           </h3>
           <p className="text-xs text-gray-800">Online</p> {/* Status might need Socket.IO presence logic */}
         </div>
+        <div className="flex gap-3 ml-auto">
+            <Button onClick={()=>{navigate(`/concern/${userId}`)}}>Report volunteer</Button>
+        </div>
          {/* --- NEW: Call Buttons (Add if Volunteer can initiate calls) --- */}
          {/* <div className="flex gap-3 ml-auto"> // Add ml-auto to push to the right
             <button
@@ -350,8 +355,8 @@ const ChatDetails = ({ volunteerId, userId }: { volunteerId: string; userId: str
       </div>
 
       {/* --- NEW: Incoming Call Notification UI --- */}
-      {incomingCall && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"> {/* Overlay */}
+      {/* {incomingCall && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"> {/* Overlay *
             <div className="bg-white text-gray-800 p-6 rounded-lg shadow-lg text-center">
                 <p className="text-lg mb-4">
                     {incomingCall.senderName || "Someone"} is calling you ({incomingCall.callType})...
@@ -372,7 +377,7 @@ const ChatDetails = ({ volunteerId, userId }: { volunteerId: string; userId: str
                 </div>
             </div>
         </div>
-      )}
+      )} */}
       {/* --- END NEW --- */}
 
 

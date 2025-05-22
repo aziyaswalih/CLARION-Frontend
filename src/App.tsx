@@ -13,8 +13,9 @@ import NotFound from "./components/NotFound";
 import AdminLogin from "./pages/Admin/Login/AdminLogin";
 // import LatestCauses from "./components/beneficiary/LatestCauses";
 import DonationPage from "./pages/Donor/DonationPage/DonationPage";
-import AboutUsPage from "./components/beneficiary/AboutUs";
+import AboutUsPage from "./pages/AboutUs";
 import RecentCases from "./pages/RecentCases";
+import Concern from "./pages/Concern";
 // import MEET from "./components/calls/VideoCall";
 // import HomePage from "./pages/Beneficiary/HomePage/HomePage";
 
@@ -59,6 +60,7 @@ function App() {
             <Route path="latest_causes" element={<RecentCases/>} />
             <Route path="about_us" element={<AboutUsPage/>} />
             <Route path="/donate" element={<DonationPage/>} />
+            <Route path="/concern/:id" element={<Concern/>} />
 
           </Routes>
      

@@ -15,7 +15,7 @@ const BeneficiaryProfilePage = () => {
 
     const [isEditing, setIsEditing] = useState(false);
     const [preview, setPreview] = useState<string>('');
-    const profilepicurl = preview === '' ? `http://localhost:5000${profilePic}` : preview;
+    const profilepicurl = preview === '' ? `${import.meta.env.VITE_SOCKET_URL}${profilePic}` : preview;
 
     const [updatedProfile, setUpdatedProfile] = useState({
         name, phone,  dateOfBirth, gender, identificationType,
@@ -50,7 +50,11 @@ const BeneficiaryProfilePage = () => {
                 ...updatedProfile,
                 familyDetails: { ...updatedProfile.familyDetails, [key]: value }
             });
-        } else {
+        }
+        //  else if (name === "dateOfBirth") {
+        //     setUpdatedProfile({ ...updatedProfile, dateOfBirth: new Date(value).toISOString() });
+        // }
+        else {
             setUpdatedProfile({ ...updatedProfile, [name]: value });
         }
     };
@@ -74,6 +78,50 @@ const BeneficiaryProfilePage = () => {
         dispatch(updateBeneficiaryProfile(updatedProfile))
         setIsEditing(false);
     };
+
+    // const renderField = (
+    //     label: string,
+    //     name: string,
+    //     value: string,
+    //     handleChange: any,
+    //     isEditing: boolean,
+    //     isTextarea: boolean = false
+    //   ): JSX.Element => {
+    //     return (
+    //       <div className="form-group">
+    //         <label>{label}</label>
+    //         {isEditing ? (
+    //           isTextarea ? (
+    //             <textarea
+    //               name={name}
+    //               value={value}
+    //               onChange={handleChange}
+    //               className="form-control"
+    //             />
+    //           ) : name === "dateOfBirth" ? (
+    //             <input
+    //               type="date"
+    //               name={name}
+    //               value={value} // should be yyyy-mm-dd
+    //               onChange={handleChange}
+    //               className="form-control"
+    //             />
+    //           ) : (
+    //             <input
+    //               type="text"
+    //               name={name}
+    //               value={value}
+    //               onChange={handleChange}
+    //               className="form-control"
+    //             />
+    //           )
+    //         ) : (
+    //           <div>{value}</div>
+    //         )}
+    //       </div>
+    //     );
+    //   };
+      
 
     return (
         <>
@@ -120,7 +168,17 @@ const BeneficiaryProfilePage = () => {
                 {/* Details */}
                 {/* {renderField("Details", "details", updatedProfile.details, handleChange, isEditing, true)} */}
                 {/* Date of Birth */}
-                {renderField("Date of Birth", "dateOfBirth", updatedProfile.dateOfBirth, handleChange, isEditing)}
+                {renderField(
+                "Date of Birth",
+                "dateOfBirth",
+                isEditing
+                    ? new Date(updatedProfile.dateOfBirth).toISOString().split("T")[0] // yyyy-mm-dd
+                    : new Date(updatedProfile.dateOfBirth).toLocaleDateString("en-GB"), // dd/mm/yyyy
+                handleChange,
+                isEditing
+                )}
+
+                {/* {renderField("Date of Birth", "dateOfBirth", new Date (updatedProfile.dateOfBirth).toLocaleDateString(), handleChange, isEditing)} */}
                 {/* Gender */}
                 {renderField("Gender", "gender", updatedProfile.gender, handleChange, isEditing)}
                 {/* ID Type */}
@@ -158,22 +216,64 @@ const BeneficiaryProfilePage = () => {
 };
 
 // Helper functions for rendering fields
-const renderField = (label: string, name: string, value: string, handleChange: any, isEditing: boolean, isTextarea = false) => (
-    <div className="flex items-start justify-between">
-        <label className="font-semibold text-gray-700 capitalize w-1/4">{label}:</label>
-        {isEditing ? (
-            isTextarea ? (
-                <textarea name={name} value={value} onChange={handleChange} 
-                    className="border p-2 w-3/4 rounded-lg focus:ring focus:ring-blue-200"></textarea>
-            ) : (
-                <input type="text" name={name} value={value} onChange={handleChange} 
-                    className="border p-2 w-3/4 rounded-lg focus:ring focus:ring-blue-200" />
-            )
+// const renderField = (label: string, name: string, value:string , handleChange: any, isEditing: boolean, isTextarea = false) => (
+//     <div className="flex items-start justify-between">
+//         <label className="font-semibold text-gray-700 capitalize w-1/4">{label}:</label>
+//         {isEditing ? (
+//             isTextarea ? (
+//                 <textarea name={name} value={value} onChange={handleChange} 
+//                     className="border p-2 w-3/4 rounded-lg focus:ring focus:ring-blue-200"></textarea>
+//             ) : (
+//                 <input type="text" name={name} value={value} onChange={handleChange} 
+//                     className="border p-2 w-3/4 rounded-lg focus:ring focus:ring-blue-200" />
+//             )
+//         ) : (
+//             <p className="w-3/4">{value}</p>
+//         )}
+//     </div>
+// );
+
+const renderField = (
+    label: string,
+    name: string,
+    value: string,
+    handleChange: any,
+    isEditing: boolean,
+    isTextarea = false
+  ) => (
+    <div className="flex items-start justify-between mb-4">
+      <label className="font-semibold text-gray-700 capitalize w-1/4">{label}:</label>
+      {isEditing ? (
+        isTextarea ? (
+          <textarea
+            name={name}
+            value={value}
+            onChange={handleChange}
+            className="border p-2 w-3/4 rounded-lg focus:ring focus:ring-blue-200"
+          />
+        ) : name === "dateOfBirth" ? (
+          <input
+            type="date"
+            name={name}
+            value={value} // must be in yyyy-mm-dd format
+            onChange={handleChange}
+            className="border p-2 w-3/4 rounded-lg focus:ring focus:ring-blue-200"
+          />
         ) : (
-            <p className="w-3/4">{value}</p>
-        )}
+          <input
+            type="text"
+            name={name}
+            value={value}
+            onChange={handleChange}
+            className="border p-2 w-3/4 rounded-lg focus:ring focus:ring-blue-200"
+          />
+        )
+      ) : (
+        <p className="w-3/4">{value}</p>
+      )}
     </div>
-);
+  );
+  
 
 const renderStaticField = (label: string, value: string) => (
     <div className="flex items-center justify-between">

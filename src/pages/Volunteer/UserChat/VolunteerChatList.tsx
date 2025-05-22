@@ -66,10 +66,60 @@ const VolunteerChatList = ({userId=null}:{userId:string | null}) => {
       });
   }, [dispatch, volunteer?.id]);
   const handleMessage = () => {
+    // if (!volunteer?.id) {
+
+    //   console.warn("User ID is missing!");
+    //   return;
+    // }
+
+    // dispatch(User_get_MessagesUserId(volunteer.id))
+    //   .unwrap()
+    //   .then(async (messages: Response_ChatsTypes[]) => {
+    //     console.log("User Messages:", messages);
+
+    //     const uniqueConnections = new Map<string, Response_ChatsTypes>();
+
+    //     messages.forEach((message) => {
+    //       const otherUserId = message.sender === volunteer.id ? message.receiver : message.sender;
+    //       if (!uniqueConnections.has(otherUserId)) {
+    //         uniqueConnections.set(otherUserId, message);
+    //       }
+    //     });
+
+    //     const VolunteerIds = Array.from(uniqueConnections.keys());
+
+    //     const userDetailsPromises = VolunteerIds.map((empId) =>
+        
+    //       dispatch(user_get_volunteerDetails(empId.toString())).unwrap()
+    //     );
+
+    //     try {
+    //       const userDetailsResults = await Promise.allSettled(userDetailsPromises);
+    //       const userDetailsMap = new Map<string, UserStateTypes>();
+
+    //       userDetailsResults.forEach((result, index) => {
+    //         if (result.status === "fulfilled") {
+    //           userDetailsMap.set(VolunteerIds[index], result.value);
+    //         } else {
+    //           console.warn(`Failed to fetch details for ${VolunteerIds[index]}`, result.reason);
+    //         }
+    //       });
+
+    //       setUserDetails(userDetailsMap);
+    //       setChatList(Array.from(uniqueConnections.values()));
+    //     } catch (error) {
+    //       console.error("Error fetching user details:", error);
+    //     }
+    //   })
+    //   .catch((error:any) => {
+    //     console.error("Error fetching chats:", error);
+    //   });
     if (!volunteer?.id) {
       console.warn("User ID is missing!");
       return;
     }
+    console.log("handleMessage called");
+    
 
     dispatch(User_get_MessagesUserId(volunteer.id))
       .unwrap()

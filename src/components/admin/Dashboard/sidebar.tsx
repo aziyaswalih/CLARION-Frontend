@@ -26,6 +26,7 @@ const menuItems: MenuItem[] = [
     { title: "Donors", icon: BarChart, href: "/admin/donors" },
     { title: "Report & Analytics", icon: PieChart, href: "/admin/analytics" },
     { title: "Recent Stories", icon: Building2, href: "/admin/recentstories" },
+    { title: "New Concerns", icon: FileText, href: "/admin/concerns" },
     // { title: "Finance Management", icon: DollarSign, href: "/admin/finance" },
     // { title: "Donation Management", icon: Settings, href: "/admin/donation" },
     { title: "Logout", icon: Lock, href: "/admin/logout" },

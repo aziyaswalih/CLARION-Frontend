@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {  Plus } from "lucide-react";
+// import {  Plus } from "lucide-react";
 import { Avatar } from "../../../components/ui/avatar";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
@@ -27,9 +27,9 @@ export function BeneficiariesList() {
     navigate(`/admin/beneficiaries/edit/${id}`);
   };
 
-  const handleAdd = () => {
-    navigate(`/admin/beneficiaries/add`);
-  };
+  // const handleAdd = () => {
+  //   navigate(`/admin/beneficiaries/add`);
+  // };
 
   const handleBlockToggle = async (id: string, isActive: boolean) => {
     if (isActive) {
@@ -56,10 +56,10 @@ export function BeneficiariesList() {
       <div className="ml-64 p-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-xl font-semibold">BENEFICIARIES</h1>
-          <Button className="bg-green-400 hover:bg-green-500 text-white" onClick={handleAdd}>
+          {/* <Button className="bg-green-400 hover:bg-green-500 text-white" onClick={handleAdd}>
             <Plus className="w-4 h-4 mr-2" />
             ADD
-          </Button>
+          </Button> */}
         </div>
 
         <div className="bg-gray-50 p-4 rounded-lg mb-6">

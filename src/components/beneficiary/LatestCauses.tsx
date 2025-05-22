@@ -8,10 +8,12 @@ import { fetchStories } from '../../reducers/beneficiary/storyReducer';
 import { RootState, AppDispatch } from '../../store/store';
 import Swal from 'sweetalert2';
 import { newBloodDonationAction } from '../../reducers/donors/donorReducer';
+import { UserStateTypes } from '../../reducers/volunteers/volunteerApicalls';
 
 interface IStoryCardProps {
   _id: string;
   title: string;
+  beneficiary: UserStateTypes;
   requestType: 'financial' | 'blood' | 'organ';
   images?: string[];
   amount?: number;
@@ -24,6 +26,7 @@ interface IStoryCardProps {
 const CauseCard: React.FC<IStoryCardProps> = ({
   _id,
   title,
+  beneficiary,
   requestType,
   images = [],
   amount,
@@ -130,6 +133,10 @@ const CauseCard: React.FC<IStoryCardProps> = ({
             </Button>
           </div>
         )}
+      </div>
+      <div className="p-4 bg-gray-100 text-sm text-gray-600">
+      Any concerns regarding this cause? <br />
+      <Button className='alert' onClick={()=>{navigate(`/concern/${beneficiary._id}`)}}>Report</Button>
       </div>
     </div>
   );

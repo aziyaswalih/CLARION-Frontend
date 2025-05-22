@@ -10,6 +10,8 @@ import AddBeneficiary from "../pages/Admin/BeneficiaryList/AddBeneficiary"
 import Logout from "../components/admin/Dashboard/logout"
 import NotFound from "../components/NotFound"
 import RecentStories from "../pages/Admin/RecentStories/RecentStories"
+import ConcernDetailPage from "../pages/Admin/Concerns/ConcernDetailPage"
+import ConcernListPage from "../pages/Admin/Concerns/ConcernList"
 
 const AdminRoutes = () => {
   return (
@@ -23,6 +25,8 @@ const AdminRoutes = () => {
       <Route path="beneficiaries/edit/:id" element={<EditBeneficiary />} />
       <Route path="beneficiaries/add" element={<AddBeneficiary />} />
       <Route path="recentstories" element={<RecentStories/>}/>
+      <Route path="concerns/:id" element={<ConcernDetailPage />} />
+      <Route path="concerns" element={<ConcernListPage />} />
       <Route path="analytics" element={<DashboardPage/>}/>
       <Route path="logout" element={<Logout/>}/>
       <Route path="*" element={<NotFound/>}/>

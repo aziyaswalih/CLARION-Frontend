@@ -76,7 +76,7 @@ const AddStoryPage: React.FC = () => {
     try {
       await dispatch(createStory(formData)).unwrap()
       .then(()=>{console.log('success')
-        // alert('success')
+        
 
         Swal.fire({
           icon: 'success',

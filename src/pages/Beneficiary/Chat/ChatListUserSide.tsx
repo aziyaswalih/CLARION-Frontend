@@ -158,7 +158,12 @@ const ChatList = () => {
               <h4 className="text-lg font-semibold text-black-200">{user?.name}</h4>
               <p className="text-sm text-black-400 truncate">{message}</p>
             </div>
-            <small className="text-sm text-gray-500">{new Date(timestamp).toLocaleTimeString()}</small>
+            <small className="text-sm text-gray-500">
+              {timestamp ? new Date(timestamp).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }) : "N?A"}
+            </small>
           </div>
         );
       })}

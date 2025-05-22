@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../../components/ui/button";
 import Footer from "../../../components/beneficiary/Footer/Footer";
 import Header from "../../../components/beneficiary/Header/Header";
-import {  Book, MessageSquare, User } from "lucide-react";
+// import {  Book, MessageSquare, User } from "lucide-react";
 import { toast } from "react-toastify";
 import { getBeneficiary, submitBeneficiaryDetails } from "../../../reducers/beneficiary/beneficiaryReducer";
 import {  AppDispatch, RootState } from "../../../store/store";
 import { useNavigate } from "react-router-dom";
-import { Response_ChatsTypes, UserStateTypes } from "../../../reducers/volunteers/volunteerApicalls";
-import { User_get_MessagesUserId, user_get_volunteerDetails } from "../../../reducers/beneficiary/beneficiaryApicalls";
+import { Response_ChatsTypes } from "../../../reducers/volunteers/volunteerApicalls";
+import { User_get_MessagesUserId } from "../../../reducers/beneficiary/beneficiaryApicalls";
 // import ChatList from "../Chat/ChatListUserSide";
 
 //  types for address and family details
@@ -37,8 +37,8 @@ interface BeneficiaryFormData {
     address: Address;
     familyDetails: FamilyDetails; // 
     // uploadedFiles: File[];
-    submissionStatus:'idle' | 'loading' | 'succeeded' | 'failed';
-    submissionError:(string | null);
+    // submissionStatus:'idle' | 'loading' | 'succeeded' | 'failed';
+    // submissionError:(string | null);
 }
 
 const BeneficiaryHome: React.FC = () => {
@@ -127,8 +127,8 @@ const BeneficiaryHome: React.FC = () => {
             address,
             familyDetails, 
             // uploadedFiles, 
-            submissionStatus:'idle',
-            submissionError:null
+            // submissionStatus:'idle',
+            // submissionError:null
         };
 
         dispatch(submitBeneficiaryDetails(formData));

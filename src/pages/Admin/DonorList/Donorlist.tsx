@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {  Plus } from "lucide-react";
+// import {  Plus } from "lucide-react";
 import { Avatar } from "../../../components/ui/avatar";
 import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
@@ -52,10 +52,10 @@ export function DonorsList() {
       <div className="ml-64 p-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-xl font-semibold">DONORS</h1>
-          <Button className="bg-green-400 hover:bg-green-500 text-white" onClick={() => navigate("/admin/donors/add")}>
+          {/* <Button className="bg-green-400 hover:bg-green-500 text-white" onClick={() => navigate("/admin/donors/add")}>
             <Plus className="w-4 h-4 mr-2" />
             ADD +
-          </Button>
+          </Button> */}
         </div>
 
         <div className="bg-gray-50 p-4 rounded-lg mb-6">

@@ -32,13 +32,13 @@ const IncomingCallPopup = ({ incomingCall, acceptCall, rejectCall }: IncomingCal
           className="bg-green-500 p-3 rounded-full shadow-lg hover:bg-green-600 transition-all duration-300 animate-pulse"
           onClick={() => acceptCall(incomingCall)}
         >
-          <FaPhone className="text-white" size={18} />
+          <FaPhone className="text-white rotate-90" size={18} />
         </button>
         <button
           className="bg-red-500 p-3 rounded-full shadow-lg hover:bg-red-600 transition-all duration-300"
           onClick={() => rejectCall(incomingCall)}
         >
-          <FaPhoneSlash className="text-white" size={18} />
+          <FaPhoneSlash className= "text-white rotate-90" size={18} />
         </button>
       </div>
     </div>
