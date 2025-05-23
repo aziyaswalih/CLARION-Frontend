@@ -44,15 +44,17 @@ const DonationHistory: React.FC = () => {
   };
 
   // Search
-  const filteredDonations = userDonations.filter((donation: any) => {
-    const matchesSearch = donation.storyId.title
-      .toLowerCase()
+  const filteredDonations = userDonations.filter((donation:any) => {
+    const matchesSearch = donation.storyId?.title
+      ?.toLowerCase()
       .includes(searchQuery.toLowerCase());
     const matchesCategory =
       filterCategory === "All" ||
-      donation.storyId.requestType === filterCategory;
+      donation.storyId?.requestType === filterCategory;
     return matchesSearch && matchesCategory;
   });
+
+ 
 
   // Sort
   const sortedDonations = [...filteredDonations].sort((a, b) => {
@@ -79,7 +81,7 @@ const DonationHistory: React.FC = () => {
   // Unique categories for filter dropdown
   const categories = [
     "All",
-    ...new Set(userDonations.map((d: any) => d.storyId.requestType)),
+    ...new Set(userDonations.map((d: any) => d.storyId?.requestType)),
   ];
 
   return (
