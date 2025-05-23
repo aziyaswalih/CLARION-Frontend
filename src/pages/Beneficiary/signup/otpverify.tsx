@@ -13,7 +13,7 @@ export default function OTPVerification() {
   const [showResend, setShowResend] = useState<boolean>(false); // Show resend button
   const [loading, setLoading] = useState<boolean>(false); // Loading state for buttons
 
-  // const API_BASE_URL = "http://localhost:5000/api/user";
+ 
 
   // Timer countdown
   useEffect(() => {

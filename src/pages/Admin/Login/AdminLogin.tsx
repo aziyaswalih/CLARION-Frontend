@@ -58,7 +58,7 @@ const LoginPage = () => {
         token: string;
         message: string;
         user: any;
-      }>("http://localhost:5000/api/admin/login", formData);
+      }>(`${import.meta.env.VITE_BASE_URL}/admin/login`, formData);
       console.log(response.data.user);
 
       // Store the token in localStorage or a cookie

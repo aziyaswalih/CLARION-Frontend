@@ -27,7 +27,7 @@ const DonorProfilePage = () => {
   });
   const [preview, setPreview] = useState<string>("");
   const profilepicurl =
-    preview === "" ? `http://localhost:5000${profilePic}` : preview;
+    preview === "" ? `${import.meta.env.VITE_BASE_URL}${profilePic}` : preview;
   const { walletBalance, walletLoading } = useSelector(
     (state: RootState) => state.wallet
   );

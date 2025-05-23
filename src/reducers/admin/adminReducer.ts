@@ -53,7 +53,7 @@ export const fetchVolunteers = createAsyncThunk<
 >("admin/fetchVolunteers", async (_, { rejectWithValue }) => {
   try {
     const response = await userAxiosInstance.get<{ volunteers: UserCommon[] }>(
-      "http://localhost:5000/api/admin/volunteers"
+      `${import.meta.env.VITE_BASE_URL}/admin/volunteers`
     );
     return response.data.volunteers;
   } catch (error: any) {
@@ -82,7 +82,7 @@ export const blockVolunteer = createAsyncThunk<
 >("admin/blockVolunteer", async (id, { rejectWithValue }) => {
   try {
     await userAxiosInstance.put(
-      `http://localhost:5000/api/admin/volunteers/block/${id}`
+      `${import.meta.env.VITE_BASE_URL}/admin/volunteers/block/${id}`
     );
     return { id };
   } catch (error: any) {
@@ -99,7 +99,7 @@ export const unblockVolunteer = createAsyncThunk<
 >("admin/unblockVolunteer", async (id, { rejectWithValue }) => {
   try {
     await userAxiosInstance.put(
-      `http://localhost:5000/api/admin/volunteers/unblock/${id}`
+      `${import.meta.env.VITE_BASE_URL}/admin/volunteers/unblock/${id}`
     );
     return { id };
   } catch (error: any) {
@@ -118,7 +118,7 @@ export const fetchBeneficiaries = createAsyncThunk<
   try {
     const response = await userAxiosInstance.get<{
       beneficiaries: UserCommon[];
-    }>("http://localhost:5000/api/admin/beneficiaries");
+    }>(`${import.meta.env.VITE_BASE_URL}/admin/beneficiaries`);
     return response.data.beneficiaries;
   } catch (error: any) {
     return rejectWithValue(
@@ -134,7 +134,7 @@ export const blockBeneficiary = createAsyncThunk<
 >("admin/blockBeneficiary", async (id, { rejectWithValue }) => {
   try {
     await userAxiosInstance.put(
-      `http://localhost:5000/api/admin/beneficiaries/block/${id}`
+      `${import.meta.env.VITE_BASE_URL}/admin/beneficiaries/block/${id}`
     );
     return { id };
   } catch (error: any) {
@@ -151,7 +151,7 @@ export const unblockBeneficiary = createAsyncThunk<
 >("admin/unblockBeneficiary", async (id, { rejectWithValue }) => {
   try {
     await userAxiosInstance.put(
-      `http://localhost:5000/api/admin/beneficiaries/unblock/${id}`
+      `${import.meta.env.VITE_BASE_URL}/admin/beneficiaries/unblock/${id}`
     );
     return { id };
   } catch (error: any) {
@@ -169,7 +169,7 @@ export const fetchDonors = createAsyncThunk<
 >("admin/fetchDonors", async (_, { rejectWithValue }) => {
   try {
     const response = await userAxiosInstance.get<{ donors: UserCommon[] }>(
-      "http://localhost:5000/api/admin/donors"
+      `${import.meta.env.VITE_BASE_URL}/admin/donors`
     );
     return response.data.donors;
   } catch (error: any) {
@@ -186,7 +186,7 @@ export const blockDonor = createAsyncThunk<
 >("admin/blockDonor", async (id, { rejectWithValue }) => {
   try {
     await userAxiosInstance.put(
-      `http://localhost:5000/api/admin/donors/block/${id}`
+      `${import.meta.env.VITE_BASE_URL}/admin/donors/block/${id}`
     );
     return { id };
   } catch (error: any) {
@@ -203,7 +203,7 @@ export const unblockDonor = createAsyncThunk<
 >("admin/unblockDonor", async (id, { rejectWithValue }) => {
   try {
     await userAxiosInstance.put(
-      `http://localhost:5000/api/admin/donors/unblock/${id}`
+      `${import.meta.env.VITE_BASE_URL}/admin/donors/unblock/${id}`
     );
     return { id };
   } catch (error: any) {
