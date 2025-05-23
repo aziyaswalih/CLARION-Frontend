@@ -7,13 +7,19 @@ import Sidebar from "../../../components/admin/Dashboard/sidebar";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../store/store";
-import { fetchVolunteers, blockVolunteer, unblockVolunteer } from "../../../reducers/admin/adminReducer"; // update with your actual reducer path
+import {
+  fetchVolunteers,
+  blockVolunteer,
+  unblockVolunteer,
+} from "../../../reducers/admin/adminReducer"; // update with your actual reducer path
 
 export function VolunteerTable() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const { volunteers, loading, error } = useSelector((state: RootState) => state.admin); // assuming volunteer slice
+  const { volunteers, loading, error } = useSelector(
+    (state: RootState) => state.admin
+  ); // assuming volunteer slice
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,7 +50,10 @@ export function VolunteerTable() {
 
   const totalPages = Math.ceil(filteredVolunteers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentVolunteers = filteredVolunteers.slice(startIndex, startIndex + itemsPerPage);
+  const currentVolunteers = filteredVolunteers.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -69,8 +78,12 @@ export function VolunteerTable() {
                 className="w-full bg-white"
               />
             </div>
-            <Button className="bg-black hover:bg-gray-800 text-white px-6">SEARCH</Button>
-            <Button variant="outline" className="px-6">Status</Button>
+            <Button className="bg-black hover:bg-gray-800 text-white px-6">
+              SEARCH
+            </Button>
+            <Button variant="outline" className="px-6">
+              Status
+            </Button>
           </div>
         </div>
 
@@ -98,7 +111,10 @@ export function VolunteerTable() {
                         <div className="flex items-center gap-3">
                           <Avatar>
                             <img
-                              src={volunteer.avatar || "/images/hero-background.jpg"}
+                              src={
+                                volunteer.avatar ||
+                                "/images/hero-background.jpg"
+                              }
                               alt={volunteer.name}
                               className="w-8 h-8 rounded-full"
                             />
@@ -108,7 +124,9 @@ export function VolunteerTable() {
                       </td>
                       <td className="py-4">{volunteer.email}</td>
                       <td className="py-4">{volunteer.phone}</td>
-                      <td className="py-4">{volunteer.isActive ? "Active" : "Blocked"}</td>
+                      <td className="py-4">
+                        {volunteer.isActive ? "Active" : "Blocked"}
+                      </td>
                       <td className="py-4">
                         <div className="flex gap-2">
                           <Button
@@ -120,8 +138,17 @@ export function VolunteerTable() {
                           </Button>
                           <Button
                             size="sm"
-                            className={volunteer.isActive ? "bg-red-400 hover:bg-red-500 text-white px-6" : "bg-green-400 hover:bg-green-500 text-white px-6"}
-                            onClick={() => handleBlockToggle(volunteer._id, volunteer.isActive)}
+                            className={
+                              volunteer.isActive
+                                ? "bg-red-400 hover:bg-red-500 text-white px-6"
+                                : "bg-green-400 hover:bg-green-500 text-white px-6"
+                            }
+                            onClick={() =>
+                              handleBlockToggle(
+                                volunteer._id,
+                                volunteer.isActive
+                              )
+                            }
                           >
                             {volunteer.isActive ? "Block" : "Unblock"}
                           </Button>
@@ -134,23 +161,27 @@ export function VolunteerTable() {
             </div>
 
             <div className="flex justify-center gap-2 mt-6">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    currentPage === page
-                      ? "bg-[#b8860b] text-white"
-                      : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      currentPage === page
+                        ? "bg-[#b8860b] text-white"
+                        : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                )
+              )}
             </div>
 
             <div className="text-sm text-gray-500 mt-4 text-center">
-              SHOWING {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredVolunteers.length)} OF {filteredVolunteers.length}
+              SHOWING {startIndex + 1}-
+              {Math.min(startIndex + itemsPerPage, filteredVolunteers.length)}{" "}
+              OF {filteredVolunteers.length}
             </div>
           </>
         )}

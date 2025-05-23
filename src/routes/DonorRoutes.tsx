@@ -11,21 +11,20 @@ import DonationCertificate from "../pages/Donor/DonationCertificate/DonationCert
 const DonorRoutes = () => {
   return (
     <Routes>
-      <Route path="home" element={<DonorWelcome/>} />
-      <Route path="" element={<DonorWelcome/>} />
+      <Route path="home" element={<DonorWelcome />} />
+      <Route path="" element={<DonorWelcome />} />
       <Route path="/account" element={<DonorAccount />}>
         <Route path="home" element={<Navigate to="/donor/home" />} />
         <Route path="profile" element={<DonorProfilePage />} />
         <Route path="transactions" element={<TransactionHistory />} />
         <Route path="donations" element={<DonationHistory />} />
-      </Route>    
-      <Route path="certificate" element={<DonationCertificate />} />    
-      <Route path="*" element={<NotFound/>} />
-      <Route path="donations" element={<DonationHistory/>} />
-      <Route path="transaction_history" element={<TransactionHistory/>} />
+      </Route>
+      <Route path="certificate" element={<DonationCertificate />} />
+      <Route path="*" element={<NotFound />} />
+      <Route path="donations" element={<DonationHistory />} />
+      <Route path="transaction_history" element={<TransactionHistory />} />
     </Routes>
   );
 };
 
 export default DonorRoutes;
-

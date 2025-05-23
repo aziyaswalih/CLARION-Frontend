@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Logout = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    navigate('/admin/login'); // Redirect to home page using useNavigate
+    localStorage.removeItem("authToken");
+    navigate("/admin/login"); // Redirect to home page using useNavigate
   };
 
   useEffect(() => {

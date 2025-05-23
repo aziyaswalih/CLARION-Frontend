@@ -1,7 +1,12 @@
 import Footer from "../../../components/beneficiary/Footer/Footer";
 import Header from "../../../components/beneficiary/Header/Header";
 import { Button } from "../../../components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../components/ui/card";
 import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
 import { useState } from "react";
@@ -15,7 +20,9 @@ const LoginPage = () => {
     password: "",
   });
 
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,18 +54,18 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post<{ token: string; message: string;user:any }>(
-        "http://localhost:5000/api/admin/login",
-        formData
-      );
+      const response = await axios.post<{
+        token: string;
+        message: string;
+        user: any;
+      }>("http://localhost:5000/api/admin/login", formData);
       console.log(response.data.user);
 
-      
       // Store the token in localStorage or a cookie
       localStorage.setItem("authToken", response.data.token);
       // Redirect to the dashboard or another page
-      toast.success('Login successful')
-      
+      toast.success("Login successful");
+
       window.location.href = "/admin/dashboard";
     } catch (error: any) {
       console.error("Error during login:", error);
@@ -93,7 +100,9 @@ const LoginPage = () => {
                   />
                 </svg>
               </div>
-              <CardTitle className="text-2xl md:text-3xl font-bold mt-4">LOGIN TO YOUR ACCOUNT</CardTitle>
+              <CardTitle className="text-2xl md:text-3xl font-bold mt-4">
+                LOGIN TO YOUR ACCOUNT
+              </CardTitle>
             </div>
           </CardHeader>
           <CardContent>
@@ -108,7 +117,9 @@ const LoginPage = () => {
                   placeholder="Enter your email"
                   className="mt-1"
                 />
-                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email}</p>
+                )}
               </div>
               <div>
                 <Label htmlFor="password">Password</Label>
@@ -120,7 +131,9 @@ const LoginPage = () => {
                   placeholder="Enter your password"
                   className="mt-1"
                 />
-                {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                {errors.password && (
+                  <p className="text-red-500 text-sm">{errors.password}</p>
+                )}
               </div>
               <Button
                 type="submit"
@@ -130,7 +143,7 @@ const LoginPage = () => {
                 {loading ? "Logging in..." : "Login"}
               </Button>
             </form>
-            <Auth/>
+            <Auth />
           </CardContent>
         </Card>
       </main>

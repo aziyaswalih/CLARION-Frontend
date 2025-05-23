@@ -1,45 +1,55 @@
 import Footer from "../../../components/beneficiary/Footer/Footer";
 import { Button } from "../../../components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../components/ui/card";
 import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
 import { toast } from "react-toastify";
-import OTPForm from "../signup/OTPForm"; 
-import {jwtDecode} from 'jwt-decode';
+import OTPForm from "../signup/OTPForm";
+import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Auth from "../../../components/googleAuth/Auth";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAsync, resendOtp, sendOTP, verifyOtp } from "../../../reducers/users/userActions";
+import {
+  loginAsync,
+  resendOtp,
+  sendOTP,
+  verifyOtp,
+} from "../../../reducers/users/userActions";
 import { AppDispatch, RootState } from "../../../store/store";
 import { resetState } from "../../../reducers/users/userReducer";
 import Header from "../../../components/beneficiary/Header/Header";
 const LoginPage = () => {
-  
-    const [formData, setFormData] = useState({
-      email: "",
-      password: "",
-    });
-    const { isSuccess, isError, isLoading } = useSelector(
-      (state: RootState) => state.users
-    );
-    const [isOtpSent,setOtpSent] = useState<boolean>(false) 
-    const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-    const [loading, setLoading] = useState(false);
-    const [showOTPForm, setShowOTPForm] = useState(false);
-    // const [otp, setOtp] = useState(""); // State to store OTP input
-    const [otpError, setOtpError] = useState(""); // State to store OTP error message
-    const [userEmail, setUserEmail] = useState("");
-    const [isResending, setIsResending] = useState(false);
-    const [resendTimer, setResendTimer] = useState<number>(30);  
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const { isSuccess, isError, isLoading } = useSelector(
+    (state: RootState) => state.users
+  );
+  const [isOtpSent, setOtpSent] = useState<boolean>(false);
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
+  const [loading, setLoading] = useState(false);
+  const [showOTPForm, setShowOTPForm] = useState(false);
+  // const [otp, setOtp] = useState(""); // State to store OTP input
+  const [otpError, setOtpError] = useState(""); // State to store OTP error message
+  const [userEmail, setUserEmail] = useState("");
+  const [isResending, setIsResending] = useState(false);
+  const [resendTimer, setResendTimer] = useState<number>(30);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
     setErrors({ ...errors, [id]: undefined });
   };
-    const dispatch = useDispatch<AppDispatch>()
-    const [redirectPath, setRedirectPath] = useState<string | null>(null);
-
+  const dispatch = useDispatch<AppDispatch>();
+  const [redirectPath, setRedirectPath] = useState<string | null>(null);
 
   const validateForm = (): boolean => {
     const newErrors: { email?: string; password?: string } = {};
@@ -58,7 +68,7 @@ const LoginPage = () => {
   useEffect(() => {
     if (isSuccess || isError) {
       setTimeout(() => dispatch(resetState()), 3000);
-      Navigate 
+      Navigate;
     }
   }, [isSuccess, isError, dispatch]);
 
@@ -68,89 +78,91 @@ const LoginPage = () => {
 
     setLoading(true);
 
-      dispatch(loginAsync(formData)).unwrap()
-      .then((user:any)=>{
+    dispatch(loginAsync(formData))
+      .unwrap()
+      .then((user: any) => {
         if (user.user?.is_verified) {
-        localStorage.setItem("authToken", user.token);
-        setUserEmail(formData.email);
-        if (user?.user?.role === "volunteer") {
-          window.location.href = "/volunteer/home";
-        } else if (user?.user?.role === "user") {
-          window.location.href = "/home";
-        } else if (user?.user?.role === "donor") {
-          window.location.href = "/donor/home";
-        } else if (user?.user?.role === "admin") {
-          window.location.href = "/admin/dashboard";
+          localStorage.setItem("authToken", user.token);
+          setUserEmail(formData.email);
+          if (user?.user?.role === "volunteer") {
+            window.location.href = "/volunteer/home";
+          } else if (user?.user?.role === "user") {
+            window.location.href = "/home";
+          } else if (user?.user?.role === "donor") {
+            window.location.href = "/donor/home";
+          } else if (user?.user?.role === "admin") {
+            window.location.href = "/admin/dashboard";
+          } else {
+            throw new Error("Invalid role");
+          }
         } else {
-          throw new Error("Invalid role");
-        }
-        
-      } else {
-        localStorage.setItem("authToken", user.token);
-        setShowOTPForm(true);
-        setUserEmail(formData.email);
+          localStorage.setItem("authToken", user.token);
+          setShowOTPForm(true);
+          setUserEmail(formData.email);
 
-        // Send OTP only if not already sent (or implement logic to resend if needed)
-        try {
-          // cutted from
-          dispatch(sendOTP(formData.email??userEmail)).unwrap()
-          .then((otpResponse:any)=>{
-            setOtpSent(true)
-          localStorage.setItem('otpToken', otpResponse.otpToken[1]); // Store the OTP token
-          console.log( otpResponse.otpToken[1],'token from otp response');
-          
-          toast.info("Your account is not verified. Please enter the OTP sent to your email.");
-        })
-        }catch (error:any) {
-          console.error("Error sending OTP:", otpError);
-          toast.error(error.response?.data?.message || "Failed to send OTP.");
-        }
-      }
-      setLoading(false);
+          // Send OTP only if not already sent (or implement logic to resend if needed)
+          try {
+            // cutted from
+            dispatch(sendOTP(formData.email ?? userEmail))
+              .unwrap()
+              .then((otpResponse: any) => {
+                setOtpSent(true);
+                localStorage.setItem("otpToken", otpResponse.otpToken[1]); // Store the OTP token
+                console.log(otpResponse.otpToken[1], "token from otp response");
 
+                toast.info(
+                  "Your account is not verified. Please enter the OTP sent to your email."
+                );
+              });
+          } catch (error: any) {
+            console.error("Error sending OTP:", otpError);
+            toast.error(error.response?.data?.message || "Failed to send OTP.");
+          }
+        }
+        setLoading(false);
       })
-      
-      
-      
-    .catch ((error)=> {
-      console.error("Error during login:", error);
-      setErrors({ email: error.response?.data?.message || "Login failed." });
-      toast.error(error.response?.data?.message || "Login failed.");
-    }) 
-  
-  }
-  const handleOTPVerify = async (otp: string) => {  // Accept otp as argument
+
+      .catch((error) => {
+        console.error("Error during login:", error);
+        setErrors({ email: error.response?.data?.message || "Login failed." });
+        toast.error(error.response?.data?.message || "Login failed.");
+      });
+  };
+  const handleOTPVerify = async (otp: string) => {
+    // Accept otp as argument
     setLoading(true);
     try {
       const token = localStorage.getItem("otpToken");
-      console.log(token,otp);
-      
-      dispatch(verifyOtp({ token:token as string, otp })).unwrap()
-      
-      .then(()=> {
-        localStorage.removeItem('otpToken');
-        toast.success("OTP verified successfully!");
-        const token = localStorage.getItem("authToken") || '';
-        console.log(token);
-        
-        if(token){
-        const decoded: any = jwtDecode(token);
-        console.log(decoded);
-        
-        if (decoded.role === "volunteer") {
-          window.location.href = "/volunteer/home";
-        } else if (decoded.role === "user") {
-          window.location.href = "/home";
-        } else if (decoded.role === "donor") {
-          window.location.href = "/donor/home";
-        } else {
-          throw new Error("Invalid role");
-        }}
-      }) 
-      .catch((error)=> {
-        setOtpError(error.message || "Invalid OTP. Please try again.");
-        toast.error(error.message || "Invalid OTP. Please try again.");
-      })
+      console.log(token, otp);
+
+      dispatch(verifyOtp({ token: token as string, otp }))
+        .unwrap()
+
+        .then(() => {
+          localStorage.removeItem("otpToken");
+          toast.success("OTP verified successfully!");
+          const token = localStorage.getItem("authToken") || "";
+          console.log(token);
+
+          if (token) {
+            const decoded: any = jwtDecode(token);
+            console.log(decoded);
+
+            if (decoded.role === "volunteer") {
+              window.location.href = "/volunteer/home";
+            } else if (decoded.role === "user") {
+              window.location.href = "/home";
+            } else if (decoded.role === "donor") {
+              window.location.href = "/donor/home";
+            } else {
+              throw new Error("Invalid role");
+            }
+          }
+        })
+        .catch((error) => {
+          setOtpError(error.message || "Invalid OTP. Please try again.");
+          toast.error(error.message || "Invalid OTP. Please try again.");
+        });
     } catch (error: any) {
       console.error("Error during OTP verification:", error);
       setOtpError(error.response?.data?.message || "OTP verification failed.");
@@ -165,12 +177,12 @@ const LoginPage = () => {
     setResendTimer(30); // Set initial timer value
 
     try {
-      const token = localStorage.getItem('otpToken'); // Retrieve OTP token
-     
-      dispatch(resendOtp({ token:token as string })).unwrap();
-            toast.success("OTP resent successfully");
-            setResendTimer(30);
-    } catch (error:any) {
+      const token = localStorage.getItem("otpToken"); // Retrieve OTP token
+
+      dispatch(resendOtp({ token: token as string })).unwrap();
+      toast.success("OTP resent successfully");
+      setResendTimer(30);
+    } catch (error: any) {
       console.error("Error resending OTP:", error);
       toast.error(error.response?.data?.message || "Failed to resend OTP.");
     } finally {
@@ -179,10 +191,9 @@ const LoginPage = () => {
     }
   };
 
-
   const handleReset = async () => {
     // ... (handleReset function - same as before)
-        if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email)) {
+    if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email)) {
       setErrors({ email: "Enter a valid email before resetting password." });
       return;
     }
@@ -194,7 +205,7 @@ const LoginPage = () => {
       // )).unwrap()
 
       // .then((response) =>{
-        window.location.href = `/reset}`;
+      window.location.href = `/reset}`;
       //   localStorage.setItem('token', response.otpToken[1]);
       //   toast.info("OTP sent to your email. Proceed to reset your password.");
 
@@ -202,7 +213,9 @@ const LoginPage = () => {
       //   throw new Error(error?.data?.message || "Failed to send OTP.");
       // })
     } catch (error: any) {
-      setErrors({ email: error.response?.data?.message || "Error sending OTP." });
+      setErrors({
+        email: error.response?.data?.message || "Error sending OTP.",
+      });
     } finally {
       setLoading(false);
     }
@@ -210,12 +223,12 @@ const LoginPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
-    const otpToken = localStorage.getItem("otpToken")??null
+    const otpToken = localStorage.getItem("otpToken") ?? null;
     if (token && !otpToken) {
       try {
         const decoded: any = jwtDecode(token);
         console.log(decoded.role);
-        
+
         switch (decoded.role) {
           case "volunteer":
             setRedirectPath("/volunteer/home");
@@ -226,8 +239,8 @@ const LoginPage = () => {
           case "user":
             setRedirectPath("/home");
             break;
-          case 'admin':
-            setRedirectPath('/admin/dashboard')
+          case "admin":
+            setRedirectPath("/admin/dashboard");
             break;
           default:
             setRedirectPath("/login");
@@ -247,7 +260,6 @@ const LoginPage = () => {
   if (redirectPath) {
     return <Navigate to={redirectPath} replace />;
   }
-
 
   // return (
   //   <div className="min-h-screen flex flex-col bg-[#877356]">
@@ -348,8 +360,6 @@ const LoginPage = () => {
   //   </div>
   // );
 
-
-
   return (
     <div className="min-h-screen flex flex-col bg-[#9e9c98]">
       <Header />
@@ -363,7 +373,7 @@ const LoginPage = () => {
               className="object-cover h-full w-full"
             />
           </div>
-  
+
           {/* 👉 Login Form (right side) */}
           <div className="p-8">
             <Card className="bg-transparent shadow-none">
@@ -387,12 +397,17 @@ const LoginPage = () => {
                   LOGIN TO YOUR ACCOUNT
                 </CardTitle>
               </CardHeader>
-  
+
               <CardContent>
                 {!showOTPForm ? (
                   <form className="space-y-5" onSubmit={handleSubmit}>
                     <div>
-                      <Label htmlFor="email" className="text-[#4B3621] font-medium">Email</Label>
+                      <Label
+                        htmlFor="email"
+                        className="text-[#4B3621] font-medium"
+                      >
+                        Email
+                      </Label>
                       <Input
                         id="email"
                         type="email"
@@ -401,10 +416,17 @@ const LoginPage = () => {
                         placeholder="Enter your email"
                         className="mt-1"
                       />
-                      {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                      {errors.email && (
+                        <p className="text-red-500 text-sm">{errors.email}</p>
+                      )}
                     </div>
                     <div>
-                      <Label htmlFor="password" className="text-[#4B3621] font-medium">Password</Label>
+                      <Label
+                        htmlFor="password"
+                        className="text-[#4B3621] font-medium"
+                      >
+                        Password
+                      </Label>
                       <Input
                         id="password"
                         type="password"
@@ -413,9 +435,13 @@ const LoginPage = () => {
                         placeholder="Enter your password"
                         className="mt-1"
                       />
-                      {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                      {errors.password && (
+                        <p className="text-red-500 text-sm">
+                          {errors.password}
+                        </p>
+                      )}
                     </div>
-  
+
                     <Button
                       type="submit"
                       className="w-full bg-gradient-to-r from-[#b8860b] to-[#956d09] text-white font-semibold tracking-wide"
@@ -423,10 +449,12 @@ const LoginPage = () => {
                     >
                       {loading ? "Logging in..." : "Login"}
                     </Button>
-  
-                    <div className="text-center my-3 text-[#4B3621] font-semibold">OR</div>
+
+                    <div className="text-center my-3 text-[#4B3621] font-semibold">
+                      OR
+                    </div>
                     <Auth />
-  
+
                     <div className="text-center text-sm text-gray-700 mt-6">
                       Forgot your password?{" "}
                       <button
@@ -464,7 +492,6 @@ const LoginPage = () => {
       <Footer />
     </div>
   );
-  
 };
 
 export default LoginPage;

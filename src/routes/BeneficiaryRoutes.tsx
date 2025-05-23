@@ -1,153 +1,3 @@
-// import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-// import OTPVerification from "../pages/Beneficiary/signup/otpverify";
-// import BeneficiaryHome from "../pages/Beneficiary/HomePage/Home";
-// import HomePage from "../pages/HomePage";
-// import NotFound from "../components/NotFound";
-// import ProfilePage from "../pages/Beneficiary/ProfilePage/ProfilePage";
-// import Story from "../pages/Beneficiary/Story/Story";
-// import StoryHistory from "../pages/Beneficiary/StoryHistory/StoryHistory";
-// import MEET from "../components/calls/VideoCall";
-// import IncomingCallPopup from "../components/notifications/incomingcall";
-// import socket from "../socket/socket";
-// import { CallData } from "../reducers/volunteers/volunteerApicalls";
-// import { useEffect, useRef, useState } from "react";
-// import { useSelector } from "react-redux";
-// import { RootState } from "../store/store";
-// import ChatList from "../pages/Beneficiary/Chat/ChatListUserSide";
-// import BeneficiaryAccount from "../pages/Beneficiary/BeneficiaryAccount/BeneficiaryAccount";
-// // import UserProtect from "../components/beneficiary/Protect/UserProtect";
-
-// const BeneficiaryRoutes = () => {
-//   const  user  = useSelector((state: RootState) => state.users.user);
-//     const notificationSound = useRef(new Audio("/wet-431.mp3"));
-//     const [incomingCall, setIncomingCall] = useState<CallData | null>(null);
-  
-//     const canPlaySoundRef = useRef(false); // ✅ Use ref to track state outside React
-//   const navigate=useNavigate()
-//     useEffect(() => {
-//       socket.emit("register", "volunteer", user?.id);
-  
-  
-//       socket.off("callIncoming");
-  
-//       socket.on("callIncoming", (data: CallData) => {
-//         console.log("Incoming call:", data);
-//         setIncomingCall(data);
-//       });
-//       socket.on("disconnect-call", (data) => {
-//         console.log("Incoming call:", data);
-//         setIncomingCall(null);
-//       });
-  
-     
-//       // Enable sound when user clicks
-//       const enableSound = () => {
-//         canPlaySoundRef.current = true; // ✅ Update ref to keep track of state
-//         document.removeEventListener("click", enableSound);
-//       };
-  
-//       document.addEventListener("click", enableSound);
-  
-//       // Listen for new booking notifications
-//       socket.on("bookingNotification", (booking) => {
-//         if (!Array.isArray(booking)) return;
-  
-//         const matchedBooking = booking.find((emp) => emp?.volunteerId === user?.id);
-  
-//         if (matchedBooking) {
-//           console.log("Received New Booking:", matchedBooking);
-  
-//           // ✅ Check `canPlaySoundRef` instead of state
-//           if (canPlaySoundRef.current) {
-//             notificationSound.current.play().catch((err:any) => console.error("Sound play error:", err));
-//           }
-  
-//           // // Show toast notification
-//           // toast.info(`New Booking Available`, {
-//           //   position: "top-right",
-//           //   autoClose: 5000,
-//           //   hideProgressBar: false,
-//           //   closeOnClick: true,
-//           //   pauseOnHover: true,
-//           //   draggable: true,
-//           // });
-//         }
-//       });
-  
-//       return () => {
-//         socket.off("bookingNotification");
-//         document.removeEventListener("click", enableSound);
-//         socket.off('callIncoming')
-//       };
-//     }, [user?.id]);
-    
-  
-//     const acceptCall = (callData: CallData) => {
-//       console.log("📞 Call accepted function triggered with:", callData);
-  
-//       if (!socket) {
-//           console.error("❌ Socket is undefined!");
-//           return;
-//       }
-  
-//       if (!callData.roomId) {
-//           console.error("❌ Missing Room ID!");
-//           return;
-//       }
-  
-      
-//       console.log("✅ Emitting 'callAccepted' event...");
-//       setTimeout(() => {
-//         socket.emit("acceptCall", { roomId: callData.roomId, volunteerId: callData.receiverId });
-//       }, 500);
-  
-//       setIncomingCall(null)
-//       navigate(`/call?type=${callData.callType}&action=${'receiver'}&sender=${callData.senderId}&receiver=${callData.receiverId}&senderName=${callData.senderName}&roomId=${callData.roomId}`)
-      
-//       console.log("🔄 Removing 'callIncoming' listener...");
-//       socket.off('acceptCall');
-//   };
-  
-  
-//   const rejectCall=(callData:CallData)=>{
-//     setIncomingCall(null)
-//     socket.emit('rejectCall',{senderId:callData.senderId,roomId:callData.roomId})
-  
-//     socket.off('rejectCall')  
-//   }
-  
-    
-  
-//     return (
-//       <>
-  
-//   {incomingCall && (
-         
-//           <IncomingCallPopup incomingCall={incomingCall} acceptCall={()=>acceptCall(incomingCall)}  rejectCall={()=>rejectCall(incomingCall)}/>
-//         )}
-//   {/* return ( */}
-//     <Routes>
-//       <Route path="home" element={<BeneficiaryHome />} />
-//       {/* <Route path="profile" element={<ProfilePage />} /> */}
-//       <Route path="landingpage" element={<HomePage />} />
-//       <Route path="test" element={<OTPVerification />} />
-//       <Route path="*" element = {<NotFound />} />
-//       <Route path="story" element={<Story/>} />
-//       {/* <Route path="stories" element={<StoryHistory/>} /> */}
-//       <Route path="/call" element={<MEET/>}/>
-//       {/* <Route path="chats" element={<ChatList/>} /> */}
-//       <Route path="/account" element={<BeneficiaryAccount />}>
-//         <Route path="home" element={<Navigate to="/home" />} />
-//         <Route path="stories" element={<StoryHistory />} />
-//         <Route path="chats" element={<ChatList />} />
-//         <Route path="profile" element={<ProfilePage />} />
-//       </Route>
-//     </Routes>
-//     </>
-//   );
-// };
-
-// export default BeneficiaryRoutes;
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import OTPVerification from "../pages/Beneficiary/signup/otpverify"; // Assuming this is a test page as per your routes
 import BeneficiaryHome from "../pages/Beneficiary/HomePage/Home";
@@ -178,7 +28,9 @@ const BeneficiaryRoutes = () => {
   // Main useEffect for socket event listeners and user registration
   useEffect(() => {
     if (!user?.id) {
-      console.log("User not available, skipping socket registration and listeners.");
+      console.log(
+        "User not available, skipping socket registration and listeners."
+      );
       return;
     }
 
@@ -193,8 +45,14 @@ const BeneficiaryRoutes = () => {
       setIncomingCall(data);
     };
 
-    const handleCallDisconnectedByRemote = (data: { roomId: string; reason?: string }) => {
-      console.log("Socket: Received 'disconnect-call' (e.g., caller hung up or call ended):", data);
+    const handleCallDisconnectedByRemote = (data: {
+      roomId: string;
+      reason?: string;
+    }) => {
+      console.log(
+        "Socket: Received 'disconnect-call' (e.g., caller hung up or call ended):",
+        data
+      );
       setIncomingCall((currentCall) => {
         if (currentCall && currentCall.roomId === data.roomId) {
           notificationSound.current.pause();
@@ -209,7 +67,6 @@ const BeneficiaryRoutes = () => {
       });
     };
 
-
     socket.on("callIncoming", handleIncomingCall);
     socket.on("disconnect-call", handleCallDisconnectedByRemote); // Listen for explicit disconnects
 
@@ -220,7 +77,10 @@ const BeneficiaryRoutes = () => {
     document.addEventListener("click", enableSound);
 
     return () => {
-      console.log("Cleaning up BeneficiaryRoutes main useEffect for user:", user.id);
+      console.log(
+        "Cleaning up BeneficiaryRoutes main useEffect for user:",
+        user.id
+      );
       socket.off("callIncoming", handleIncomingCall);
       socket.off("disconnect-call", handleCallDisconnectedByRemote);
       document.removeEventListener("click", enableSound);
@@ -228,7 +88,6 @@ const BeneficiaryRoutes = () => {
       // socket.emit("unregister", "beneficiary", user.id);
     };
   }, [user?.id]);
-
 
   // useEffect for managing call timeout
   useEffect(() => {
@@ -238,25 +97,37 @@ const BeneficiaryRoutes = () => {
       callTimeoutRef.current = null;
     }
 
-    if (incomingCall && incomingCall.roomId) { // Ensure roomId exists
-      console.log(`Call Timeout: Starting 30s timeout for incoming call (Room: ${incomingCall.roomId})`);
-      if(canPlaySoundRef.current) {
+    if (incomingCall && incomingCall.roomId) {
+      // Ensure roomId exists
+      console.log(
+        `Call Timeout: Starting 30s timeout for incoming call (Room: ${incomingCall.roomId})`
+      );
+      if (canPlaySoundRef.current) {
         notificationSound.current.loop = true; // Loop the sound
-        notificationSound.current.play().catch((err: any) => console.error("Sound play error (incoming call):", err));
+        notificationSound.current
+          .play()
+          .catch((err: any) =>
+            console.error("Sound play error (incoming call):", err)
+          );
       }
 
       callTimeoutRef.current = setTimeout(() => {
-        console.warn(`Call Timeout: Call for room ${incomingCall.roomId} timed out.`);
+        console.warn(
+          `Call Timeout: Call for room ${incomingCall.roomId} timed out.`
+        );
         // Check if the call that timed out is still the current incomingCall
         setIncomingCall((currentCall) => {
           if (currentCall && currentCall.roomId === incomingCall.roomId) {
-            socket.emit('call_missed', { // Or use 'rejectCall' with a reason
+            socket.emit("call_missed", {
+              // Or use 'rejectCall' with a reason
               senderId: incomingCall.senderId,
               receiverId: incomingCall.receiverId, // This user
               roomId: incomingCall.roomId,
-              reason: 'timeout'
+              reason: "timeout",
             });
-            console.log(`Socket: Emitted 'call_missed' for room ${incomingCall.roomId}`);
+            console.log(
+              `Socket: Emitted 'call_missed' for room ${incomingCall.roomId}`
+            );
             notificationSound.current.pause();
             notificationSound.current.currentTime = 0;
             notificationSound.current.loop = false;
@@ -277,7 +148,9 @@ const BeneficiaryRoutes = () => {
       if (callTimeoutRef.current) {
         clearTimeout(callTimeoutRef.current);
         callTimeoutRef.current = null;
-        console.log(`Call Timeout: Cleared timeout for call (Room: ${incomingCall?.roomId}) due to effect cleanup.`);
+        console.log(
+          `Call Timeout: Cleared timeout for call (Room: ${incomingCall?.roomId}) due to effect cleanup.`
+        );
       }
       // Ensure sound stops if the incoming call changes or component unmounts
       notificationSound.current.pause();
@@ -285,7 +158,6 @@ const BeneficiaryRoutes = () => {
       notificationSound.current.loop = false;
     };
   }, [incomingCall]); // Re-run this effect only when incomingCall object reference changes
-
 
   const acceptCall = (callData: CallData) => {
     console.log("Call Action: Accepting call...", callData);
@@ -311,9 +183,9 @@ const BeneficiaryRoutes = () => {
     // Emit event to server that call is accepted
     // The 'volunteerId' here might need to be 'accepterId' or similar
     // Assuming callData.receiverId is the current user (beneficiary)
-    socket.emit("acceptCall", { 
-        roomId: callData.roomId, 
-        userId: callData.receiverId // ID of the user accepting the call
+    socket.emit("acceptCall", {
+      roomId: callData.roomId,
+      userId: callData.receiverId, // ID of the user accepting the call
     });
     console.log(`Socket: Emitted 'acceptCall' for room ${callData.roomId}`);
 
@@ -321,7 +193,11 @@ const BeneficiaryRoutes = () => {
 
     // Navigate to the call page
     navigate(
-      `/call?type=${callData.callType}&action=receiver&sender=${callData.senderId}&receiver=${callData.receiverId}&senderName=${callData.senderName}&roomId=${callData.roomId}&receiverName=${user?.name || 'User'}`
+      `/call?type=${callData.callType}&action=receiver&sender=${
+        callData.senderId
+      }&receiver=${callData.receiverId}&senderName=${
+        callData.senderName
+      }&roomId=${callData.roomId}&receiverName=${user?.name || "User"}`
     );
   };
 
@@ -331,7 +207,7 @@ const BeneficiaryRoutes = () => {
       console.error("Socket is not available for rejectCall!");
       return;
     }
-     if (!callData.roomId) {
+    if (!callData.roomId) {
       console.error("Missing Room ID in callData for rejectCall!");
       return;
     }
@@ -348,41 +224,42 @@ const BeneficiaryRoutes = () => {
     setIncomingCall(null); // Clear the incoming call UI
 
     // Emit event to server that call is rejected
-    socket.emit('rejectCall', {
+    socket.emit("rejectCall", {
       senderId: callData.senderId,
       receiverId: callData.receiverId, // This user
       roomId: callData.roomId,
-      reason: 'declined_by_user'
+      reason: "declined_by_user",
     });
     console.log(`Socket: Emitted 'rejectCall' for room ${callData.roomId}`);
   };
 
   return (
     <>
-      {incomingCall && incomingCall.roomId && ( // Ensure incomingCall and roomId are valid before rendering popup
-        <IncomingCallPopup
-          incomingCall={incomingCall}
-          acceptCall={() => acceptCall(incomingCall)}
-          rejectCall={() => rejectCall(incomingCall)}
-        />
-      )}
+      {incomingCall &&
+        incomingCall.roomId && ( // Ensure incomingCall and roomId are valid before rendering popup
+          <IncomingCallPopup
+            incomingCall={incomingCall}
+            acceptCall={() => acceptCall(incomingCall)}
+            rejectCall={() => rejectCall(incomingCall)}
+          />
+        )}
       <Routes>
         <Route path="home" element={<BeneficiaryHome />} />
         <Route path="landingpage" element={<HomePage />} />
-        <Route path="test" element={<OTPVerification />} /> {/* This seems like a test route */}
+        <Route path="test" element={<OTPVerification />} />{" "}
+        {/* This seems like a test route */}
         <Route path="story" element={<Story />} />
         <Route path="/call" element={<MEET />} />
-        
         {/* Nested Routes for Account Section */}
         <Route path="/account" element={<BeneficiaryAccount />}>
-          <Route path="home" element={<Navigate to="/home" replace />} /> {/* Redirect to home */}
-          <Route index element={<Navigate to="profile" replace />} /> 
+          <Route path="home" element={<Navigate to="/home" replace />} />{" "}
+          {/* Redirect to home */}
+          <Route index element={<Navigate to="profile" replace />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="stories" element={<StoryHistory />} />
           <Route path="chats" element={<ChatList />} />
           {/* Add other /account sub-routes here if needed */}
         </Route>
-        
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

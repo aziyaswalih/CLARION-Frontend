@@ -1,27 +1,30 @@
-import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
-import { useEffect, useState, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import socket from '../../socket/socket';
-import ToastAlert from '../alert/ToastAlert';
-import { ToastMsg } from '../../reducers/volunteers/volunteerApicalls';
+import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import socket from "../../socket/socket";
+import ToastAlert from "../alert/ToastAlert";
+import { ToastMsg } from "../../reducers/volunteers/volunteerApicalls";
 
 function randomID(len: number = 5) {
-  const chars = '12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP';
-  return Array.from({ length: len }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
+  const chars =
+    "12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP";
+  return Array.from({ length: len }, () =>
+    chars.charAt(Math.floor(Math.random() * chars.length))
+  ).join("");
 }
 
 export default function MEET() {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [senderId, setSenderId] = useState<string | null>(null);
   const [receiverId, setReceiverId] = useState<string | null>(null);
   const [roomId, setRoomId] = useState<string | null>(null);
   const [callType, setCallType] = useState<string | null>(null);
-  const [showError,setShowError]=useState<ToastMsg>({
-    action:false,
-    message:'',
-    type:'idle'
-  })
+  const [showError, setShowError] = useState<ToastMsg>({
+    action: false,
+    message: "",
+    type: "idle",
+  });
   const callContainerRef = useRef<HTMLDivElement | null>(null);
 
   const appId = parseInt(import.meta.env.VITE_ZEGO_APP_ID);
@@ -39,27 +42,23 @@ export default function MEET() {
     setCallType(callTypeParam);
   }, [searchParams]);
 
+  useEffect(() => {
+    socket.on("rejected", (data) => {
+      console.log("rejected");
+      if (data.roomId === roomId && data.senderId == senderId) {
+        setShowError({
+          action: true,
+          message: "Call Rejected",
+          type: "error",
+        });
+        navigate(-1);
+      }
+    });
 
-
-  useEffect(()=>{
-    socket.on('rejected',(data)=>{
-        console.log("rejected");
-        if (data.roomId===roomId&&data.senderId==senderId) {
-setShowError({
-    action:true,
-    message:'Call Rejected',
-    type:'error'
-})
-navigate(-1)
-            
-        }
-        
-    })
-
-    return  ()=>{
-        socket.off('rejected')
-    }
-  },[roomId,senderId,navigate])
+    return () => {
+      socket.off("rejected");
+    };
+  }, [roomId, senderId, navigate]);
 
   useEffect(() => {
     if (senderId && receiverId && roomId && callContainerRef.current) {
@@ -78,40 +77,49 @@ navigate(-1)
         showPreJoinView: false,
         sharedLinks: [
           {
-            name: 'Personal link',
+            name: "Personal link",
             url: `${window.location.origin}${window.location.pathname}?roomId=${roomId}&type=${callType}`,
           },
         ],
         scenario: {
-          mode: callType === "video" ? ZegoUIKitPrebuilt.VideoConference : ZegoUIKitPrebuilt.OneONoneCall,
+          mode:
+            callType === "video"
+              ? ZegoUIKitPrebuilt.VideoConference
+              : ZegoUIKitPrebuilt.OneONoneCall,
         },
         turnOnCameraWhenJoining: callType === "video",
-        turnOnMicrophoneWhenJoining: true,             
-        showMyCameraToggleButton: callType === "video", 
-        showScreenSharingButton: callType === "video",  
-        showTurnOffRemoteCameraButton: callType === "video", 
+        turnOnMicrophoneWhenJoining: true,
+        showMyCameraToggleButton: callType === "video",
+        showScreenSharingButton: callType === "video",
+        showTurnOffRemoteCameraButton: callType === "video",
         showTurnOffRemoteMicrophoneButton: true,
         showTextChat: true,
         showUserList: true,
         showLeaveRoomConfirmDialog: true,
         layout: callType === "audio" ? "Grid" : "Auto",
-        onLeaveRoom:()=>{
-            console.log("Call ended. Navigating...");
-            navigate(-1); 
-        }
+        onLeaveRoom: () => {
+          console.log("Call ended. Navigating...");
+          navigate(-1);
+        },
       });
     }
-  }, [senderId, receiverId, roomId, callType, appId, serverSecret,navigate]);
+  }, [senderId, receiverId, roomId, callType, appId, serverSecret, navigate]);
 
   return (
     <>
-        {showError.action && <ToastAlert onClose={()=>setShowError((prev)=>({...prev,action:false}))} message={showError.message} type={showError.type as "info"|"success"|"error"} />}
+      {showError.action && (
+        <ToastAlert
+          onClose={() => setShowError((prev) => ({ ...prev, action: false }))}
+          message={showError.message}
+          type={showError.type as "info" | "success" | "error"}
+        />
+      )}
 
-    <div
-      className="w-full"
-      ref={callContainerRef}
-      style={{ width: '100vw', height: '100vh' }}
-    ></div>
-      </>
+      <div
+        className="w-full"
+        ref={callContainerRef}
+        style={{ width: "100vw", height: "100vh" }}
+      ></div>
+    </>
   );
 }

@@ -1,80 +1,5 @@
-// // features/concern/concernSlice.ts
-// import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// import userAxiosInstance from '../../api/useraxios';
-
-// interface Concern {
-//   reportedMemberId: string;
-//   subject: string;
-//   description: string;
-//   reporterId: string;
-// }
-
-// interface Member {
-//   _id: string;
-//   name: string;
-//   email: string;
-// }
-
-// interface ConcernState {
-//   loading: boolean;
-//   error: string | null;
-//   success: boolean;
-//   members: Member[];
-// }
-
-// const initialState: ConcernState = {
-//   loading: false,
-//   error: null,
-//   success: false,
-//   members: [],
-// };
-
-
-
-// export const submitConcern = createAsyncThunk(
-//   'concern/submit',
-//   async (data: Concern) => {
-//     const res = await userAxiosInstance.post('/concerns',data, {
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-//     if (!res) throw new Error('Failed to submit concern');
-//     return res
-//   }
-// );
-
-// const concernSlice = createSlice({
-//   name: 'concern',
-//   initialState,
-//   reducers: {
-//     clearStatus: (state) => {
-//       state.success = false;
-//       state.error = null;
-//     },
-//   },
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(submitConcern.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//       })
-//       .addCase(submitConcern.fulfilled, (state) => {
-//         state.loading = false;
-//         state.success = true;
-//       })
-//       .addCase(submitConcern.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.error.message || 'Submission failed';
-//       });
-//   },
-// });
-
-// export const { clearStatus } = concernSlice.actions;
-// export default concernSlice.reducer;
-
-
-// features/concern/concernSlice.ts
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import userAxiosInstance from '../../api/useraxios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import userAxiosInstance from "../../api/useraxios";
 
 interface Concern {
   reportedMemberId: Member | string;
@@ -85,7 +10,7 @@ interface Concern {
 
 interface ConcernFull extends Concern {
   _id: string;
-  status: 'Pending' | 'In Review' | 'Resolved' | 'Rejected';
+  status: "Pending" | "In Review" | "Resolved" | "Rejected";
   resolutionNote?: string;
   reporterId: Member;
   reportedMemberId: Member;
@@ -117,41 +42,58 @@ const initialState: ConcernState = {
   selectedConcern: null,
 };
 
-export const fetchMembers = createAsyncThunk('concern/members', async () => {
-  const res = await userAxiosInstance.get('/members');
+export const fetchMembers = createAsyncThunk("concern/members", async () => {
+  const res = await userAxiosInstance.get("/members");
   return res.data;
 });
 
-export const submitConcern = createAsyncThunk('concern/submit', async (data: Concern) => {
-  const res = await userAxiosInstance.post('/concerns', data, {
-    headers: { 'Content-Type': 'application/json' },
-  });
-  return res.data;
-});
+export const submitConcern = createAsyncThunk(
+  "concern/submit",
+  async (data: Concern) => {
+    const res = await userAxiosInstance.post("/concerns", data, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  }
+);
 
 // Admin: fetch all concerns
-export const fetchAllConcerns = createAsyncThunk('admin/concerns', async () => {
-  const res = await userAxiosInstance.get('/concerns');
+export const fetchAllConcerns = createAsyncThunk("admin/concerns", async () => {
+  const res = await userAxiosInstance.get("/concerns");
   return res.data;
 });
 
 // Admin: fetch a specific concern
-export const fetchConcernById = createAsyncThunk('admin/concernById', async (id: string) => {
-  const res = await userAxiosInstance.get(`/concerns/${id}`);
-  return res.data;
-});
+export const fetchConcernById = createAsyncThunk(
+  "admin/concernById",
+  async (id: string) => {
+    const res = await userAxiosInstance.get(`/concerns/${id}`);
+    return res.data;
+  }
+);
 
 // Admin: update concern
 export const updateConcernStatus = createAsyncThunk(
-  'admin/updateConcern',
-  async ({ id, status, resolutionNote }: { id: string; status: string; resolutionNote: string }) => {
-    const res = await userAxiosInstance.put(`/concerns/${id}`, { status, resolutionNote });
+  "admin/updateConcern",
+  async ({
+    id,
+    status,
+    resolutionNote,
+  }: {
+    id: string;
+    status: string;
+    resolutionNote: string;
+  }) => {
+    const res = await userAxiosInstance.put(`/concerns/${id}`, {
+      status,
+      resolutionNote,
+    });
     return res.data;
   }
 );
 
 const concernSlice = createSlice({
-  name: 'concern',
+  name: "concern",
   initialState,
   reducers: {
     clearStatus: (state) => {
@@ -172,7 +114,7 @@ const concernSlice = createSlice({
       })
       .addCase(submitConcern.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Submission failed';
+        state.error = action.error.message || "Submission failed";
       })
 
       // Fetch members
@@ -190,7 +132,7 @@ const concernSlice = createSlice({
       })
       .addCase(fetchAllConcerns.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to fetch concerns';
+        state.error = action.error.message || "Failed to fetch concerns";
       })
 
       // Fetch one concern (admin)
@@ -204,7 +146,7 @@ const concernSlice = createSlice({
       })
       .addCase(fetchConcernById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to load concern';
+        state.error = action.error.message || "Failed to load concern";
       })
 
       // Update status
@@ -218,7 +160,7 @@ const concernSlice = createSlice({
       })
       .addCase(updateConcernStatus.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to update concern';
+        state.error = action.error.message || "Failed to update concern";
       });
   },
 });

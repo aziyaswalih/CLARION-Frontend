@@ -1,14 +1,13 @@
-
 // import React from 'react';
-import { useRef } from 'react';
-import { Button } from '../../../components/ui/button'; // adjust as needed
-import { useLocation } from 'react-router-dom';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
+import { useRef } from "react";
+import { Button } from "../../../components/ui/button"; // adjust as needed
+import { useLocation } from "react-router-dom";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 interface DonationCertificateProps {
   donorName: string;
-  requestType: 'financial' | 'organ' | 'blood';
+  requestType: "financial" | "organ" | "blood";
   amount?: number;
   organ?: string;
   bloodGroup?: string;
@@ -18,7 +17,8 @@ interface DonationCertificateProps {
 const DonationCertificate = () => {
   const { state } = useLocation();
   const certificateData = (state || {}) as DonationCertificateProps;
-  const { donorName, requestType, bloodGroup, organ, amount, date } = certificateData;
+  const { donorName, requestType, bloodGroup, organ, amount, date } =
+    certificateData;
 
   const certificateRef = useRef<HTMLDivElement>(null);
 
@@ -30,11 +30,11 @@ const DonationCertificate = () => {
       useCORS: true,
     });
 
-    const imgData = canvas.toDataURL('image/png');
+    const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF({
-      orientation: 'landscape',
-      unit: 'mm',
-      format: 'a4',
+      orientation: "landscape",
+      unit: "mm",
+      format: "a4",
     });
 
     const pageWidth = pdf.internal.pageSize.getWidth();
@@ -45,14 +45,19 @@ const DonationCertificate = () => {
 
     const yOffset = (pageHeight - pdfHeight) / 2;
 
-    pdf.addImage(imgData, 'PNG', 0, yOffset, pdfWidth, pdfHeight);
-    pdf.save(`Donation_Certificate_${donorName?.replace(/\s+/g, '_') || 'Donor'}_${new Date(date || '').getFullYear()}.pdf`);
+    pdf.addImage(imgData, "PNG", 0, yOffset, pdfWidth, pdfHeight);
+    pdf.save(
+      `Donation_Certificate_${
+        donorName?.replace(/\s+/g, "_") || "Donor"
+      }_${new Date(date || "").getFullYear()}.pdf`
+    );
   };
 
   if (!donorName || !date || !requestType) {
     return (
       <div className="text-center mt-8 text-red-600">
-        Loading certificate data... or Data not found. Please ensure you reached this page correctly.
+        Loading certificate data... or Data not found. Please ensure you reached
+        this page correctly.
       </div>
     );
   }
@@ -65,47 +70,54 @@ const DonationCertificate = () => {
         className="w-full max-w-2xl border-2 border-gray-300 rounded-lg px-8 py-12 shadow-xl bg-white font-serif text-gray-900"
       >
         <div className="text-center mb-24">
-          <h1 className="text-5xl font-semibold text-blue-800 mb-4">Certificate of Donation</h1>
+          <h1 className="text-5xl font-semibold text-blue-800 mb-4">
+            Certificate of Donation
+          </h1>
         </div>
 
         <p className="text-xl leading-relaxed mb-8 text-center">
-          This is to certify that{' '}
-          <span className="font-bold text-blue-900">{donorName}</span> has made a generous{' '}
-          <span className={`capitalize font-semibold ${
-            requestType === 'financial'
-              ? 'text-green-700'
-              : requestType === 'organ'
-              ? 'text-red-700'
-              : 'text-blue-700'
-          }`}>
+          This is to certify that{" "}
+          <span className="font-bold text-blue-900">{donorName}</span> has made
+          a generous{" "}
+          <span
+            className={`capitalize font-semibold ${
+              requestType === "financial"
+                ? "text-green-700"
+                : requestType === "organ"
+                ? "text-red-700"
+                : "text-blue-700"
+            }`}
+          >
             {requestType} donation
-          </span> on{' '}
+          </span>{" "}
+          on{" "}
           <span className="font-semibold text-gray-700">
-            {new Date(date).toLocaleDateString('en-IN', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
+            {new Date(date).toLocaleDateString("en-IN", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
             })}
           </span>
           .
         </p>
 
-        {requestType === 'financial' && amount !== undefined && (
+        {requestType === "financial" && amount !== undefined && (
           <p className="mb-8 text-center text-xl">
-            The donated amount is <span className="font-bold text-green-800">₹{amount}</span>.
+            The donated amount is{" "}
+            <span className="font-bold text-green-800">₹{amount}</span>.
           </p>
         )}
 
-        {requestType === 'organ' && organ && (
+        {requestType === "organ" && organ && (
           <p className="mb-8 text-center text-xl">
-            The donor has pledged to donate the following organ(s):{' '}
+            The donor has pledged to donate the following organ(s):{" "}
             <span className="font-bold text-red-800">{organ}</span>.
           </p>
         )}
 
-        {requestType === 'blood' && bloodGroup && (
+        {requestType === "blood" && bloodGroup && (
           <p className="mb-8 text-center text-xl">
-            The donor has contributed blood of type:{' '}
+            The donor has contributed blood of type:{" "}
             <span className="font-bold text-red-800">{bloodGroup}</span>.
           </p>
         )}

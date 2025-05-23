@@ -7,13 +7,19 @@ import Sidebar from "../../../components/admin/Dashboard/sidebar";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store/store";
-import { fetchDonors, blockDonor, unblockDonor } from "../../../reducers/admin/adminReducer";
+import {
+  fetchDonors,
+  blockDonor,
+  unblockDonor,
+} from "../../../reducers/admin/adminReducer";
 
 export function DonorsList() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const { donors, loading, error } = useSelector((state: RootState) => state.admin);
+  const { donors, loading, error } = useSelector(
+    (state: RootState) => state.admin
+  );
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,7 +50,10 @@ export function DonorsList() {
 
   const totalPages = Math.ceil(filteredDonors.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentDonors = filteredDonors.slice(startIndex, startIndex + itemsPerPage);
+  const currentDonors = filteredDonors.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -69,7 +78,9 @@ export function DonorsList() {
                 className="w-full bg-white"
               />
             </div>
-            <Button className="bg-black hover:bg-gray-800 text-white px-6">SEARCH</Button>
+            <Button className="bg-black hover:bg-gray-800 text-white px-6">
+              SEARCH
+            </Button>
             <Button variant="outline" className="px-6">
               Status
             </Button>
@@ -109,27 +120,29 @@ export function DonorsList() {
                     </td>
                     <td className="py-4">{donor.email}</td>
                     <td className="py-4">{donor.phone}</td>
-                    <td className="py-4">{donor.isActive ? "Active" : "Blocked"}</td>
                     <td className="py-4">
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        className="bg-blue-400 hover:bg-blue-500 text-white px-6"
-                        onClick={() => handleEdit(donor._id)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        size="sm"
-                        className={
-                          donor.isActive
-                            ? "bg-red-400 hover:bg-red-500 text-white px-6"
-                            : "bg-green-400 hover:bg-green-500 text-white px-6"
-                        }
-                        onClick={() => handleBlock(donor._id, donor.isActive)}
-                      >
-                        {donor.isActive ? "Block" : "Unblock"}
-                      </Button>
+                      {donor.isActive ? "Active" : "Blocked"}
+                    </td>
+                    <td className="py-4">
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          className="bg-blue-400 hover:bg-blue-500 text-white px-6"
+                          onClick={() => handleEdit(donor._id)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          className={
+                            donor.isActive
+                              ? "bg-red-400 hover:bg-red-500 text-white px-6"
+                              : "bg-green-400 hover:bg-green-500 text-white px-6"
+                          }
+                          onClick={() => handleBlock(donor._id, donor.isActive)}
+                        >
+                          {donor.isActive ? "Block" : "Unblock"}
+                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -156,7 +169,9 @@ export function DonorsList() {
         </div>
 
         <div className="text-sm text-gray-500 mt-4 text-center">
-          SHOWING {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredDonors.length)} OF {filteredDonors.length}
+          SHOWING {startIndex + 1}-
+          {Math.min(startIndex + itemsPerPage, filteredDonors.length)} OF{" "}
+          {filteredDonors.length}
         </div>
       </div>
     </div>

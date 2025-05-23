@@ -1,51 +1,48 @@
-import { NavLink, Outlet } from 'react-router-dom';
-import { Home, User, BookOpen, MessageSquare } from 'lucide-react';
-import Header from '../../../components/beneficiary/Header/Header';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../store/store';
-import { User_get_MessagesUserId } from '../../../reducers/beneficiary/beneficiaryApicalls';
-import { Response_ChatsTypes } from '../../../reducers/volunteers/volunteerApicalls';
+import { NavLink, Outlet } from "react-router-dom";
+import { Home, User, BookOpen, MessageSquare } from "lucide-react";
+import Header from "../../../components/beneficiary/Header/Header";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../store/store";
+import { User_get_MessagesUserId } from "../../../reducers/beneficiary/beneficiaryApicalls";
+import { Response_ChatsTypes } from "../../../reducers/volunteers/volunteerApicalls";
 
 const navItems = [
-  { label: 'Home', path: 'home', icon: <Home className="w-5 h-5" /> },
-  { label: 'Profile', path: 'profile', icon: <User className="w-5 h-5" /> },
-  { label: 'Stories', path: 'stories', icon: <BookOpen className="w-5 h-5" /> },
-  { label: 'Chat', path: 'chats', icon: <MessageSquare className="w-5 h-5" /> },
+  { label: "Home", path: "home", icon: <Home className="w-5 h-5" /> },
+  { label: "Profile", path: "profile", icon: <User className="w-5 h-5" /> },
+  { label: "Stories", path: "stories", icon: <BookOpen className="w-5 h-5" /> },
+  { label: "Chat", path: "chats", icon: <MessageSquare className="w-5 h-5" /> },
 ];
 
 export default function BeneficiaryAccount() {
-  const user = useSelector((state:RootState) => state.users.user)
+  const user = useSelector((state: RootState) => state.users.user);
   const dispatch = useDispatch<AppDispatch>();
-  const [unreadChatCount, setUnreadChatCount] = useState(0); 
+  const [unreadChatCount, setUnreadChatCount] = useState(0);
 
   useEffect(() => {
-          if (user?.id) {
-            console.log(user.id, "user id");
-            
-            dispatch(User_get_MessagesUserId(user.id))
-              .unwrap()
-              .then(async (messages: Response_ChatsTypes[]) => {
-                console.log(messages);
-                let prevCount = 0;
-                // Extract unique connections based on sender and receiver
-              //   const uniqueConnections = new Map<string, Response_ChatsTypes>();
-      
-                // Map over messages to build unique connections
-                messages.forEach((message) => {
-                  if(message.isRead===false && message.receiver===user.id){
-                    prevCount++;
-                    // setUnreadChatCount((prevCount) => prevCount + 1); // Increment unread count
-                  }
-             
-              })
-                setUnreadChatCount(prevCount);
-                console.log(prevCount, "prev count");
-              
-              
-          })
-          }
-        }, [dispatch]);
+    if (user?.id) {
+      console.log(user.id, "user id");
+
+      dispatch(User_get_MessagesUserId(user.id))
+        .unwrap()
+        .then(async (messages: Response_ChatsTypes[]) => {
+          console.log(messages);
+          let prevCount = 0;
+          // Extract unique connections based on sender and receiver
+          //   const uniqueConnections = new Map<string, Response_ChatsTypes>();
+
+          // Map over messages to build unique connections
+          messages.forEach((message) => {
+            if (message.isRead === false && message.receiver === user.id) {
+              prevCount++;
+              // setUnreadChatCount((prevCount) => prevCount + 1); // Increment unread count
+            }
+          });
+          setUnreadChatCount(prevCount);
+          console.log(prevCount, "prev count");
+        });
+    }
+  }, [dispatch]);
 
   return (
     <>
@@ -67,19 +64,20 @@ export default function BeneficiaryAccount() {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                     isActive
-                      ? 'bg-blue-100 text-blue-700 font-semibold'
-                      : 'text-gray-700 hover:bg-gray-100'
+                      ? "bg-blue-100 text-blue-700 font-semibold"
+                      : "text-gray-700 hover:bg-gray-100"
                   }`
                 }
               >
                 {item.icon}
                 {item.label}
-                {item.label === 'Chat' && unreadChatCount > 0 && (
+                {item.label === "Chat" && unreadChatCount > 0 && (
                   <span
                     className="ml-auto bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5 leading-tight"
                     aria-label={`${unreadChatCount} unread messages`} // For accessibility
                   >
-                    {unreadChatCount > 99 ? '99+' : unreadChatCount} {/* Display count, cap at 99+ */}
+                    {unreadChatCount > 99 ? "99+" : unreadChatCount}{" "}
+                    {/* Display count, cap at 99+ */}
                   </span>
                 )}
               </NavLink>
@@ -95,5 +93,3 @@ export default function BeneficiaryAccount() {
     </>
   );
 }
-
-

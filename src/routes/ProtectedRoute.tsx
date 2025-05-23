@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 
 const ProtectedRoute = ({ allowedRoles }: { allowedRoles: string[] }) => {
@@ -14,12 +14,12 @@ const ProtectedRoute = ({ allowedRoles }: { allowedRoles: string[] }) => {
     if (allowedRoles.includes(decoded.role)) {
       return <Outlet />;
     } else {
-      toast.error('Unauthorized, please login')
+      toast.error("Unauthorized, please login");
       return <Navigate to="/login" replace />;
     }
   } catch (error) {
     console.error("Invalid Token", error);
-    localStorage.removeItem('authToken');
+    localStorage.removeItem("authToken");
     return <Navigate to="/login" replace />;
   }
 };

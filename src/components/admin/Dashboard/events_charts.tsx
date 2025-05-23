@@ -1,13 +1,13 @@
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts"
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 const data = [
   { name: "Category A", value: 45 },
   { name: "Category B", value: 30 },
   { name: "Category C", value: 15 },
   { name: "Category D", value: 10 },
-]
+];
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 export function EventsChart() {
   return (
@@ -27,13 +27,15 @@ export function EventsChart() {
               dataKey="value"
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
               ))}
             </Pie>
           </PieChart>
         </ResponsiveContainer>
       </div>
     </div>
-  )
+  );
 }
-

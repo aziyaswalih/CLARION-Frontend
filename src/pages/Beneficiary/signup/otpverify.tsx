@@ -13,7 +13,7 @@ export default function OTPVerification() {
   const [showResend, setShowResend] = useState<boolean>(false); // Show resend button
   const [loading, setLoading] = useState<boolean>(false); // Loading state for buttons
 
-  const API_BASE_URL = "http://localhost:5000/api/user";
+  // const API_BASE_URL = "http://localhost:5000/api/user";
 
   // Timer countdown
   useEffect(() => {
@@ -37,9 +37,12 @@ export default function OTPVerification() {
 
     try {
       setLoading(true);
-      const response = await axios.post(`${API_BASE_URL}/auth/verify-otp`, {
-        otp,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/user/auth/verify-otp`,
+        {
+          otp,
+        }
+      );
       alert(response.data.message || "OTP verified successfully!");
     } catch (error: any) {
       console.error("Error verifying OTP:", error);
@@ -53,7 +56,9 @@ export default function OTPVerification() {
   const handleResendOTP = async () => {
     try {
       setLoading(true);
-      const response = await axios.post(`${API_BASE_URL}/auth/send-otp`);
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/user/auth/send-otp`
+      );
       alert(response.data.message || "OTP resent successfully!");
       setTimeLeft(10); // Reset timer
       setShowResend(false); // Hide resend button
@@ -74,7 +79,9 @@ export default function OTPVerification() {
           {/* Centered OTP Verification */}
           <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-lg shadow-sm">
             <EmailIcon />
-            <h2 className="text-lg font-medium text-center">VERIFY YOUR EMAIL</h2>
+            <h2 className="text-lg font-medium text-center">
+              VERIFY YOUR EMAIL
+            </h2>
             <Input
               type="text"
               placeholder="Enter OTP"

@@ -19,12 +19,8 @@ export const store = configureStore({
     wallet: walletReducer,
     transaction: transactionReducer,
     concern: concernReducer,
-
   },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
-
-

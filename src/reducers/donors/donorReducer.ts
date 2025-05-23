@@ -29,7 +29,7 @@ interface DonationState {
   isLoading: boolean;
   error: string | null;
   // Donor profile fields
-  donorId: DonorProfile['donorId'];
+  donorId: DonorProfile["donorId"];
   address: Address;
   submissionStatus: "idle" | "loading" | "succeeded" | "failed";
   userDonations: any[]; // <--- New
@@ -42,20 +42,20 @@ const initialState: DonationState = {
   isLoading: false,
   error: null,
   donorId: {
-    id: '',
-    name: '',
-    email: '',
-    phone: '',
+    id: "",
+    name: "",
+    email: "",
+    phone: "",
     role: "donor",
     is_verified: false,
-    profilePic: '',
+    profilePic: "",
   },
   address: {
-    street: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: '',
+    street: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "",
   },
   submissionStatus: "idle",
   userDonations: [], // <--- New
@@ -67,14 +67,15 @@ export const fetchUserDonations = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await userAxiosInstance.get("/donor/donations");
-      console.log(response.data.data, 'response from donations');
+      console.log(response.data.data, "response from donations");
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || "Failed to fetch donations");
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch donations"
+      );
     }
   }
 );
-
 
 // Create Donation Async Action
 export const createDonation = createAsyncThunk<
@@ -83,10 +84,10 @@ export const createDonation = createAsyncThunk<
   { rejectValue: string }
 >("donor/createDonation", async ({ amount, currency }, { rejectWithValue }) => {
   try {
-    const response = await userAxiosInstance.post(
-      "/payments/create-Donation",
-      {amount, currency }
-    );
+    const response = await userAxiosInstance.post("/payments/create-Donation", {
+      amount,
+      currency,
+    });
     return response.data;
   } catch (error: any) {
     return rejectWithValue(
@@ -116,8 +117,11 @@ export const verifyPayment = createAsyncThunk<
 
 export const newDonation = createAsyncThunk(
   "donor/newDonation",
-  async (donationData: {causeId:string; amount :number}) => {
-    const response = await userAxiosInstance.post("/payments/donation", donationData);
+  async (donationData: { causeId: string; amount: number }) => {
+    const response = await userAxiosInstance.post(
+      "/payments/donation",
+      donationData
+    );
     return response.data;
   }
 );
@@ -125,10 +129,9 @@ export const newDonation = createAsyncThunk(
 export const getDonor = createAsyncThunk("donor/getDonor", async () => {
   const response = await userAxiosInstance.get("/donor/profile");
   console.log(response);
-  
+
   return response.data.data;
 });
-
 
 // export const updateDonorProfile = createAsyncThunk(
 //   "volunteer/updateProfile",
@@ -164,8 +167,8 @@ export const getDonor = createAsyncThunk("donor/getDonor", async () => {
 // );
 
 export const newBloodDonationAction = createAsyncThunk(
-  "donor/newBloodDonationAction", 
-  async (donationData: { causeId: string; }) => {
+  "donor/newBloodDonationAction",
+  async (donationData: { causeId: string }) => {
     const response = await userAxiosInstance.post("/donor/blood", donationData);
     return response.data;
   }
@@ -175,11 +178,11 @@ export const updateDonorProfile = createAsyncThunk(
   "donor/updateDonorProfile",
   async (updatedData: any) => {
     const formData = new FormData();
-    console.log(updatedData, 'data from update donor profile');
+    console.log(updatedData, "data from update donor profile");
 
     if (updatedData) {
       Object.entries(updatedData).forEach(([key, value]) => {
-        if (key === 'name' || key === 'phone') {
+        if (key === "name" || key === "phone") {
           formData.append(`${key}`, value as unknown as string);
         }
       });
@@ -187,42 +190,37 @@ export const updateDonorProfile = createAsyncThunk(
 
     if (updatedData.address) {
       // Object.entries(updatedData.address).forEach(([key, value]) => {
-        formData.append(`address`, JSON.stringify(updatedData.address));
+      formData.append(`address`, JSON.stringify(updatedData.address));
       // });
     }
 
     if (updatedData.profilePic instanceof File) {
-      formData.append('profilePic', updatedData.profilePic);
+      formData.append("profilePic", updatedData.profilePic);
     }
 
-    const response = await userAxiosInstance.put(
-      "/donor/profile",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await userAxiosInstance.put("/donor/profile", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-    console.log(response.data, 'response from update donor');
+    console.log(response.data, "response from update donor");
     return response.data;
   }
 );
-
 
 // export const updateDonorProfile = createAsyncThunk(
 //   "donor/updateDonorProfile",
 //   async (updatedData:any) => {
 //     const formData = new FormData();
 //     console.log(updatedData,'data from update donor profile');
-    
+
 //     if (updatedData) {
 //       Object.entries(updatedData).forEach(([key, value]) => {
 //         if (key === 'name' || key === 'phone')
-//           {        
+//           {
 //             formData.append(`donorId.${key}`, value as unknown as string);
-//           }      
+//           }
 //         });
 //     }
 //     if (updatedData.address) {
@@ -238,7 +236,7 @@ export const updateDonorProfile = createAsyncThunk(
 //     }
 //     const response = await userAxiosInstance.put("/donor/profile", formData);
 //     console.log(response.data,'response from update donor');
-    
+
 //     return response.data;
 //   }
 // );
@@ -279,11 +277,14 @@ const donorSlice = createSlice({
         state.submissionStatus = "loading";
         state.error = null;
       })
-      .addCase(getDonor.fulfilled, (state, action: PayloadAction<DonorProfile>) => {
-        state.submissionStatus = "succeeded";
-        state.donorId = action.payload.donorId;
-        state.address = action.payload.address;
-      })
+      .addCase(
+        getDonor.fulfilled,
+        (state, action: PayloadAction<DonorProfile>) => {
+          state.submissionStatus = "succeeded";
+          state.donorId = action.payload.donorId;
+          state.address = action.payload.address;
+        }
+      )
       .addCase(getDonor.rejected, (state, action) => {
         state.submissionStatus = "failed";
         state.error = action.error.message || "Failed to fetch donor";
@@ -298,7 +299,7 @@ const donorSlice = createSlice({
       })
       .addCase(fetchUserDonations.rejected, (state, action) => {
         state.donationsLoading = false;
-        state.error = action.payload as string || "Failed to load donations";
+        state.error = (action.payload as string) || "Failed to load donations";
       })
       .addCase(updateDonorProfile.pending, (state) => {
         state.submissionStatus = "loading";
@@ -307,15 +308,16 @@ const donorSlice = createSlice({
       .addCase(updateDonorProfile.fulfilled, (state, action) => {
         state.submissionStatus = "succeeded";
         console.log(action.payload);
-        
+
         state.donorId.name = action.payload.data.updatedUser.name;
         state.donorId.phone = action.payload.data.updatedUser.phone;
         state.address.city = action.payload.data.updatedDonor.address.city;
         state.address.street = action.payload.data.updatedDonor.address.street;
         state.address.state = action.payload.data.updatedDonor.address.state;
-        state.address.zipCode = action.payload.data.updatedDonor.address.zipCode;
-        state.address.country = action.payload.data.updatedDonor.address.country;
-        
+        state.address.zipCode =
+          action.payload.data.updatedDonor.address.zipCode;
+        state.address.country =
+          action.payload.data.updatedDonor.address.country;
       })
       .addCase(updateDonorProfile.rejected, (state, action) => {
         state.submissionStatus = "failed";

@@ -9,9 +9,11 @@ import Sidebar from "../../../components/admin/Dashboard/sidebar";
 
 export function RecentStories() {
   const dispatch = useDispatch<AppDispatch>();
-//   const navigate = useNavigate();
+  //   const navigate = useNavigate();
 
-  const { stories, loading, error } = useSelector((state: RootState) => state.stories);
+  const { stories, loading, error } = useSelector(
+    (state: RootState) => state.stories
+  );
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,43 +23,41 @@ export function RecentStories() {
     dispatch(fetchStories());
   }, [dispatch]);
 
-//   const approvedStories = stories.filter(
-//     (story: any) =>
-//       story.status === "approved" &&
-//       (story.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//         story.requestType.toLowerCase().includes(searchTerm.toLowerCase()))
-//   );
+  //   const approvedStories = stories.filter(
+  //     (story: any) =>
+  //       story.status === "approved" &&
+  //       (story.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //         story.requestType.toLowerCase().includes(searchTerm.toLowerCase()))
+  //   );
 
-const filteredStories = stories.filter(
+  const filteredStories = stories.filter(
     (story: any) =>
       story.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       story.requestType.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const totalPages = Math.ceil(filteredStories.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentStories = filteredStories.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
-const totalPages = Math.ceil(filteredStories.length / itemsPerPage);
-const startIndex = (currentPage - 1) * itemsPerPage;
-const currentStories = filteredStories.slice(startIndex, startIndex + itemsPerPage);
-
-  
-
-const getStatusColorClass = (status: string): string => {
+  const getStatusColorClass = (status: string): string => {
     switch (status?.toLowerCase()) {
-      case 'rejected':
-        return 'text-red-600 font-medium';
-      case 'completed':
-        return 'text-green-600 font-medium';
-      case 'approved':
-        return 'text-blue-600 font-medium';
-      case 'pending':
-      case 'submitted':
-        return 'text-yellow-600 font-medium';
+      case "rejected":
+        return "text-red-600 font-medium";
+      case "completed":
+        return "text-green-600 font-medium";
+      case "approved":
+        return "text-blue-600 font-medium";
+      case "pending":
+      case "submitted":
+        return "text-yellow-600 font-medium";
       default:
-        return 'text-gray-700 font-medium'; // Keep font-medium for consistency
+        return "text-gray-700 font-medium"; // Keep font-medium for consistency
     }
   };
-
-
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -76,7 +76,9 @@ const getStatusColorClass = (status: string): string => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-1 bg-white"
             />
-            <Button className="bg-black hover:bg-gray-800 text-white px-6">SEARCH</Button>
+            <Button className="bg-black hover:bg-gray-800 text-white px-6">
+              SEARCH
+            </Button>
           </div>
         </div>
 
@@ -106,10 +108,18 @@ const getStatusColorClass = (status: string): string => {
                       {/* Assuming reviewedBy is a string, if it's an object, adjust accordingly */}
                       <td className="p-4 capitalize">{story.requestType}</td>
                       {/* <td className="p-4 text-green-600 font-semibold capitalize">{story.status}</td> */}
-                        <td className={`p-4 capitalize ${getStatusColorClass(story.status)}`}>{story.status}</td>
-                        {/* <td className="p-4">{story.status}</td> */}
+                      <td
+                        className={`p-4 capitalize ${getStatusColorClass(
+                          story.status
+                        )}`}
+                      >
+                        {story.status}
+                      </td>
+                      {/* <td className="p-4">{story.status}</td> */}
                       <td className="p-4">₹{story.amount?.toLocaleString()}</td>
-                      <td className="p-4">₹{story.raisedAmount?.toLocaleString()}</td>
+                      <td className="p-4">
+                        ₹{story.raisedAmount?.toLocaleString()}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -142,4 +152,3 @@ const getStatusColorClass = (status: string): string => {
 }
 
 export default RecentStories;
-

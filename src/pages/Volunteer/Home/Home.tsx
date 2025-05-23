@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Button } from "../../../components/ui/button";
-import { Bell, Eye, LogOut } from "lucide-react";
+import { Bell, Eye } from "lucide-react";
 import Footer from "../../../components/beneficiary/Footer/Footer";
 import Header from "../../../components/beneficiary/Header/Header";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +32,7 @@ const HomePage: React.FC = () => {
   const [availability, setAvailability] = useState("part-time");
   const [isNotificationTrayOpen, setIsNotificationTrayOpen] = useState(false); // Added
 
-  console.log(user, "user from state");
+  // console.log(user, "user from state");
 
   useEffect(() => {
     dispatch(getVolunteer());
@@ -99,6 +99,23 @@ const HomePage: React.FC = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
     navigate("/login");
+  };
+
+  const getStatusColorClass = (status: string): string => {
+    switch (status?.toLowerCase()) {
+      case "rejected":
+        return "text-red-600 font-medium";
+      case "completed":
+        return "text-green-600 font-medium";
+      case "approved":
+        return "text-blue-600 font-medium";
+      case "pending":
+        return "text-yellow-600 font-medium";
+      case "processing":
+        return "text-orange-600 font-medium";
+      default:
+        return "text-gray-700 font-medium";
+    }
   };
 
   const HandleReview = (story_id: string) => {
@@ -355,9 +372,12 @@ const HomePage: React.FC = () => {
                     Description: {story.description}
                   </p>
                   <p className="text-lg text-gray-600 mb-4">
-                    <span className="font-medium">Status:</span>{" "}
-                    {story.status.charAt(0).toUpperCase() +
-                      story.status.slice(1)}
+                    Status :
+                    <span className={getStatusColorClass(story.status)}>
+                      {" "}
+                      {story.status.charAt(0).toUpperCase() +
+                        story.status.slice(1)}
+                    </span>{" "}
                   </p>
                   <div className="flex justify-center">
                     <Button
@@ -374,7 +394,6 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      
       <Footer />
     </div>
   );

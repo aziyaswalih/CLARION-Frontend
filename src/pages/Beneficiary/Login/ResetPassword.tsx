@@ -1,11 +1,20 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../store/store";
-import { sendOTP, verifyOtp, resetPasswordAsync } from "../../../reducers/users/userActions";
+import {
+  sendOTP,
+  verifyOtp,
+  resetPasswordAsync,
+} from "../../../reducers/users/userActions";
 import { toast } from "react-toastify";
 import Footer from "../../../components/beneficiary/Footer/Footer";
 import { Button } from "../../../components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../components/ui/card";
 import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
 
@@ -35,11 +44,11 @@ const ResetPasswordPage: React.FC = () => {
 
   const handleSendOtp = async () => {
     try {
-      const result = await dispatch(sendOTP(formData.email ));
+      const result = await dispatch(sendOTP(formData.email));
       if (sendOTP.fulfilled.match(result)) {
         localStorage.setItem("token", result.payload.otpToken[1]);
         console.log("token", result.payload.otpToken[1]);
-        
+
         setOtpSent(true);
         toast.success("OTP sent successfully!");
       } else {
@@ -77,7 +86,10 @@ const ResetPasswordPage: React.FC = () => {
 
     setLoading(true);
     const result = await dispatch(
-      resetPasswordAsync({ email: formData.email, password: formData.newPassword })
+      resetPasswordAsync({
+        email: formData.email,
+        password: formData.newPassword,
+      })
     );
     setLoading(false);
 
@@ -94,15 +106,26 @@ const ResetPasswordPage: React.FC = () => {
       <main className="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">
         <Card className="w-full max-w-md bg-white/80 backdrop-blur-sm shadow-xl">
           <CardHeader>
-            <CardTitle className="text-2xl md:text-3xl font-bold">RESET PASSWORD</CardTitle>
+            <CardTitle className="text-2xl md:text-3xl font-bold">
+              RESET PASSWORD
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" onChange={handleChange} placeholder="Enter your email" />
+                <Input
+                  id="email"
+                  type="email"
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                />
                 {!otpSent && (
-                  <Button type="button" onClick={handleSendOtp} className="mt-2 bg-blue-500 text-white">
+                  <Button
+                    type="button"
+                    onClick={handleSendOtp}
+                    className="mt-2 bg-blue-500 text-white"
+                  >
                     Send OTP
                   </Button>
                 )}
@@ -111,8 +134,18 @@ const ResetPasswordPage: React.FC = () => {
               {otpSent && (
                 <div>
                   <Label htmlFor="otp">Enter OTP</Label>
-                  <Input id="otp" type="text" value={formData.otp} onChange={handleChange} placeholder="Enter OTP" />
-                  <Button type="button" onClick={handleVerifyOtp} className="mt-2 bg-green-500 text-white">
+                  <Input
+                    id="otp"
+                    type="text"
+                    value={formData.otp}
+                    onChange={handleChange}
+                    placeholder="Enter OTP"
+                  />
+                  <Button
+                    type="button"
+                    onClick={handleVerifyOtp}
+                    className="mt-2 bg-green-500 text-white"
+                  >
                     Verify OTP
                   </Button>
                 </div>
@@ -122,13 +155,28 @@ const ResetPasswordPage: React.FC = () => {
                 <>
                   <div>
                     <Label htmlFor="newPassword">New Password</Label>
-                    <Input id="newPassword" type="password" value={formData.newPassword} onChange={handleChange} placeholder="Enter new password" />
+                    <Input
+                      id="newPassword"
+                      type="password"
+                      value={formData.newPassword}
+                      onChange={handleChange}
+                      placeholder="Enter new password"
+                    />
                   </div>
                   <div>
                     <Label htmlFor="confirmPassword">Confirm Password</Label>
-                    <Input id="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleChange} placeholder="Confirm password" />
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      placeholder="Confirm password"
+                    />
                   </div>
-                  <Button type="submit" className="w-full bg-gradient-to-r from-[#b8860b] to-[#956d09] text-white">
+                  <Button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-[#b8860b] to-[#956d09] text-white"
+                  >
                     {loading ? "Resetting..." : "Reset Password"}
                   </Button>
                 </>

@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button } from '../../ui/button'
+import React from "react";
+import { Button } from "../../ui/button";
 
 const Footer: React.FC = () => {
   return (
@@ -13,9 +13,21 @@ const Footer: React.FC = () => {
         <div>
           <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
           <ul className="space-y-2">
-            <li><a href="#" className="hover:text-[#b8860b]">Home</a></li>
-            <li><a href="#" className="hover:text-[#b8860b]">About Us</a></li>
-            <li><a href="#" className="hover:text-[#b8860b]">Photo Gallery</a></li>
+            <li>
+              <a href="#" className="hover:text-[#b8860b]">
+                Home
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-[#b8860b]">
+                About Us
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-[#b8860b]">
+                Photo Gallery
+              </a>
+            </li>
           </ul>
         </div>
         <div>
@@ -41,8 +53,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
-
+export default Footer;

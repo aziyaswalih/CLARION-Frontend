@@ -6,14 +6,20 @@ import { Input } from "../../../components/ui/input";
 import Sidebar from "../../../components/admin/Dashboard/sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../store/store";
-import { fetchBeneficiaries, blockBeneficiary, unblockBeneficiary } from "../../../reducers/admin/adminReducer";
+import {
+  fetchBeneficiaries,
+  blockBeneficiary,
+  unblockBeneficiary,
+} from "../../../reducers/admin/adminReducer";
 import { useNavigate } from "react-router-dom";
 
 export function BeneficiariesList() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  
-  const { beneficiaries, loading, error } = useSelector((state: RootState) => state.admin);
+
+  const { beneficiaries, loading, error } = useSelector(
+    (state: RootState) => state.admin
+  );
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,7 +54,10 @@ export function BeneficiariesList() {
 
   const totalPages = Math.ceil(filteredBeneficiaries.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentBeneficiaries = filteredBeneficiaries.slice(startIndex, startIndex + itemsPerPage);
+  const currentBeneficiaries = filteredBeneficiaries.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -73,8 +82,12 @@ export function BeneficiariesList() {
                 className="w-full bg-white"
               />
             </div>
-            <Button className="bg-black hover:bg-gray-800 text-white px-6">SEARCH</Button>
-            <Button variant="outline" className="px-6">Status</Button>
+            <Button className="bg-black hover:bg-gray-800 text-white px-6">
+              SEARCH
+            </Button>
+            <Button variant="outline" className="px-6">
+              Status
+            </Button>
           </div>
         </div>
 
@@ -102,7 +115,10 @@ export function BeneficiariesList() {
                         <div className="flex items-center gap-3">
                           <Avatar>
                             <img
-                              src={beneficiary.avatar || "/images/hero-background.jpg"}
+                              src={
+                                beneficiary.avatar ||
+                                "/images/hero-background.jpg"
+                              }
                               alt={beneficiary.name}
                               className="w-8 h-8 rounded-full"
                             />
@@ -112,7 +128,9 @@ export function BeneficiariesList() {
                       </td>
                       <td className="py-4">{beneficiary.email}</td>
                       <td className="py-4">{beneficiary.phone}</td>
-                      <td className="py-4">{beneficiary.isActive ? "Active" : "Blocked"}</td>
+                      <td className="py-4">
+                        {beneficiary.isActive ? "Active" : "Blocked"}
+                      </td>
                       <td className="py-4">
                         <div className="flex gap-2">
                           <Button
@@ -124,8 +142,17 @@ export function BeneficiariesList() {
                           </Button>
                           <Button
                             size="sm"
-                            className={beneficiary.isActive ? "bg-red-400 hover:bg-red-500 text-white px-6" : "bg-green-400 hover:bg-green-500 text-white px-6"}
-                            onClick={() => handleBlockToggle(beneficiary._id, beneficiary.isActive)}
+                            className={
+                              beneficiary.isActive
+                                ? "bg-red-400 hover:bg-red-500 text-white px-6"
+                                : "bg-green-400 hover:bg-green-500 text-white px-6"
+                            }
+                            onClick={() =>
+                              handleBlockToggle(
+                                beneficiary._id,
+                                beneficiary.isActive
+                              )
+                            }
                           >
                             {beneficiary.isActive ? "Block" : "Unblock"}
                           </Button>
@@ -138,23 +165,30 @@ export function BeneficiariesList() {
             </div>
 
             <div className="flex justify-center gap-2 mt-6">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    currentPage === page
-                      ? "bg-[#b8860b] text-white"
-                      : "bg-gray-200 text-gray-600 hover:bg-gray-300"
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      currentPage === page
+                        ? "bg-[#b8860b] text-white"
+                        : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                )
+              )}
             </div>
 
             <div className="text-sm text-gray-500 mt-4 text-center">
-              SHOWING {startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredBeneficiaries.length)} OF {filteredBeneficiaries.length}
+              SHOWING {startIndex + 1}-
+              {Math.min(
+                startIndex + itemsPerPage,
+                filteredBeneficiaries.length
+              )}{" "}
+              OF {filteredBeneficiaries.length}
             </div>
           </>
         )}

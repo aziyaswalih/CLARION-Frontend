@@ -7,7 +7,11 @@ type IncomingCallProps = {
   rejectCall: (call: CallData) => void;
 };
 
-const IncomingCallPopup = ({ incomingCall, acceptCall, rejectCall }: IncomingCallProps) => {
+const IncomingCallPopup = ({
+  incomingCall,
+  acceptCall,
+  rejectCall,
+}: IncomingCallProps) => {
   if (!incomingCall) return null;
 
   return (
@@ -20,9 +24,12 @@ const IncomingCallPopup = ({ incomingCall, acceptCall, rejectCall }: IncomingCal
           className="w-12 h-12 rounded-full border-2 border-white shadow-sm"
         />
         <div>
-        <p className="text-lg font-semibold bg-gradient-to-r from-blue-400 to-cyan-300 text-transparent bg-clip-text drop-shadow-md">
+          <p className="text-lg font-semibold bg-gradient-to-r from-blue-400 to-cyan-300 text-transparent bg-clip-text drop-shadow-md">
             {incomingCall.senderName}
-          </p>          <p className="text-sm text-gray-300 animate-pulse">Incoming Call...</p>
+          </p>{" "}
+          <p className="text-sm text-gray-300 animate-pulse">
+            Incoming Call...
+          </p>
         </div>
       </div>
 
@@ -38,7 +45,7 @@ const IncomingCallPopup = ({ incomingCall, acceptCall, rejectCall }: IncomingCal
           className="bg-red-500 p-3 rounded-full shadow-lg hover:bg-red-600 transition-all duration-300"
           onClick={() => rejectCall(incomingCall)}
         >
-          <FaPhoneSlash className= "text-white rotate-90" size={18} />
+          <FaPhoneSlash className="text-white rotate-90" size={18} />
         </button>
       </div>
     </div>

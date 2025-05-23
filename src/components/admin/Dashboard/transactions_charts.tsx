@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts"
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
 
 const data = [
   { name: "Jan", amount: 1000 },
@@ -6,7 +6,7 @@ const data = [
   { name: "Mar", amount: 1500 },
   { name: "Apr", amount: 3000 },
   { name: "May", amount: 2500 },
-]
+];
 
 export function TransactionsChart() {
   return (
@@ -22,9 +22,8 @@ export function TransactionsChart() {
         </ResponsiveContainer>
       </div>
     </div>
-  )
+  );
 }
-
 
 // "use client"
 
@@ -157,4 +156,3 @@ export function TransactionsChart() {
 //     </Card>
 //   )
 // }
-

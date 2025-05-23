@@ -42,28 +42,29 @@ userAxiosInstance.interceptors.request.use(
   },
   (error: AxiosError) => Promise.reject(error)
 );
-let isRefreshing = false
+let isRefreshing = false;
 // Refresh token on unauthorized
 userAxiosInstance.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
-    console.log(error,'error from axios');
-    if (!isRefreshing && error.response?.status === 403 ){
+    console.log(error, "error from axios");
+    if (!isRefreshing && error.response?.status === 403) {
       Swal.fire({
-                    title: "User Blocked!",
-                    text: "You are blocked",
-                    icon: "error",
-                    confirmButtonColor: "#d33",
-                    confirmButtonText: "OK",
-                  }).then(() => {
-        localStorage.removeItem("authToken")
-        window.location.href = "/login"})
+        title: "User Blocked!",
+        text: "You are blocked",
+        icon: "error",
+        confirmButtonColor: "#d33",
+        confirmButtonText: "OK",
+      }).then(() => {
+        localStorage.removeItem("authToken");
+        window.location.href = "/login";
+      });
     }
-    if (!isRefreshing && error.response?.status === 401 ) {
+    if (!isRefreshing && error.response?.status === 401) {
       console.warn("Access token expired, attempting to refresh...");
-      isRefreshing = true
+      isRefreshing = true;
       const newToken = await refreshToken();
-      isRefreshing = false
+      isRefreshing = false;
       if (newToken) {
         const originalRequest = error.config as InternalAxiosRequestConfig;
         if (originalRequest.headers) {

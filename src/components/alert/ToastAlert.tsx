@@ -8,7 +8,11 @@ interface ToastAlertProps {
   onClose: () => void;
 }
 
-const ToastAlert: React.FC<ToastAlertProps> = ({ message, type = "success", onClose }) => {
+const ToastAlert: React.FC<ToastAlertProps> = ({
+  message,
+  type = "success",
+  onClose,
+}) => {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
